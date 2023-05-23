@@ -1,55 +1,55 @@
 ﻿
 using System;
 
-public partial class MAVLink
+public partial class Mavlink
 {
-    public class MAVLinkMessage
+    public class MavlinkMessage
     {
-        public static readonly MAVLinkMessage Invalid = new MAVLinkMessage();
+        public static readonly MavlinkMessage Invalid = new MavlinkMessage();
         object _locker = new object();
 
-        private byte[] _buffer;
+        public DateTime RxTime { get; set; }
+        public byte Header { get; internal set; }
+        public byte PayloadLength { get; internal set; }
 
-        public byte[] buffer
-        {
-            get { return _buffer; }
-            set
-            {
-                _buffer = value;
-                processBuffer(_buffer);
-            }
-        }
+        public byte IncompatibleFlags { get; internal set; }
+        public byte CompatibleFlags { get; internal set; }
 
-        public DateTime rxtime { get; set; }
-        public byte header { get; internal set; }
-        public byte payloadlength { get; internal set; }
+        public byte Sequence { get; internal set; }
+        public byte SysID { get; internal set; }
+        public byte CompID { get; internal set; }
 
-        public byte incompat_flags { get; internal set; }
-        public byte compat_flags { get; internal set; }
+        public uint MsgID { get; internal set; }
 
-        public byte seq { get; internal set; }
-        public byte sysid { get; internal set; }
-        public byte compid { get; internal set; }
-
-        public uint msgid { get; internal set; }
-
-        public bool ismavlink2 {
+        public bool IsMavlink2 {
             get
             {
-                if (buffer != null && buffer.Length > 0)
-                    return (buffer[0] == MAVLINK_STX);
+                if (SerializationMessageBuffer != null && SerializationMessageBuffer.Length > 0)
+                    return (SerializationMessageBuffer[0] == MAVLINK2_STX);
 
                 return false;
             }
         }
 
-        public string msgtypename
+        public string MsgTypename
         {
-            get { return MAVLINK_MESSAGE_INFOS.GetMessageInfo(msgid).name; }
+            get { return MavlinkMessageInfoTable.GetMessageInfo(MsgID).Name; }
         }
 
-        object _payload;
-        public object payload
+        private byte[] _serializationMessageBuffer;
+
+        public byte[] SerializationMessageBuffer
+        {
+            get { return _serializationMessageBuffer; }
+            set
+            {
+                _serializationMessageBuffer = value;
+                ProcessBuffer(_serializationMessageBuffer);
+            }
+        }
+
+        private object _payload;
+        public object Payload
         {
             get
             {
@@ -59,25 +59,26 @@ public partial class MAVLink
                     if (_payload != null)
                         return _payload;
 
-                    var messageInfo = MAVLINK_MESSAGE_INFOS.GetMessageInfo(msgid); // msgid refers to current instance of Message
+                    var messageInfo = MavlinkMessageInfoTable.GetMessageInfo(MsgID); // msgid refers to current instance of Message
 
-                    if (messageInfo.type == null)
+                    if (messageInfo.Type == null)
                         return null;
 
-                    _payload = Activator.CreateInstance(messageInfo.type);
+                    _payload = Activator.CreateInstance(messageInfo.Type);
 
                     try
                     {
-                        if (payloadlength == 0)
+                        if (PayloadLength == 0)
                             return _payload;
+
                         // fill in the data of the object
-                        if (ismavlink2)
+                        if (IsMavlink2)
                         {
-                            MavlinkUtil.ByteArrayToStructure(buffer, ref _payload, MAVLINK_NUM_HEADER_BYTES, payloadlength);
+                            MavlinkUtil.ByteArrayToStructure(SerializationMessageBuffer, ref _payload, MAVLINK2_NUM_HEADER_BYTES, PayloadLength);
                         }
                         else
                         {
-                            MavlinkUtil.ByteArrayToStructure(buffer, ref _payload, 6, payloadlength);
+                            MavlinkUtil.ByteArrayToStructure(SerializationMessageBuffer, ref _payload, 6, PayloadLength);
                         }
                     }
                     catch (Exception ex)
@@ -92,34 +93,34 @@ public partial class MAVLink
 
         public T ToStructure<T>()
         {
-            return (T)payload;
+            return (T)Payload;
         }
 
-        public ushort crc16 { get; internal set; }
+        public ushort Crc16 { get; internal set; }
 
-        public byte[] sig { get; internal set; }
+        public byte[] Signature { get; internal set; }
 
-        public byte sigLinkid
+        public byte SigLinkID
         {
             get
             {
-                if (sig != null)
+                if (Signature != null)
                 {
-                    return sig[0];
+                    return Signature[0];
                 }
 
                 return 0;
             }
         }
 
-        public ulong sigTimestamp 
+        public ulong SignatureTimeStamp 
         {
             get
             {
-                if (sig != null)
+                if (Signature != null)
                 {
                     byte[] temp = new byte[8];
-                    Array.Copy(sig, 1, temp, 0, 6);
+                    Array.Copy(Signature, 1, temp, 0, 6);
                     return BitConverter.ToUInt64(temp, 0);
                 }
 
@@ -131,57 +132,57 @@ public partial class MAVLink
         {
             get
             {
-                if (buffer == null) return 0;
-                return buffer.Length;
+                if (SerializationMessageBuffer == null) return 0;
+                return SerializationMessageBuffer.Length;
             }
         }
 
-        public MAVLinkMessage()
+        public MavlinkMessage()
         {
-            this.rxtime = DateTime.MinValue;
+            this.RxTime = DateTime.MinValue;
         }
 
-        public MAVLinkMessage(byte[] buffer): this(buffer, DateTime.UtcNow)
+        public MavlinkMessage(byte[] buffer): this(buffer, DateTime.UtcNow)
         {
         }
 
-        public MAVLinkMessage(byte[] buffer, DateTime rxTime)
+        public MavlinkMessage(byte[] buffer, DateTime rxTime)
         {
-            this.buffer = buffer;
-            this.rxtime = rxTime;
+            this.SerializationMessageBuffer = buffer;
+            this.RxTime = rxTime;
 
-            processBuffer(buffer);
+            ProcessBuffer(buffer);
         }
 
-        internal void processBuffer(byte[] buffer)
+        internal void ProcessBuffer(byte[] buffer)
         {
             _payload = null;
 
-            if (buffer[0] == MAVLINK_STX)
+            if (buffer[0] == MAVLINK2_STX)
             {
                 if (buffer.Length < 10)
                 {
                     return;
                 }
-                header = buffer[0];
-                payloadlength = buffer[1];
-                incompat_flags = buffer[2];
-                compat_flags = buffer[3];
-                seq = buffer[4];
-                sysid = buffer[5];
-                compid = buffer[6];
-                msgid = (uint) ((buffer[9] << 16) + (buffer[8] << 8) + buffer[7]);
+                Header = buffer[0];
+                PayloadLength = buffer[1];
+                IncompatibleFlags = buffer[2];
+                CompatibleFlags = buffer[3];
+                Sequence = buffer[4];
+                SysID = buffer[5];
+                CompID = buffer[6];
+                MsgID = (uint) ((buffer[9] << 16) + (buffer[8] << 8) + buffer[7]);
 
-                var crc1 = MAVLINK_CORE_HEADER_LEN + payloadlength + 1;
-                var crc2 = MAVLINK_CORE_HEADER_LEN + payloadlength + 2;
+                var crc1 = MAVLINK2_CORE_HEADER_LEN + PayloadLength + 1;
+                var crc2 = MAVLINK2_CORE_HEADER_LEN + PayloadLength + 2;
 
-                crc16 = (ushort) ((buffer[crc2] << 8) + buffer[crc1]);
+                Crc16 = (ushort) ((buffer[crc2] << 8) + buffer[crc1]);
 
-                if ((incompat_flags & MAVLINK_IFLAG_SIGNED) > 0)
+                if ((IncompatibleFlags & MAVLINK_IFLAG_SIGNED) > 0)
                 {
-                    sig = new byte[MAVLINK_SIGNATURE_BLOCK_LEN];
-                    Array.ConstrainedCopy(buffer, buffer.Length - MAVLINK_SIGNATURE_BLOCK_LEN, sig, 0,
-                        MAVLINK_SIGNATURE_BLOCK_LEN);
+                    Signature = new byte[MAVLINK2_SIGNATURE_BLOCK_LEN];
+                    Array.ConstrainedCopy(buffer, buffer.Length - MAVLINK2_SIGNATURE_BLOCK_LEN, Signature, 0,
+                        MAVLINK2_SIGNATURE_BLOCK_LEN);
                 }
             }
             else
@@ -190,23 +191,23 @@ public partial class MAVLink
                 {
                     return;
                 }
-                header = buffer[0];
-                payloadlength = buffer[1];
-                seq = buffer[2];
-                sysid = buffer[3];
-                compid = buffer[4];
-                msgid = buffer[5];
+                Header = buffer[0];
+                PayloadLength = buffer[1];
+                Sequence = buffer[2];
+                SysID = buffer[3];
+                CompID = buffer[4];
+                MsgID = buffer[5];
 
-                var crc1 = MAVLINK_CORE_HEADER_MAVLINK1_LEN + payloadlength + 1;
-                var crc2 = MAVLINK_CORE_HEADER_MAVLINK1_LEN + payloadlength + 2;
+                var crc1 = MAVLINK1_CORE_HEADER_LEN + PayloadLength + 1;
+                var crc2 = MAVLINK1_CORE_HEADER_LEN + PayloadLength + 2;
 
-                crc16 = (ushort) ((buffer[crc2] << 8) + buffer[crc1]);
+                Crc16 = (ushort) ((buffer[crc2] << 8) + buffer[crc1]);
             }
         }
 
         public override string ToString()
         {
-            return String.Format("{5},{4},{0},{1},{2},{3}", sysid, compid, msgid, msgtypename, ismavlink2, rxtime);
+            return String.Format("{5},{4},{0},{1},{2},{3}", SysID, CompID, MsgID, MsgTypename, IsMavlink2, RxTime);
         }
     }
 }

@@ -3,27 +3,27 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-public partial class MAVLink
+public partial class Mavlink
 {
     public const string MAVLINK_BUILD_DATE = "Sun May 14 2023";
     public const string MAVLINK_WIRE_PROTOCOL_VERSION = "1.0";
     public const int MAVLINK_MAX_PAYLOAD_LEN = 255;
 
-    public const byte MAVLINK_CORE_HEADER_LEN = 9;///< Length of core header (of the comm. layer)
-    public const byte MAVLINK_CORE_HEADER_MAVLINK1_LEN = 5;///< Length of MAVLink1 core header (of the comm. layer)
-    public const byte MAVLINK_NUM_HEADER_BYTES = (MAVLINK_CORE_HEADER_LEN + 1);///< Length of all header bytes, including core and stx
+    public const byte MAVLINK2_CORE_HEADER_LEN = 9; // Length of core header (of the comm. layer)
+    public const byte MAVLINK1_CORE_HEADER_LEN = 5; // Length of MAVLink1 core header (of the comm. layer)
+    public const byte MAVLINK2_NUM_HEADER_BYTES = (MAVLINK2_CORE_HEADER_LEN + 1); // Length of all header bytes, including core and stx
     public const byte MAVLINK_NUM_CHECKSUM_BYTES = 2;
-    public const byte MAVLINK_NUM_NON_PAYLOAD_BYTES = (MAVLINK_NUM_HEADER_BYTES + MAVLINK_NUM_CHECKSUM_BYTES);
+    public const byte MAVLINK2_NUM_NON_PAYLOAD_BYTES = (MAVLINK2_NUM_HEADER_BYTES + MAVLINK_NUM_CHECKSUM_BYTES);
 
-    public const int MAVLINK_MAX_PACKET_LEN = (MAVLINK_MAX_PAYLOAD_LEN + MAVLINK_NUM_NON_PAYLOAD_BYTES + MAVLINK_SIGNATURE_BLOCK_LEN);///< Maximum packet length
-    public const byte MAVLINK_SIGNATURE_BLOCK_LEN = 13;
+    public const int MAVLINK2_MAX_PACKET_LEN = (MAVLINK_MAX_PAYLOAD_LEN + MAVLINK2_NUM_NON_PAYLOAD_BYTES + MAVLINK2_SIGNATURE_BLOCK_LEN);///< Maximum packet length  
+    public const byte MAVLINK2_SIGNATURE_BLOCK_LEN = 13;
 
     public const int MAVLINK_LITTLE_ENDIAN = 1;
     public const int MAVLINK_BIG_ENDIAN = 0;
 
-    public const byte MAVLINK_STX = 254;
+    public const byte MAVLINK2_STX = 0xFD;
 
-    public const byte MAVLINK_STX_MAVLINK1 = 0xFE;
+    public const byte MAVLINK1_STX = 0xFE;
 
     public const byte MAVLINK_ENDIAN = MAVLINK_LITTLE_ENDIAN;
 
@@ -36,149 +36,149 @@ public partial class MAVLink
     public const bool MAVLINK_NEED_BYTE_SWAP = (MAVLINK_ENDIAN == MAVLINK_LITTLE_ENDIAN);
         
     // msgid, name, crc, minlength, length, type
-    public static message_info[] MAVLINK_MESSAGE_INFOS = new message_info[] {
-        new message_info(0, "HEARTBEAT", 50, 9, 9, typeof( mavlink_heartbeat_t )), // none 24 bit
-        new message_info(1, "SYS_STATUS", 124, 31, 31, typeof( mavlink_sys_status_t )), // none 24 bit
-        new message_info(2, "SYSTEM_TIME", 137, 12, 12, typeof( mavlink_system_time_t )), // none 24 bit
-        new message_info(4, "PING", 237, 14, 14, typeof( mavlink_ping_t )), // none 24 bit
-        new message_info(5, "CHANGE_OPERATOR_CONTROL", 217, 28, 28, typeof( mavlink_change_operator_control_t )), // none 24 bit
-        new message_info(6, "CHANGE_OPERATOR_CONTROL_ACK", 104, 3, 3, typeof( mavlink_change_operator_control_ack_t )), // none 24 bit
-        new message_info(7, "AUTH_KEY", 119, 32, 32, typeof( mavlink_auth_key_t )), // none 24 bit
-        new message_info(8, "LINK_NODE_STATUS", 117, 36, 36, typeof( mavlink_link_node_status_t )), // none 24 bit
-        new message_info(11, "SET_MODE", 89, 6, 6, typeof( mavlink_set_mode_t )), // none 24 bit
-        new message_info(20, "PARAM_REQUEST_READ", 214, 20, 20, typeof( mavlink_param_request_read_t )), // none 24 bit
-        new message_info(21, "PARAM_REQUEST_LIST", 159, 2, 2, typeof( mavlink_param_request_list_t )), // none 24 bit
-        new message_info(22, "PARAM_VALUE", 220, 25, 25, typeof( mavlink_param_value_t )), // none 24 bit
-        new message_info(23, "PARAM_SET", 168, 23, 23, typeof( mavlink_param_set_t )), // none 24 bit
-        new message_info(24, "GPS_RAW_INT", 24, 30, 30, typeof( mavlink_gps_raw_int_t )), // none 24 bit
-        new message_info(25, "GPS_STATUS", 23, 101, 101, typeof( mavlink_gps_status_t )), // none 24 bit
-        new message_info(26, "SCALED_IMU", 170, 22, 22, typeof( mavlink_scaled_imu_t )), // none 24 bit
-        new message_info(27, "RAW_IMU", 144, 26, 26, typeof( mavlink_raw_imu_t )), // none 24 bit
-        new message_info(28, "RAW_PRESSURE", 67, 16, 16, typeof( mavlink_raw_pressure_t )), // none 24 bit
-        new message_info(29, "SCALED_PRESSURE", 115, 14, 14, typeof( mavlink_scaled_pressure_t )), // none 24 bit
-        new message_info(30, "ATTITUDE", 39, 28, 28, typeof( mavlink_attitude_t )), // none 24 bit
-        new message_info(31, "ATTITUDE_QUATERNION", 246, 32, 32, typeof( mavlink_attitude_quaternion_t )), // none 24 bit
-        new message_info(32, "LOCAL_POSITION_NED", 185, 28, 28, typeof( mavlink_local_position_ned_t )), // none 24 bit
-        new message_info(33, "GLOBAL_POSITION_INT", 104, 28, 28, typeof( mavlink_global_position_int_t )), // none 24 bit
-        new message_info(34, "RC_CHANNELS_SCALED", 237, 22, 22, typeof( mavlink_rc_channels_scaled_t )), // none 24 bit
-        new message_info(35, "RC_CHANNELS_RAW", 244, 22, 22, typeof( mavlink_rc_channels_raw_t )), // none 24 bit
-        new message_info(36, "SERVO_OUTPUT_RAW", 222, 21, 21, typeof( mavlink_servo_output_raw_t )), // none 24 bit
-        new message_info(37, "MISSION_REQUEST_PARTIAL_LIST", 212, 6, 6, typeof( mavlink_mission_request_partial_list_t )), // none 24 bit
-        new message_info(38, "MISSION_WRITE_PARTIAL_LIST", 9, 6, 6, typeof( mavlink_mission_write_partial_list_t )), // none 24 bit
-        new message_info(39, "MISSION_ITEM", 254, 37, 37, typeof( mavlink_mission_item_t )), // none 24 bit
-        new message_info(40, "MISSION_REQUEST", 230, 4, 4, typeof( mavlink_mission_request_t )), // none 24 bit
-        new message_info(41, "MISSION_SET_CURRENT", 28, 4, 4, typeof( mavlink_mission_set_current_t )), // none 24 bit
-        new message_info(42, "MISSION_CURRENT", 28, 2, 2, typeof( mavlink_mission_current_t )), // none 24 bit
-        new message_info(43, "MISSION_REQUEST_LIST", 132, 2, 2, typeof( mavlink_mission_request_list_t )), // none 24 bit
-        new message_info(44, "MISSION_COUNT", 221, 4, 4, typeof( mavlink_mission_count_t )), // none 24 bit
-        new message_info(45, "MISSION_CLEAR_ALL", 232, 2, 2, typeof( mavlink_mission_clear_all_t )), // none 24 bit
-        new message_info(46, "MISSION_ITEM_REACHED", 11, 2, 2, typeof( mavlink_mission_item_reached_t )), // none 24 bit
-        new message_info(47, "MISSION_ACK", 153, 3, 3, typeof( mavlink_mission_ack_t )), // none 24 bit
-        new message_info(48, "SET_GPS_GLOBAL_ORIGIN", 41, 13, 13, typeof( mavlink_set_gps_global_origin_t )), // none 24 bit
-        new message_info(49, "GPS_GLOBAL_ORIGIN", 39, 12, 12, typeof( mavlink_gps_global_origin_t )), // none 24 bit
-        new message_info(50, "PARAM_MAP_RC", 78, 37, 37, typeof( mavlink_param_map_rc_t )), // none 24 bit
-        new message_info(51, "MISSION_REQUEST_INT", 196, 4, 4, typeof( mavlink_mission_request_int_t )), // none 24 bit
-        new message_info(54, "SAFETY_SET_ALLOWED_AREA", 15, 27, 27, typeof( mavlink_safety_set_allowed_area_t )), // none 24 bit
-        new message_info(55, "SAFETY_ALLOWED_AREA", 3, 25, 25, typeof( mavlink_safety_allowed_area_t )), // none 24 bit
-        new message_info(61, "ATTITUDE_QUATERNION_COV", 167, 72, 72, typeof( mavlink_attitude_quaternion_cov_t )), // none 24 bit
-        new message_info(62, "NAV_CONTROLLER_OUTPUT", 183, 26, 26, typeof( mavlink_nav_controller_output_t )), // none 24 bit
-        new message_info(63, "GLOBAL_POSITION_INT_COV", 119, 181, 181, typeof( mavlink_global_position_int_cov_t )), // none 24 bit
-        new message_info(64, "LOCAL_POSITION_NED_COV", 191, 225, 225, typeof( mavlink_local_position_ned_cov_t )), // none 24 bit
-        new message_info(65, "RC_CHANNELS", 118, 42, 42, typeof( mavlink_rc_channels_t )), // none 24 bit
-        new message_info(66, "REQUEST_DATA_STREAM", 148, 6, 6, typeof( mavlink_request_data_stream_t )), // none 24 bit
-        new message_info(67, "DATA_STREAM", 21, 4, 4, typeof( mavlink_data_stream_t )), // none 24 bit
-        new message_info(69, "MANUAL_CONTROL", 243, 11, 11, typeof( mavlink_manual_control_t )), // none 24 bit
-        new message_info(70, "RC_CHANNELS_OVERRIDE", 124, 18, 18, typeof( mavlink_rc_channels_override_t )), // none 24 bit
-        new message_info(73, "MISSION_ITEM_INT", 38, 37, 37, typeof( mavlink_mission_item_int_t )), // none 24 bit
-        new message_info(74, "VFR_HUD", 20, 20, 20, typeof( mavlink_vfr_hud_t )), // none 24 bit
-        new message_info(75, "COMMAND_INT", 158, 35, 35, typeof( mavlink_command_int_t )), // none 24 bit
-        new message_info(76, "COMMAND_LONG", 152, 33, 33, typeof( mavlink_command_long_t )), // none 24 bit
-        new message_info(77, "COMMAND_ACK", 143, 3, 3, typeof( mavlink_command_ack_t )), // none 24 bit
-        new message_info(80, "COMMAND_CANCEL", 14, 4, 4, typeof( mavlink_command_cancel_t )), // none 24 bit
-        new message_info(81, "MANUAL_SETPOINT", 106, 22, 22, typeof( mavlink_manual_setpoint_t )), // none 24 bit
-        new message_info(82, "SET_ATTITUDE_TARGET", 49, 39, 39, typeof( mavlink_set_attitude_target_t )), // none 24 bit
-        new message_info(83, "ATTITUDE_TARGET", 22, 37, 37, typeof( mavlink_attitude_target_t )), // none 24 bit
-        new message_info(84, "SET_POSITION_TARGET_LOCAL_NED", 143, 53, 53, typeof( mavlink_set_position_target_local_ned_t )), // none 24 bit
-        new message_info(85, "POSITION_TARGET_LOCAL_NED", 140, 51, 51, typeof( mavlink_position_target_local_ned_t )), // none 24 bit
-        new message_info(86, "SET_POSITION_TARGET_GLOBAL_INT", 5, 53, 53, typeof( mavlink_set_position_target_global_int_t )), // none 24 bit
-        new message_info(87, "POSITION_TARGET_GLOBAL_INT", 150, 51, 51, typeof( mavlink_position_target_global_int_t )), // none 24 bit
-        new message_info(89, "LOCAL_POSITION_NED_SYSTEM_GLOBAL_OFFSET", 231, 28, 28, typeof( mavlink_local_position_ned_system_global_offset_t )), // none 24 bit
-        new message_info(90, "HIL_STATE", 183, 56, 56, typeof( mavlink_hil_state_t )), // none 24 bit
-        new message_info(91, "HIL_CONTROLS", 63, 42, 42, typeof( mavlink_hil_controls_t )), // none 24 bit
-        new message_info(92, "HIL_RC_INPUTS_RAW", 54, 33, 33, typeof( mavlink_hil_rc_inputs_raw_t )), // none 24 bit
-        new message_info(93, "HIL_ACTUATOR_CONTROLS", 47, 81, 81, typeof( mavlink_hil_actuator_controls_t )), // none 24 bit
-        new message_info(100, "OPTICAL_FLOW", 175, 26, 26, typeof( mavlink_optical_flow_t )), // none 24 bit
-        new message_info(101, "GLOBAL_VISION_POSITION_ESTIMATE", 102, 32, 32, typeof( mavlink_global_vision_position_estimate_t )), // none 24 bit
-        new message_info(102, "VISION_POSITION_ESTIMATE", 158, 32, 32, typeof( mavlink_vision_position_estimate_t )), // none 24 bit
-        new message_info(103, "VISION_SPEED_ESTIMATE", 208, 20, 20, typeof( mavlink_vision_speed_estimate_t )), // none 24 bit
-        new message_info(104, "VICON_POSITION_ESTIMATE", 56, 32, 32, typeof( mavlink_vicon_position_estimate_t )), // none 24 bit
-        new message_info(105, "HIGHRES_IMU", 93, 62, 62, typeof( mavlink_highres_imu_t )), // none 24 bit
-        new message_info(106, "OPTICAL_FLOW_RAD", 138, 44, 44, typeof( mavlink_optical_flow_rad_t )), // none 24 bit
-        new message_info(107, "HIL_SENSOR", 108, 64, 64, typeof( mavlink_hil_sensor_t )), // none 24 bit
-        new message_info(108, "SIM_STATE", 32, 84, 84, typeof( mavlink_sim_state_t )), // none 24 bit
-        new message_info(109, "RADIO_STATUS", 185, 9, 9, typeof( mavlink_radio_status_t )), // none 24 bit
-        new message_info(110, "FILE_TRANSFER_PROTOCOL", 84, 254, 254, typeof( mavlink_file_transfer_protocol_t )), // none 24 bit
-        new message_info(111, "TIMESYNC", 34, 16, 16, typeof( mavlink_timesync_t )), // none 24 bit
-        new message_info(112, "CAMERA_TRIGGER", 174, 12, 12, typeof( mavlink_camera_trigger_t )), // none 24 bit
-        new message_info(113, "HIL_GPS", 124, 36, 36, typeof( mavlink_hil_gps_t )), // none 24 bit
-        new message_info(114, "HIL_OPTICAL_FLOW", 237, 44, 44, typeof( mavlink_hil_optical_flow_t )), // none 24 bit
-        new message_info(115, "HIL_STATE_QUATERNION", 4, 64, 64, typeof( mavlink_hil_state_quaternion_t )), // none 24 bit
-        new message_info(116, "SCALED_IMU2", 76, 22, 22, typeof( mavlink_scaled_imu2_t )), // none 24 bit
-        new message_info(117, "LOG_REQUEST_LIST", 128, 6, 6, typeof( mavlink_log_request_list_t )), // none 24 bit
-        new message_info(118, "LOG_ENTRY", 56, 14, 14, typeof( mavlink_log_entry_t )), // none 24 bit
-        new message_info(119, "LOG_REQUEST_DATA", 116, 12, 12, typeof( mavlink_log_request_data_t )), // none 24 bit
-        new message_info(120, "LOG_DATA", 134, 97, 97, typeof( mavlink_log_data_t )), // none 24 bit
-        new message_info(121, "LOG_ERASE", 237, 2, 2, typeof( mavlink_log_erase_t )), // none 24 bit
-        new message_info(122, "LOG_REQUEST_END", 203, 2, 2, typeof( mavlink_log_request_end_t )), // none 24 bit
-        new message_info(123, "GPS_INJECT_DATA", 250, 113, 113, typeof( mavlink_gps_inject_data_t )), // none 24 bit
-        new message_info(124, "GPS2_RAW", 87, 35, 35, typeof( mavlink_gps2_raw_t )), // none 24 bit
-        new message_info(125, "POWER_STATUS", 203, 6, 6, typeof( mavlink_power_status_t )), // none 24 bit
-        new message_info(126, "SERIAL_CONTROL", 220, 79, 79, typeof( mavlink_serial_control_t )), // none 24 bit
-        new message_info(127, "GPS_RTK", 25, 35, 35, typeof( mavlink_gps_rtk_t )), // none 24 bit
-        new message_info(128, "GPS2_RTK", 226, 35, 35, typeof( mavlink_gps2_rtk_t )), // none 24 bit
-        new message_info(129, "SCALED_IMU3", 46, 22, 22, typeof( mavlink_scaled_imu3_t )), // none 24 bit
-        new message_info(130, "DATA_TRANSMISSION_HANDSHAKE", 29, 13, 13, typeof( mavlink_data_transmission_handshake_t )), // none 24 bit
-        new message_info(131, "ENCAPSULATED_DATA", 223, 255, 255, typeof( mavlink_encapsulated_data_t )), // none 24 bit
-        new message_info(132, "DISTANCE_SENSOR", 85, 14, 14, typeof( mavlink_distance_sensor_t )), // none 24 bit
-        new message_info(133, "TERRAIN_REQUEST", 6, 18, 18, typeof( mavlink_terrain_request_t )), // none 24 bit
-        new message_info(134, "TERRAIN_DATA", 229, 43, 43, typeof( mavlink_terrain_data_t )), // none 24 bit
-        new message_info(135, "TERRAIN_CHECK", 203, 8, 8, typeof( mavlink_terrain_check_t )), // none 24 bit
-        new message_info(136, "TERRAIN_REPORT", 1, 22, 22, typeof( mavlink_terrain_report_t )), // none 24 bit
-        new message_info(137, "SCALED_PRESSURE2", 195, 14, 14, typeof( mavlink_scaled_pressure2_t )), // none 24 bit
-        new message_info(138, "ATT_POS_MOCAP", 109, 36, 36, typeof( mavlink_att_pos_mocap_t )), // none 24 bit
-        new message_info(139, "SET_ACTUATOR_CONTROL_TARGET", 168, 43, 43, typeof( mavlink_set_actuator_control_target_t )), // none 24 bit
-        new message_info(140, "ACTUATOR_CONTROL_TARGET", 181, 41, 41, typeof( mavlink_actuator_control_target_t )), // none 24 bit
-        new message_info(141, "ALTITUDE", 47, 32, 32, typeof( mavlink_altitude_t )), // none 24 bit
-        new message_info(142, "RESOURCE_REQUEST", 72, 243, 243, typeof( mavlink_resource_request_t )), // none 24 bit
-        new message_info(143, "SCALED_PRESSURE3", 131, 14, 14, typeof( mavlink_scaled_pressure3_t )), // none 24 bit
-        new message_info(144, "FOLLOW_TARGET", 127, 93, 93, typeof( mavlink_follow_target_t )), // none 24 bit
-        new message_info(146, "CONTROL_SYSTEM_STATE", 103, 100, 100, typeof( mavlink_control_system_state_t )), // none 24 bit
-        new message_info(147, "BATTERY_STATUS", 154, 36, 36, typeof( mavlink_battery_status_t )), // none 24 bit
-        new message_info(148, "AUTOPILOT_VERSION", 178, 60, 60, typeof( mavlink_autopilot_version_t )), // none 24 bit
-        new message_info(149, "LANDING_TARGET", 200, 30, 30, typeof( mavlink_landing_target_t )), // none 24 bit
-        new message_info(162, "FENCE_STATUS", 189, 8, 8, typeof( mavlink_fence_status_t )), // none 24 bit
-        new message_info(192, "MAG_CAL_REPORT", 36, 44, 44, typeof( mavlink_mag_cal_report_t )), // none 24 bit
-        new message_info(225, "EFI_STATUS", 208, 65, 65, typeof( mavlink_efi_status_t )), // none 24 bit
-        new message_info(230, "ESTIMATOR_STATUS", 163, 42, 42, typeof( mavlink_estimator_status_t )), // none 24 bit
-        new message_info(231, "WIND_COV", 105, 40, 40, typeof( mavlink_wind_cov_t )), // none 24 bit
-        new message_info(232, "GPS_INPUT", 151, 63, 63, typeof( mavlink_gps_input_t )), // none 24 bit
-        new message_info(233, "GPS_RTCM_DATA", 35, 182, 182, typeof( mavlink_gps_rtcm_data_t )), // none 24 bit
-        new message_info(234, "HIGH_LATENCY", 150, 40, 40, typeof( mavlink_high_latency_t )), // none 24 bit
-        new message_info(235, "HIGH_LATENCY2", 179, 42, 42, typeof( mavlink_high_latency2_t )), // none 24 bit
-        new message_info(241, "VIBRATION", 90, 32, 32, typeof( mavlink_vibration_t )), // none 24 bit
-        new message_info(242, "HOME_POSITION", 104, 52, 52, typeof( mavlink_home_position_t )), // none 24 bit
-        new message_info(243, "SET_HOME_POSITION", 85, 53, 53, typeof( mavlink_set_home_position_t )), // none 24 bit
-        new message_info(244, "MESSAGE_INTERVAL", 95, 6, 6, typeof( mavlink_message_interval_t )), // none 24 bit
-        new message_info(245, "EXTENDED_SYS_STATE", 130, 2, 2, typeof( mavlink_extended_sys_state_t )), // none 24 bit
-        new message_info(246, "ADSB_VEHICLE", 184, 38, 38, typeof( mavlink_adsb_vehicle_t )), // none 24 bit
-        new message_info(247, "COLLISION", 81, 19, 19, typeof( mavlink_collision_t )), // none 24 bit
-        new message_info(248, "V2_EXTENSION", 8, 254, 254, typeof( mavlink_v2_extension_t )), // none 24 bit
-        new message_info(249, "MEMORY_VECT", 204, 36, 36, typeof( mavlink_memory_vect_t )), // none 24 bit
-        new message_info(250, "DEBUG_VECT", 49, 30, 30, typeof( mavlink_debug_vect_t )), // none 24 bit
-        new message_info(251, "NAMED_VALUE_FLOAT", 170, 18, 18, typeof( mavlink_named_value_float_t )), // none 24 bit
-        new message_info(252, "NAMED_VALUE_INT", 44, 18, 18, typeof( mavlink_named_value_int_t )), // none 24 bit
-        new message_info(253, "STATUSTEXT", 83, 51, 51, typeof( mavlink_statustext_t )), // none 24 bit
-        new message_info(254, "DEBUG", 46, 9, 9, typeof( mavlink_debug_t )), // none 24 bit
+    public static MessageInfo[] MavlinkMessageInfoTable = new MessageInfo[] {
+        new MessageInfo(0, "HEARTBEAT", 50, 9, 9, typeof( mavlink_heartbeat_t )), // none 24 bit
+        new MessageInfo(1, "SYS_STATUS", 124, 31, 31, typeof( mavlink_sys_status_t )), // none 24 bit
+        new MessageInfo(2, "SYSTEM_TIME", 137, 12, 12, typeof( mavlink_system_time_t )), // none 24 bit
+        new MessageInfo(4, "PING", 237, 14, 14, typeof( mavlink_ping_t )), // none 24 bit
+        new MessageInfo(5, "CHANGE_OPERATOR_CONTROL", 217, 28, 28, typeof( mavlink_change_operator_control_t )), // none 24 bit
+        new MessageInfo(6, "CHANGE_OPERATOR_CONTROL_ACK", 104, 3, 3, typeof( mavlink_change_operator_control_ack_t )), // none 24 bit
+        new MessageInfo(7, "AUTH_KEY", 119, 32, 32, typeof( mavlink_auth_key_t )), // none 24 bit
+        new MessageInfo(8, "LINK_NODE_STATUS", 117, 36, 36, typeof( mavlink_link_node_status_t )), // none 24 bit
+        new MessageInfo(11, "SET_MODE", 89, 6, 6, typeof( mavlink_set_mode_t )), // none 24 bit
+        new MessageInfo(20, "PARAM_REQUEST_READ", 214, 20, 20, typeof( mavlink_param_request_read_t )), // none 24 bit
+        new MessageInfo(21, "PARAM_REQUEST_LIST", 159, 2, 2, typeof( mavlink_param_request_list_t )), // none 24 bit
+        new MessageInfo(22, "PARAM_VALUE", 220, 25, 25, typeof( mavlink_param_value_t )), // none 24 bit
+        new MessageInfo(23, "PARAM_SET", 168, 23, 23, typeof( mavlink_param_set_t )), // none 24 bit
+        new MessageInfo(24, "GPS_RAW_INT", 24, 30, 30, typeof( mavlink_gps_raw_int_t )), // none 24 bit
+        new MessageInfo(25, "GPS_STATUS", 23, 101, 101, typeof( mavlink_gps_status_t )), // none 24 bit
+        new MessageInfo(26, "SCALED_IMU", 170, 22, 22, typeof( mavlink_scaled_imu_t )), // none 24 bit
+        new MessageInfo(27, "RAW_IMU", 144, 26, 26, typeof( mavlink_raw_imu_t )), // none 24 bit
+        new MessageInfo(28, "RAW_PRESSURE", 67, 16, 16, typeof( mavlink_raw_pressure_t )), // none 24 bit
+        new MessageInfo(29, "SCALED_PRESSURE", 115, 14, 14, typeof( mavlink_scaled_pressure_t )), // none 24 bit
+        new MessageInfo(30, "ATTITUDE", 39, 28, 28, typeof( mavlink_attitude_t )), // none 24 bit
+        new MessageInfo(31, "ATTITUDE_QUATERNION", 246, 32, 32, typeof( mavlink_attitude_quaternion_t )), // none 24 bit
+        new MessageInfo(32, "LOCAL_POSITION_NED", 185, 28, 28, typeof( mavlink_local_position_ned_t )), // none 24 bit
+        new MessageInfo(33, "GLOBAL_POSITION_INT", 104, 28, 28, typeof( mavlink_global_position_int_t )), // none 24 bit
+        new MessageInfo(34, "RC_CHANNELS_SCALED", 237, 22, 22, typeof( mavlink_rc_channels_scaled_t )), // none 24 bit
+        new MessageInfo(35, "RC_CHANNELS_RAW", 244, 22, 22, typeof( mavlink_rc_channels_raw_t )), // none 24 bit
+        new MessageInfo(36, "SERVO_OUTPUT_RAW", 222, 21, 21, typeof( mavlink_servo_output_raw_t )), // none 24 bit
+        new MessageInfo(37, "MISSION_REQUEST_PARTIAL_LIST", 212, 6, 6, typeof( mavlink_mission_request_partial_list_t )), // none 24 bit
+        new MessageInfo(38, "MISSION_WRITE_PARTIAL_LIST", 9, 6, 6, typeof( mavlink_mission_write_partial_list_t )), // none 24 bit
+        new MessageInfo(39, "MISSION_ITEM", 254, 37, 37, typeof( mavlink_mission_item_t )), // none 24 bit
+        new MessageInfo(40, "MISSION_REQUEST", 230, 4, 4, typeof( mavlink_mission_request_t )), // none 24 bit
+        new MessageInfo(41, "MISSION_SET_CURRENT", 28, 4, 4, typeof( mavlink_mission_set_current_t )), // none 24 bit
+        new MessageInfo(42, "MISSION_CURRENT", 28, 2, 2, typeof( mavlink_mission_current_t )), // none 24 bit
+        new MessageInfo(43, "MISSION_REQUEST_LIST", 132, 2, 2, typeof( mavlink_mission_request_list_t )), // none 24 bit
+        new MessageInfo(44, "MISSION_COUNT", 221, 4, 4, typeof( mavlink_mission_count_t )), // none 24 bit
+        new MessageInfo(45, "MISSION_CLEAR_ALL", 232, 2, 2, typeof( mavlink_mission_clear_all_t )), // none 24 bit
+        new MessageInfo(46, "MISSION_ITEM_REACHED", 11, 2, 2, typeof( mavlink_mission_item_reached_t )), // none 24 bit
+        new MessageInfo(47, "MISSION_ACK", 153, 3, 3, typeof( mavlink_mission_ack_t )), // none 24 bit
+        new MessageInfo(48, "SET_GPS_GLOBAL_ORIGIN", 41, 13, 13, typeof( mavlink_set_gps_global_origin_t )), // none 24 bit
+        new MessageInfo(49, "GPS_GLOBAL_ORIGIN", 39, 12, 12, typeof( mavlink_gps_global_origin_t )), // none 24 bit
+        new MessageInfo(50, "PARAM_MAP_RC", 78, 37, 37, typeof( mavlink_param_map_rc_t )), // none 24 bit
+        new MessageInfo(51, "MISSION_REQUEST_INT", 196, 4, 4, typeof( mavlink_mission_request_int_t )), // none 24 bit
+        new MessageInfo(54, "SAFETY_SET_ALLOWED_AREA", 15, 27, 27, typeof( mavlink_safety_set_allowed_area_t )), // none 24 bit
+        new MessageInfo(55, "SAFETY_ALLOWED_AREA", 3, 25, 25, typeof( mavlink_safety_allowed_area_t )), // none 24 bit
+        new MessageInfo(61, "ATTITUDE_QUATERNION_COV", 167, 72, 72, typeof( mavlink_attitude_quaternion_cov_t )), // none 24 bit
+        new MessageInfo(62, "NAV_CONTROLLER_OUTPUT", 183, 26, 26, typeof( mavlink_nav_controller_output_t )), // none 24 bit
+        new MessageInfo(63, "GLOBAL_POSITION_INT_COV", 119, 181, 181, typeof( mavlink_global_position_int_cov_t )), // none 24 bit
+        new MessageInfo(64, "LOCAL_POSITION_NED_COV", 191, 225, 225, typeof( mavlink_local_position_ned_cov_t )), // none 24 bit
+        new MessageInfo(65, "RC_CHANNELS", 118, 42, 42, typeof( mavlink_rc_channels_t )), // none 24 bit
+        new MessageInfo(66, "REQUEST_DATA_STREAM", 148, 6, 6, typeof( mavlink_request_data_stream_t )), // none 24 bit
+        new MessageInfo(67, "DATA_STREAM", 21, 4, 4, typeof( mavlink_data_stream_t )), // none 24 bit
+        new MessageInfo(69, "MANUAL_CONTROL", 243, 11, 11, typeof( mavlink_manual_control_t )), // none 24 bit
+        new MessageInfo(70, "RC_CHANNELS_OVERRIDE", 124, 18, 18, typeof( mavlink_rc_channels_override_t )), // none 24 bit
+        new MessageInfo(73, "MISSION_ITEM_INT", 38, 37, 37, typeof( mavlink_mission_item_int_t )), // none 24 bit
+        new MessageInfo(74, "VFR_HUD", 20, 20, 20, typeof( mavlink_vfr_hud_t )), // none 24 bit
+        new MessageInfo(75, "COMMAND_INT", 158, 35, 35, typeof( mavlink_command_int_t )), // none 24 bit
+        new MessageInfo(76, "COMMAND_LONG", 152, 33, 33, typeof( mavlink_command_long_t )), // none 24 bit
+        new MessageInfo(77, "COMMAND_ACK", 143, 3, 3, typeof( mavlink_command_ack_t )), // none 24 bit
+        new MessageInfo(80, "COMMAND_CANCEL", 14, 4, 4, typeof( mavlink_command_cancel_t )), // none 24 bit
+        new MessageInfo(81, "MANUAL_SETPOINT", 106, 22, 22, typeof( mavlink_manual_setpoint_t )), // none 24 bit
+        new MessageInfo(82, "SET_ATTITUDE_TARGET", 49, 39, 39, typeof( mavlink_set_attitude_target_t )), // none 24 bit
+        new MessageInfo(83, "ATTITUDE_TARGET", 22, 37, 37, typeof( mavlink_attitude_target_t )), // none 24 bit
+        new MessageInfo(84, "SET_POSITION_TARGET_LOCAL_NED", 143, 53, 53, typeof( mavlink_set_position_target_local_ned_t )), // none 24 bit
+        new MessageInfo(85, "POSITION_TARGET_LOCAL_NED", 140, 51, 51, typeof( mavlink_position_target_local_ned_t )), // none 24 bit
+        new MessageInfo(86, "SET_POSITION_TARGET_GLOBAL_INT", 5, 53, 53, typeof( mavlink_set_position_target_global_int_t )), // none 24 bit
+        new MessageInfo(87, "POSITION_TARGET_GLOBAL_INT", 150, 51, 51, typeof( mavlink_position_target_global_int_t )), // none 24 bit
+        new MessageInfo(89, "LOCAL_POSITION_NED_SYSTEM_GLOBAL_OFFSET", 231, 28, 28, typeof( mavlink_local_position_ned_system_global_offset_t )), // none 24 bit
+        new MessageInfo(90, "HIL_STATE", 183, 56, 56, typeof( mavlink_hil_state_t )), // none 24 bit
+        new MessageInfo(91, "HIL_CONTROLS", 63, 42, 42, typeof( mavlink_hil_controls_t )), // none 24 bit
+        new MessageInfo(92, "HIL_RC_INPUTS_RAW", 54, 33, 33, typeof( mavlink_hil_rc_inputs_raw_t )), // none 24 bit
+        new MessageInfo(93, "HIL_ACTUATOR_CONTROLS", 47, 81, 81, typeof( mavlink_hil_actuator_controls_t )), // none 24 bit
+        new MessageInfo(100, "OPTICAL_FLOW", 175, 26, 26, typeof( mavlink_optical_flow_t )), // none 24 bit
+        new MessageInfo(101, "GLOBAL_VISION_POSITION_ESTIMATE", 102, 32, 32, typeof( mavlink_global_vision_position_estimate_t )), // none 24 bit
+        new MessageInfo(102, "VISION_POSITION_ESTIMATE", 158, 32, 32, typeof( mavlink_vision_position_estimate_t )), // none 24 bit
+        new MessageInfo(103, "VISION_SPEED_ESTIMATE", 208, 20, 20, typeof( mavlink_vision_speed_estimate_t )), // none 24 bit
+        new MessageInfo(104, "VICON_POSITION_ESTIMATE", 56, 32, 32, typeof( mavlink_vicon_position_estimate_t )), // none 24 bit
+        new MessageInfo(105, "HIGHRES_IMU", 93, 62, 62, typeof( mavlink_highres_imu_t )), // none 24 bit
+        new MessageInfo(106, "OPTICAL_FLOW_RAD", 138, 44, 44, typeof( mavlink_optical_flow_rad_t )), // none 24 bit
+        new MessageInfo(107, "HIL_SENSOR", 108, 64, 64, typeof( mavlink_hil_sensor_t )), // none 24 bit
+        new MessageInfo(108, "SIM_STATE", 32, 84, 84, typeof( mavlink_sim_state_t )), // none 24 bit
+        new MessageInfo(109, "RADIO_STATUS", 185, 9, 9, typeof( mavlink_radio_status_t )), // none 24 bit
+        new MessageInfo(110, "FILE_TRANSFER_PROTOCOL", 84, 254, 254, typeof( mavlink_file_transfer_protocol_t )), // none 24 bit
+        new MessageInfo(111, "TIMESYNC", 34, 16, 16, typeof( mavlink_timesync_t )), // none 24 bit
+        new MessageInfo(112, "CAMERA_TRIGGER", 174, 12, 12, typeof( mavlink_camera_trigger_t )), // none 24 bit
+        new MessageInfo(113, "HIL_GPS", 124, 36, 36, typeof( mavlink_hil_gps_t )), // none 24 bit
+        new MessageInfo(114, "HIL_OPTICAL_FLOW", 237, 44, 44, typeof( mavlink_hil_optical_flow_t )), // none 24 bit
+        new MessageInfo(115, "HIL_STATE_QUATERNION", 4, 64, 64, typeof( mavlink_hil_state_quaternion_t )), // none 24 bit
+        new MessageInfo(116, "SCALED_IMU2", 76, 22, 22, typeof( mavlink_scaled_imu2_t )), // none 24 bit
+        new MessageInfo(117, "LOG_REQUEST_LIST", 128, 6, 6, typeof( mavlink_log_request_list_t )), // none 24 bit
+        new MessageInfo(118, "LOG_ENTRY", 56, 14, 14, typeof( mavlink_log_entry_t )), // none 24 bit
+        new MessageInfo(119, "LOG_REQUEST_DATA", 116, 12, 12, typeof( mavlink_log_request_data_t )), // none 24 bit
+        new MessageInfo(120, "LOG_DATA", 134, 97, 97, typeof( mavlink_log_data_t )), // none 24 bit
+        new MessageInfo(121, "LOG_ERASE", 237, 2, 2, typeof( mavlink_log_erase_t )), // none 24 bit
+        new MessageInfo(122, "LOG_REQUEST_END", 203, 2, 2, typeof( mavlink_log_request_end_t )), // none 24 bit
+        new MessageInfo(123, "GPS_INJECT_DATA", 250, 113, 113, typeof( mavlink_gps_inject_data_t )), // none 24 bit
+        new MessageInfo(124, "GPS2_RAW", 87, 35, 35, typeof( mavlink_gps2_raw_t )), // none 24 bit
+        new MessageInfo(125, "POWER_STATUS", 203, 6, 6, typeof( mavlink_power_status_t )), // none 24 bit
+        new MessageInfo(126, "SERIAL_CONTROL", 220, 79, 79, typeof( mavlink_serial_control_t )), // none 24 bit
+        new MessageInfo(127, "GPS_RTK", 25, 35, 35, typeof( mavlink_gps_rtk_t )), // none 24 bit
+        new MessageInfo(128, "GPS2_RTK", 226, 35, 35, typeof( mavlink_gps2_rtk_t )), // none 24 bit
+        new MessageInfo(129, "SCALED_IMU3", 46, 22, 22, typeof( mavlink_scaled_imu3_t )), // none 24 bit
+        new MessageInfo(130, "DATA_TRANSMISSION_HANDSHAKE", 29, 13, 13, typeof( mavlink_data_transmission_handshake_t )), // none 24 bit
+        new MessageInfo(131, "ENCAPSULATED_DATA", 223, 255, 255, typeof( mavlink_encapsulated_data_t )), // none 24 bit
+        new MessageInfo(132, "DISTANCE_SENSOR", 85, 14, 14, typeof( mavlink_distance_sensor_t )), // none 24 bit
+        new MessageInfo(133, "TERRAIN_REQUEST", 6, 18, 18, typeof( mavlink_terrain_request_t )), // none 24 bit
+        new MessageInfo(134, "TERRAIN_DATA", 229, 43, 43, typeof( mavlink_terrain_data_t )), // none 24 bit
+        new MessageInfo(135, "TERRAIN_CHECK", 203, 8, 8, typeof( mavlink_terrain_check_t )), // none 24 bit
+        new MessageInfo(136, "TERRAIN_REPORT", 1, 22, 22, typeof( mavlink_terrain_report_t )), // none 24 bit
+        new MessageInfo(137, "SCALED_PRESSURE2", 195, 14, 14, typeof( mavlink_scaled_pressure2_t )), // none 24 bit
+        new MessageInfo(138, "ATT_POS_MOCAP", 109, 36, 36, typeof( mavlink_att_pos_mocap_t )), // none 24 bit
+        new MessageInfo(139, "SET_ACTUATOR_CONTROL_TARGET", 168, 43, 43, typeof( mavlink_set_actuator_control_target_t )), // none 24 bit
+        new MessageInfo(140, "ACTUATOR_CONTROL_TARGET", 181, 41, 41, typeof( mavlink_actuator_control_target_t )), // none 24 bit
+        new MessageInfo(141, "ALTITUDE", 47, 32, 32, typeof( mavlink_altitude_t )), // none 24 bit
+        new MessageInfo(142, "RESOURCE_REQUEST", 72, 243, 243, typeof( mavlink_resource_request_t )), // none 24 bit
+        new MessageInfo(143, "SCALED_PRESSURE3", 131, 14, 14, typeof( mavlink_scaled_pressure3_t )), // none 24 bit
+        new MessageInfo(144, "FOLLOW_TARGET", 127, 93, 93, typeof( mavlink_follow_target_t )), // none 24 bit
+        new MessageInfo(146, "CONTROL_SYSTEM_STATE", 103, 100, 100, typeof( mavlink_control_system_state_t )), // none 24 bit
+        new MessageInfo(147, "BATTERY_STATUS", 154, 36, 36, typeof( mavlink_battery_status_t )), // none 24 bit
+        new MessageInfo(148, "AUTOPILOT_VERSION", 178, 60, 60, typeof( mavlink_autopilot_version_t )), // none 24 bit
+        new MessageInfo(149, "LANDING_TARGET", 200, 30, 30, typeof( mavlink_landing_target_t )), // none 24 bit
+        new MessageInfo(162, "FENCE_STATUS", 189, 8, 8, typeof( mavlink_fence_status_t )), // none 24 bit
+        new MessageInfo(192, "MAG_CAL_REPORT", 36, 44, 44, typeof( mavlink_mag_cal_report_t )), // none 24 bit
+        new MessageInfo(225, "EFI_STATUS", 208, 65, 65, typeof( mavlink_efi_status_t )), // none 24 bit
+        new MessageInfo(230, "ESTIMATOR_STATUS", 163, 42, 42, typeof( mavlink_estimator_status_t )), // none 24 bit
+        new MessageInfo(231, "WIND_COV", 105, 40, 40, typeof( mavlink_wind_cov_t )), // none 24 bit
+        new MessageInfo(232, "GPS_INPUT", 151, 63, 63, typeof( mavlink_gps_input_t )), // none 24 bit
+        new MessageInfo(233, "GPS_RTCM_DATA", 35, 182, 182, typeof( mavlink_gps_rtcm_data_t )), // none 24 bit
+        new MessageInfo(234, "HIGH_LATENCY", 150, 40, 40, typeof( mavlink_high_latency_t )), // none 24 bit
+        new MessageInfo(235, "HIGH_LATENCY2", 179, 42, 42, typeof( mavlink_high_latency2_t )), // none 24 bit
+        new MessageInfo(241, "VIBRATION", 90, 32, 32, typeof( mavlink_vibration_t )), // none 24 bit
+        new MessageInfo(242, "HOME_POSITION", 104, 52, 52, typeof( mavlink_home_position_t )), // none 24 bit
+        new MessageInfo(243, "SET_HOME_POSITION", 85, 53, 53, typeof( mavlink_set_home_position_t )), // none 24 bit
+        new MessageInfo(244, "MESSAGE_INTERVAL", 95, 6, 6, typeof( mavlink_message_interval_t )), // none 24 bit
+        new MessageInfo(245, "EXTENDED_SYS_STATE", 130, 2, 2, typeof( mavlink_extended_sys_state_t )), // none 24 bit
+        new MessageInfo(246, "ADSB_VEHICLE", 184, 38, 38, typeof( mavlink_adsb_vehicle_t )), // none 24 bit
+        new MessageInfo(247, "COLLISION", 81, 19, 19, typeof( mavlink_collision_t )), // none 24 bit
+        new MessageInfo(248, "V2_EXTENSION", 8, 254, 254, typeof( mavlink_v2_extension_t )), // none 24 bit
+        new MessageInfo(249, "MEMORY_VECT", 204, 36, 36, typeof( mavlink_memory_vect_t )), // none 24 bit
+        new MessageInfo(250, "DEBUG_VECT", 49, 30, 30, typeof( mavlink_debug_vect_t )), // none 24 bit
+        new MessageInfo(251, "NAMED_VALUE_FLOAT", 170, 18, 18, typeof( mavlink_named_value_float_t )), // none 24 bit
+        new MessageInfo(252, "NAMED_VALUE_INT", 44, 18, 18, typeof( mavlink_named_value_int_t )), // none 24 bit
+        new MessageInfo(253, "STATUSTEXT", 83, 51, 51, typeof( mavlink_statustext_t )), // none 24 bit
+        new MessageInfo(254, "DEBUG", 46, 9, 9, typeof( mavlink_debug_t )), // none 24 bit
 
     };
 
@@ -187,28 +187,28 @@ public partial class MAVLink
     public const byte MAVLINK_IFLAG_SIGNED=  0x01;
     public const byte MAVLINK_IFLAG_MASK   = 0x01;
 
-    public struct message_info
+    public struct MessageInfo
     {
-        public uint msgid { get; internal set; }
-        public string name { get; internal set; }
-        public byte crc { get; internal set; }
-        public uint minlength { get; internal set; }
-        public uint length { get; internal set; }
-        public Type type { get; internal set; }
+        public uint MsgID { get; internal set; }
+        public string Name { get; internal set; }
+        public byte Crc { get; internal set; }
+        public uint MinLength { get; internal set; }
+        public uint Length { get; internal set; }
+        public Type Type { get; internal set; }
 
-        public message_info(uint msgid, string name, byte crc, uint minlength, uint length, Type type)
+        public MessageInfo(uint msgid, string name, byte crc, uint minlength, uint length, Type type)
         {
-            this.msgid = msgid;
-            this.name = name;
-            this.crc = crc;
-            this.minlength = minlength;
-            this.length = length;
-            this.type = type;
+            this.MsgID = msgid;
+            this.Name = name;
+            this.Crc = crc;
+            this.MinLength = minlength;
+            this.Length = length;
+            this.Type = type;
         }
 
         public override string ToString()
         {
-            return String.Format("{0} - {1}",name,msgid);
+            return String.Format("{0} - {1}",Name,MsgID);
         }
     }   
 

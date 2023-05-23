@@ -18,16 +18,16 @@ public static class MavlinkUtil
     /// Endianness will be detected using packet inspection
     /// </summary>
     /// <typeparam name="TMavlinkPacket">The type of mavlink packet to create</typeparam>
-    /// <param name="bytearray">The bytes of the mavlink packet</param>
-    /// <param name="startoffset">The position in the byte array where the packet starts</param>
+    /// <param name="byteArray">The bytes of the mavlink packet</param>
+    /// <param name="startOffset">The position in the byte array where the packet starts</param>
     /// <returns>The newly created mavlink packet</returns>
-    public static TMavlinkPacket ByteArrayToStructure<TMavlinkPacket>(this byte[] bytearray, int startoffset = 6)
+    public static TMavlinkPacket ByteArrayToStructure<TMavlinkPacket>(this byte[] byteArray, int startOffset = 6)
         where TMavlinkPacket : struct
     {
         if (UseUnsafe)
-            return ReadUsingPointer<TMavlinkPacket>(bytearray, startoffset);
+            return ReadUsingPointer<TMavlinkPacket>(byteArray, startOffset);
         else
-            return ByteArrayToStructureGC<TMavlinkPacket>(bytearray, startoffset);
+            return ByteArrayToStructureGC<TMavlinkPacket>(byteArray, startOffset);
     }
     public static TMavlinkPacket ByteArrayToStructureBigEndian<TMavlinkPacket>(this byte[] bytearray,
         int startoffset = 6) where TMavlinkPacket : struct
@@ -37,38 +37,38 @@ public static class MavlinkUtil
         return (TMavlinkPacket) newPacket;
     }
 
-    public static void ByteArrayToStructure(byte[] bytearray, ref object obj, int startoffset, int payloadlength = 0)
+    public static void ByteArrayToStructure(byte[] byteArray, ref object payloadStructure, int startOffset, int payloadLength = 0)
     {
-        if (bytearray == null || bytearray.Length < (startoffset + payloadlength) || payloadlength == 0)
+        if (byteArray == null || byteArray.Length < (startOffset + payloadLength) || payloadLength == 0)
             return;
 
-        int len = Marshal.SizeOf(obj);
+        int length = Marshal.SizeOf(payloadStructure);
 
-        IntPtr iptr = IntPtr.Zero;
+        IntPtr intPtr = IntPtr.Zero;
 
         try
         {
-            iptr = Marshal.AllocHGlobal(len);
-            //clear memory
-            for (int i = 0; i < len / 8; i++)
+            intPtr = Marshal.AllocHGlobal(length);
+            // Clear allocated memory block in 8 byte chunks.
+            for (int i = 0; i < length / 8; i++)
             {
-                Marshal.WriteInt64(iptr, i * 8, 0x00);
+                Marshal.WriteInt64(intPtr, i * 8, 0x00);
+            }
+            // Clear the remaining memory byte by byte.
+            for (int i = length - (length % 8); i < length; i++)
+            {
+                Marshal.WriteByte(intPtr, i, 0x00);
             }
 
-            for (int i = len - (len % 8); i < len; i++)
-            {
-                Marshal.WriteByte(iptr, i, 0x00);
-            }
+            // Copy byte array to pointer memory block.
+            Marshal.Copy(byteArray, startOffset, intPtr, payloadLength);
 
-            // copy byte array to ptr
-            Marshal.Copy(bytearray, startoffset, iptr, payloadlength);
-
-            obj = Marshal.PtrToStructure(iptr, obj.GetType());
+            payloadStructure = Marshal.PtrToStructure(intPtr, payloadStructure.GetType());
         }
         finally
         {
-            if(iptr != IntPtr.Zero)
-                Marshal.FreeHGlobal(iptr);
+            if(intPtr != IntPtr.Zero)
+                Marshal.FreeHGlobal(intPtr);
         }
     }
 
@@ -98,10 +98,10 @@ public static class MavlinkUtil
         return (TMavlinkPacket) obj;
     }
 
-    public static byte[] trim_payload(ref byte[] payload)
+    public static byte[] TrimPayloadNullBytes(ref byte[] payload)
     {
         var length = payload.Length;
-        while (length > 1 && payload[length - 1] == 0)
+        while (length > 1 && payload[length - 1] == 0) 
         {
             length--;
         }
@@ -349,15 +349,15 @@ public static class MavlinkUtil
         return data;
     } // Swap
 
-    public static MAVLink.message_info GetMessageInfo(this MAVLink.message_info[] messageInfoCollection, uint msgid)
+    public static Mavlink.MessageInfo GetMessageInfo(this Mavlink.MessageInfo[] messageInfoCollection, uint msgid)
     {
         foreach (var messageInfo in messageInfoCollection)
         {
-            if (messageInfo.msgid == msgid)
+            if (messageInfo.MsgID == msgid)
                 return messageInfo;
         }
 
         Console.WriteLine("Unknown Packet " + msgid);
-        return new MAVLink.message_info();
+        return new Mavlink.MessageInfo();
     }
 }
