@@ -21,7 +21,10 @@ namespace SimpleExample
         // locking to prevent thread collisions on serial port
         private object serialLock = new object();
         private byte SysIDLocal { get;  set; } = 0xFF;
-        private byte CompIDLocal { get; set; } = 0xBE; 
+        private byte CompIDLocal { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_MISSIONPLANNER;
+
+        private byte VehicleSysID { get; set; } = 0x01;
+        private byte VehicleCompID { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER;
 
         public GroundStation()
         {
@@ -116,7 +119,7 @@ namespace SimpleExample
                                 target_component = targetCompID,
                                 req_stream_id = (byte)Mavlink.MAV_DATA_STREAM.ALL,
                                 start_stop = 1
-                            });
+                            },SysIDLocal, CompIDLocal);
 
                         WriteBufferConsole(buffer, "Requesting data", true);
                         serialPort1.Write(buffer, 0, buffer.Length);
@@ -127,25 +130,40 @@ namespace SimpleExample
                     }
 
                     // from here we should check the the message is addressed to us
-                    if (SysIDLocal != message.SysID || CompIDLocal != message.CompID)
+                    if (VehicleSysID != message.SysID || VehicleCompID != message.CompID)
                         continue;
-
-                    Console.WriteLine(message.MsgTypename);
                     
-                    if (message.MsgID == (byte)Mavlink.MAVLINK_MSG_ID.ATTITUDE)
-                    //or
-                    //if (packet.data.GetType() == typeof(MAVLink.mavlink_attitude_t))
-                    {
-                        var att = (Mavlink.mavlink_attitude_t)message.Payload;
-
-                        Console.WriteLine(att.pitch*57.2958 + " " + att.roll*57.2958);
-                    }
+                    ProcessMessage(message);
                 }
                 catch
                 {
                 }
 
                 System.Threading.Thread.Sleep(1);
+            }
+        }
+
+        void ProcessMessage(Mavlink.MavlinkMessage message)
+        {
+            Console.WriteLine(message.MsgTypename);
+            switch (message.MsgID)
+            {
+                case (byte)Mavlink.MAVLINK_MSG_ID.NAMED_VALUE_INT:
+                    {
+                        var payload = (Mavlink.mavlink_named_value_int_t)message.Payload;
+                        labelIntName.BeginInvoke((Action)(() => labelIntName.Text = $"Param: {Encoding.UTF8.GetString(payload.name)}" + "]"));
+                        labelInt.BeginInvoke((Action)(() => labelInt.Text = $"Value: {payload.value}"));
+                        break;
+                    }
+                case (byte)Mavlink.MAVLINK_MSG_ID.INSTRUMENTATION:
+                    {
+                        var payload = (Mavlink.mavlink_instrumentation_t)message.Payload;
+                        labelIntName.BeginInvoke((Action)(() => labelIntName.Text = $"Param: {message.MsgTypename}"));
+                        labelInt.BeginInvoke((Action)(() => labelInt.Text = $"Value: {payload.current_zero}/{payload.current_one}/{payload.current_two}/{payload.voltage}"));
+                        break;
+                    }
+                default:
+                    break;
             }
         }
 

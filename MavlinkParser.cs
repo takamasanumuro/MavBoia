@@ -9,16 +9,16 @@ public partial class Mavlink
    
     public class MavlinkParser
     {
-        public int sequenceCounter = 0;
+        public int SequenceCounterRX { get; set; } = 0;
+        public int SequenceCounterTX { get; set; } = 0;
+        public int BadCrc { get; set; } = 0;
+        public int BadLength { get; set; } = 0;
 
-        public int badCRC = 0;
-        public int badLength = 0;
-
-        public bool hasTimestamp = false;
+        public bool HasTimeStamp = false;
 
         public MavlinkParser(bool hasTimestamp = false)
         {
-            this.hasTimestamp = hasTimestamp;
+            this.HasTimeStamp = hasTimestamp;
         }
 
         public static void ReadWithTimeout(Stream BaseStream, byte[] buffer, int startingPositionindex, int count)
@@ -76,7 +76,7 @@ public partial class Mavlink
 
             DateTime packetTime = DateTime.MinValue;
 
-            if (hasTimestamp)
+            if (HasTimeStamp)
             {
                 byte[] dateArray = new byte[8];
 
@@ -173,7 +173,7 @@ public partial class Mavlink
             if ((message.Crc16 >> 8) != (crc >> 8) ||
                       (message.Crc16 & 0xff) != (crc & 0xff))
             {
-                badCRC++;
+                BadCrc++;
                 // crc fail
                 return null;
             }
@@ -191,11 +191,11 @@ public partial class Mavlink
 
             serializedMessage[0] = MAVLINK1_STX;
             serializedMessage[1] = (byte)serializedPayloadData.Length;
-            serializedMessage[2] = (byte)sequenceCounter;
+            serializedMessage[2] = (byte)SequenceCounterRX;
             if (sequence != -1)
                 serializedMessage[2] = (byte)sequence;
 
-            sequenceCounter++;
+            SequenceCounterRX++;
 
             serializedMessage[3] = sysID; // this is always 255 - MYGCS
             serializedMessage[4] = compID;
@@ -240,10 +240,10 @@ public partial class Mavlink
             if (sign)
                 packet[2] |= MAVLINK_IFLAG_SIGNED;
             packet[3] = 0;//compat
-            packet[4] = (byte)sequenceCounter;
+            packet[4] = (byte)SequenceCounterRX;
             if (sequence != -1)
                 packet[4] = (byte)sequence;
-            sequenceCounter++;
+            SequenceCounterRX++;
 
             packet[5] = sysid;
             packet[6] = compid;

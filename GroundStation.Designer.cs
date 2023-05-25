@@ -38,6 +38,8 @@
             this.comboBoxLogPacket = new System.Windows.Forms.ComboBox();
             this.buttonLogPacket = new System.Windows.Forms.Button();
             this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.labelInt = new System.Windows.Forms.Label();
+            this.labelIntName = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.mavlinkheartbeattBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -120,11 +122,31 @@
             // 
             this.mavlinkheartbeattBindingSource.DataSource = typeof(Mavlink.mavlink_heartbeat_t);
             // 
+            // labelInt
+            // 
+            this.labelInt.AutoSize = true;
+            this.labelInt.Location = new System.Drawing.Point(357, 85);
+            this.labelInt.Name = "labelInt";
+            this.labelInt.Size = new System.Drawing.Size(79, 13);
+            this.labelInt.TabIndex = 7;
+            this.labelInt.Text = "Received int: []";
+            // 
+            // labelIntName
+            // 
+            this.labelIntName.AutoSize = true;
+            this.labelIntName.Location = new System.Drawing.Point(357, 60);
+            this.labelIntName.Name = "labelIntName";
+            this.labelIntName.Size = new System.Drawing.Size(49, 13);
+            this.labelIntName.TabIndex = 8;
+            this.labelIntName.Text = "Param: []";
+            // 
             // GroundStation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(551, 90);
+            this.ClientSize = new System.Drawing.Size(547, 123);
+            this.Controls.Add(this.labelIntName);
+            this.Controls.Add(this.labelInt);
             this.Controls.Add(this.buttonLogPacket);
             this.Controls.Add(this.comboBoxLogPacket);
             this.Controls.Add(this.but_mission);
@@ -137,6 +159,7 @@
             this.Load += new System.EventHandler(this.GroundStation_Load);
             ((System.ComponentModel.ISupportInitialize)(this.mavlinkheartbeattBindingSource)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -151,6 +174,8 @@
         private System.Windows.Forms.ComboBox comboBoxLogPacket;
         private System.Windows.Forms.BindingSource mavlinkheartbeattBindingSource;
         private System.Windows.Forms.Button buttonLogPacket;
+        private System.Windows.Forms.Label labelInt;
+        private System.Windows.Forms.Label labelIntName;
     }
 }
 
