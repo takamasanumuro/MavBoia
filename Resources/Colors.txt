@@ -1,0 +1,7 @@
+﻿Nirmala UI (0, 126, 249) -- Button text
+Nirmala UI (0, 126, 249) -- panelNav backcolor
+Form-BackColor (46, 51, 73)
+Panel-BackColor (24, 30, 54)
+Hover-Over-Argb(46,51,73)
+
+

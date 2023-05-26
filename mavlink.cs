@@ -158,13 +158,11 @@ public partial class Mavlink
         new MessageInfo(148, "AUTOPILOT_VERSION", 178, 60, 60, typeof( mavlink_autopilot_version_t )), // none 24 bit
         new MessageInfo(149, "LANDING_TARGET", 200, 30, 30, typeof( mavlink_landing_target_t )), // none 24 bit
         new MessageInfo(162, "FENCE_STATUS", 189, 8, 8, typeof( mavlink_fence_status_t )), // none 24 bit
-        new MessageInfo(170, "PUMP_STATE", 176, 1, 1, typeof( mavlink_pump_state_t )), // none 24 bit
-        new MessageInfo(171, "PUMP_STATE_INDIVIDUAL", 248, 4, 4, typeof( mavlink_pump_state_individual_t )), // none 24 bit
-        new MessageInfo(172, "INSTRUMENTATION", 71, 16, 16, typeof( mavlink_instrumentation_t )), // none 24 bit
-        new MessageInfo(173, "MOTOR_CONTROL_SIGNALS", 23, 8, 8, typeof( mavlink_motor_control_signals_t )), // none 24 bit
-        new MessageInfo(174, "GPS_GPRMC_SENTENCE", 30, 80, 80, typeof( mavlink_gps_gprmc_sentence_t )), // none 24 bit
-        new MessageInfo(175, "GPS_LAT_LNG", 248, 8, 8, typeof( mavlink_gps_lat_lng_t )), // none 24 bit
-
+        new MessageInfo(170, "CONTROL_SYSTEM", 202, 9, 9, typeof( mavlink_control_system_t )), // none 24 bit
+        new MessageInfo(171, "INSTRUMENTATION", 179, 16, 16, typeof( mavlink_instrumentation_t )), // none 24 bit
+        new MessageInfo(172, "TEMPERATURES", 60, 8, 8, typeof( mavlink_temperatures_t )), // none 24 bit
+        new MessageInfo(176, "GPS_GPRMC_SENTENCE", 30, 80, 80, typeof( mavlink_gps_gprmc_sentence_t )), // none 24 bit
+        new MessageInfo(177, "GPS_LAT_LNG", 248, 8, 8, typeof( mavlink_gps_lat_lng_t )), // none 24 bit
         new MessageInfo(192, "MAG_CAL_REPORT", 36, 44, 44, typeof( mavlink_mag_cal_report_t )), // none 24 bit
         new MessageInfo(225, "EFI_STATUS", 208, 65, 65, typeof( mavlink_efi_status_t )), // none 24 bit
         new MessageInfo(230, "ESTIMATOR_STATUS", 163, 42, 42, typeof( mavlink_estimator_status_t )), // none 24 bit
@@ -342,13 +340,14 @@ public partial class Mavlink
         BATTERY_STATUS = 147,
         AUTOPILOT_VERSION = 148,
         LANDING_TARGET = 149,
-        FENCE_STATUS = 162,       
-        PUMP_STATE = 170,
-        PUMP_STATE_INDIVIDUAL = 171,
-        INSTRUMENTATION = 172,
-        MOTOR_CONTROL_SIGNALS = 173,
-        GPS_GPRMC_SENTENCE = 174,
-        GPS_LAT_LNG = 175,
+        FENCE_STATUS = 162,
+        ////////////////////
+        CONTROL_SYSTEM = 170,
+        INSTRUMENTATION = 171,
+        TEMPERATURES = 172,
+        GPS_GPRMC_SENTENCE = 176,
+        GPS_LAT_LNG = 177,
+        ////////////////////
         MAG_CAL_REPORT = 192,
         EFI_STATUS = 225,
         ESTIMATOR_STATUS = 230,
@@ -12990,16 +12989,26 @@ public partial class Mavlink
         public  byte mavlink_version;
     
     };
-
-    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 1)]
+  
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 9)]
     ///<summary>  Bitfield that encodes whether the pumps are active or not. </summary>
-    public struct mavlink_pump_state_t
+    public struct mavlink_control_system_t
     {
-        public mavlink_pump_state_t(byte pump_mask)
+        public mavlink_control_system_t(float dac_output, float potentiometer_signal, byte pump_mask)
         {
+            this.dac_output = dac_output;
+            this.potentiometer_signal = potentiometer_signal;
             this.pump_mask = pump_mask;
 
         }
+        /// <summary>DAC output.  [mV] </summary>
+        [Units("[mV]")]
+        [Description("DAC output.")]
+        public float dac_output;
+        /// <summary>Potentiometer output.  [mV] </summary>
+        [Units("[mV]")]
+        [Description("Potentiometer output.")]
+        public float potentiometer_signal;
         /// <summary>Bitfield that encodes whether the pumps are active or not.   </summary>
         [Units("")]
         [Description("Bitfield that encodes whether the pumps are active or not.")]
@@ -13007,51 +13016,16 @@ public partial class Mavlink
 
     };
 
-
-    /// extensions_start 0
-    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 4)]
-    ///<summary>  Send each pump state on a separate variable. </summary>
-    public struct mavlink_pump_state_individual_t
-    {
-        public mavlink_pump_state_individual_t(byte pump_zero, byte pump_one, byte pump_two, byte pump_three)
-        {
-            this.pump_zero = pump_zero;
-            this.pump_one = pump_one;
-            this.pump_two = pump_two;
-            this.pump_three = pump_three;
-
-        }
-        /// <summary>Pump 0 state.   </summary>
-        [Units("")]
-        [Description("Pump 0 state.")]
-        public byte pump_zero;
-        /// <summary>Pump 1 state.   </summary>
-        [Units("")]
-        [Description("Pump 1 state.")]
-        public byte pump_one;
-        /// <summary>Pump 2 state.   </summary>
-        [Units("")]
-        [Description("Pump 2 state.")]
-        public byte pump_two;
-        /// <summary>Pump 3 state.   </summary>
-        [Units("")]
-        [Description("Pump 3 state.")]
-        public byte pump_three;
-
-    };
-
-
-    /// extensions_start 0
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 16)]
     ///<summary>  Instrumentation data for 3 current sensors and 1 voltage sensor. </summary>
     public struct mavlink_instrumentation_t
     {
-        public mavlink_instrumentation_t(float current_zero, float current_one, float current_two, float voltage)
+        public mavlink_instrumentation_t(float current_zero, float current_one, float current_two, float battery_voltage)
         {
             this.current_zero = current_zero;
             this.current_one = current_one;
             this.current_two = current_two;
-            this.voltage = voltage;
+            this.battery_voltage = battery_voltage;
 
         }
         /// <summary>Current Sensor 0  [mA] </summary>
@@ -13069,35 +13043,31 @@ public partial class Mavlink
         /// <summary>Voltage sensor.  [mA] </summary>
         [Units("[mA]")]
         [Description("Voltage sensor.")]
-        public float voltage;
+        public float battery_voltage;
 
     };
 
-
-    /// extensions_start 0
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 8)]
-    ///<summary>  Output voltage from DAC and potentiometer going to motor. </summary>
-    public struct mavlink_motor_control_signals_t
+    ///<summary>  Temperature data for motor and MPPT. </summary>
+    public struct mavlink_temperatures_t
     {
-        public mavlink_motor_control_signals_t(uint dac_output, uint potentiometer_output)
+        public mavlink_temperatures_t(float motor_temp, float mppt_temp)
         {
-            this.dac_output = dac_output;
-            this.potentiometer_output = potentiometer_output;
+            this.motor_temp = motor_temp;
+            this.mppt_temp = mppt_temp;
 
         }
-        /// <summary>DAC output.  [mV] </summary>
-        [Units("[mV]")]
-        [Description("DAC output.")]
-        public uint dac_output;
-        /// <summary>Potentiometer output.  [mV] </summary>
-        [Units("[mV]")]
-        [Description("Potentiometer output.")]
-        public uint potentiometer_output;
+        /// <summary>Motor temperature.  [degC] </summary>
+        [Units("[degC]")]
+        [Description("Motor temperature.")]
+        public float motor_temp;
+        /// <summary>MPPT temperature.  [degC] </summary>
+        [Units("[degC]")]
+        [Description("MPPT temperature.")]
+        public float mppt_temp;
 
     };
 
-
-    /// extensions_start 0
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 80)]
     ///<summary>  Output GPRMC NMEA string from GPS sensor.  </summary>
     public struct mavlink_gps_gprmc_sentence_t
@@ -13115,8 +13085,6 @@ public partial class Mavlink
 
     };
 
-
-    /// extensions_start 0
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 8)]
     ///<summary>  Output latitude and longitude from GPS sensor.  </summary>
     public struct mavlink_gps_lat_lng_t

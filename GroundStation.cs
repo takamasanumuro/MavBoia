@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,15 +30,27 @@ namespace SimpleExample
         public GroundStation()
         {
             InitializeComponent();
+            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
 
         }
-    
+
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn
+         (
+              int nLeftRect,
+              int nTopRect,
+              int nRightRect,
+              int nBottomRect,
+              int nWidthEllipse,
+             int nHeightEllipse
+
+          );
 
         #region Form Initialization Defaults
 
         private void GroundStation_Load(object sender, EventArgs e)
         {
-            SetSerialPortDefaults("COM2", 9600);            
+            SetSerialPortDefaults("COM4", 9600);            
         }
 
         private void SetSerialPortDefaults(string portName, int baudRate)
@@ -151,19 +164,56 @@ namespace SimpleExample
                 case (byte)Mavlink.MAVLINK_MSG_ID.NAMED_VALUE_INT:
                     {
                         var payload = (Mavlink.mavlink_named_value_int_t)message.Payload;
-                        labelIntName.BeginInvoke((Action)(() => labelIntName.Text = $"Param: {Encoding.UTF8.GetString(payload.name)}" + "]"));
-                        labelInt.BeginInvoke((Action)(() => labelInt.Text = $"Value: {payload.value}"));
+                        labelInstruTitle.BeginInvoke((Action)(() => labelInstruTitle.Text = $"Param: {Encoding.UTF8.GetString(payload.name)}" + "]"));
+                        labelInstruData.BeginInvoke((Action)(() => labelInstruData.Text = $"Value: {payload.value}"));
+                        break;
+                    }
+                case (byte)Mavlink.MAVLINK_MSG_ID.CONTROL_SYSTEM:
+                    {
+                        var payload = (Mavlink.mavlink_control_system_t)message.Payload;
+                        String leftPumpState = DecodePumpMask(payload.pump_mask, 1);
+                        String rightPumpState = DecodePumpMask(payload.pump_mask, 0);
+                        labelControlData.BeginInvoke(
+                            (Action)(() => labelControlData.Text = $"Sinal PoT:{payload.potentiometer_signal:F2}V\n" +
+                            $"Sinal Encoder:{payload.dac_output:F2}V\n" +
+                            $"Bomba Esquerda:{leftPumpState}\n" +
+                            $"Bomba direita: {rightPumpState}")
+                            );                       
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.INSTRUMENTATION:
                     {
+                        Random random = new Random();
                         var payload = (Mavlink.mavlink_instrumentation_t)message.Payload;
-                        labelIntName.BeginInvoke((Action)(() => labelIntName.Text = $"Param: {message.MsgTypename}"));
-                        labelInt.BeginInvoke((Action)(() => labelInt.Text = $"Value: {payload.current_zero}/{payload.current_one}/{payload.current_two}/{payload.voltage}"));
+                        labelInstruTitle.BeginInvoke((Action)(() => labelInstruTitle.Text = $"Instrumentação"));
+                        labelInstruData.BeginInvoke((Action)(() => labelInstruData.Text = $"Corrente do motor: {payload.current_zero:F2}A\n" +
+                        $"Corrente do MPPT: {payload.current_one:F2}A\n" +
+                        $"Corrente auxiliar: {payload.current_two:F2}A\n" +
+                        $"Tensão do sistema: {payload.battery_voltage:F2}V\n" +
+                        $"Temperatura do MPPT: {random.Next(30,50)}°C\n" +
+                        $"Temperatura do Motor: {random.Next(40, 60)}°C"));
                         break;
                     }
+                case (byte)Mavlink.MAVLINK_MSG_ID.TEMPERATURES:
+                    {
+
+                        break;
+                    }
+               
                 default:
                     break;
+            }
+        }
+
+        private String DecodePumpMask(byte mask, byte index)
+        {
+            if (Convert.ToBoolean((1 << index) & mask))
+            {
+                return "Ativa";
+            }
+            else
+            {
+                return "Desligada";
             }
         }
 
@@ -341,6 +391,30 @@ namespace SimpleExample
             serialPort1.Write(buffer, 0, buffer.Length);
             WriteBufferConsole(buffer, "", true);
 
+        }
+
+        private void buttonSettings_Click(object sender, EventArgs e)
+        {
+            panelNav.Height = buttonSettings.Height;
+            panelNav.Top = buttonSettings.Top;
+            panelNav.Left = buttonSettings.Left;
+            buttonSettings.BackColor = Color.FromArgb(46, 51, 73);            
+        }
+
+        private void buttonSettings_Leave(object sender, EventArgs e)
+        {
+            buttonSettings.BackColor = Color.FromArgb(24, 30, 54);
+        }
+
+        private void labelInt_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonExit_Click(object sender, EventArgs e)
+        {
+            // Close application
+            System.Windows.Forms.Application.Exit();
         }
     }
 }
