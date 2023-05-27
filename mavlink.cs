@@ -4,6 +4,10 @@ using System.Text;
 using System.Runtime.InteropServices;
 using static Mavlink;
 
+
+/// <summary>
+/// Mavlink constants, enums, payload structs and message infos are stored here
+/// </summary>
 public partial class Mavlink
 {
     public const string MAVLINK_BUILD_DATE = "Sun May 14 2023";
