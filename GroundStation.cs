@@ -36,6 +36,7 @@ namespace SimpleExample
 
         Form formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         Form formDados = new FormDados() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+        Form formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         Control labelInstrumentationData;
         Control labelControlData;
 
@@ -341,6 +342,16 @@ namespace SimpleExample
 
         }
 
+        private void buttonMapa_Click(object sender, EventArgs e)
+        {
+            button_Click(sender, e);
+            panelFormLoader.Controls.Clear();
+            panelFormLoader.Controls.Add(formMapa);
+            formMapa.Show();
+            labelTitleSelection.Text = "Mapa";
+
+        }
+
         private void button_Click(object sender, EventArgs e)
         {
             Button button = (Button)sender;
@@ -394,5 +405,6 @@ namespace SimpleExample
 
         }
 
+       
     }
 }

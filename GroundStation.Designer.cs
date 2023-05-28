@@ -43,6 +43,7 @@
             this.labelTitleSelection = new System.Windows.Forms.Label();
             this.buttonExit = new System.Windows.Forms.Button();
             this.buttonDados = new System.Windows.Forms.Button();
+            this.buttonMapa = new System.Windows.Forms.Button();
             this.buttonConfigurações = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -140,6 +141,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
             this.panel1.Controls.Add(this.buttonDados);
+            this.panel1.Controls.Add(this.buttonMapa);
             this.panel1.Controls.Add(this.panelNav);
             this.panel1.Controls.Add(this.comboBoxSerialPort);
             this.panel1.Controls.Add(this.buttonConfigurações);
@@ -216,7 +218,7 @@
             this.buttonDados.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDados.ForeColor = System.Drawing.Color.Coral;
             this.buttonDados.Image = global::SimpleExample.Properties.Resources.diagram;
-            this.buttonDados.Location = new System.Drawing.Point(0, 487);
+            this.buttonDados.Location = new System.Drawing.Point(0, 432);
             this.buttonDados.Name = "buttonDados";
             this.buttonDados.Size = new System.Drawing.Size(255, 55);
             this.buttonDados.TabIndex = 10;
@@ -225,6 +227,25 @@
             this.buttonDados.UseVisualStyleBackColor = true;
             this.buttonDados.Click += new System.EventHandler(this.buttonDados_Click);
             this.buttonDados.Leave += new System.EventHandler(this.button_Leave);
+            // 
+            // buttonMapa
+            // 
+            this.buttonMapa.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonMapa.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonMapa.FlatAppearance.BorderSize = 0;
+            this.buttonMapa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonMapa.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonMapa.ForeColor = System.Drawing.Color.Coral;
+            this.buttonMapa.Image = global::SimpleExample.Properties.Resources.mapicon;
+            this.buttonMapa.Location = new System.Drawing.Point(0, 487);
+            this.buttonMapa.Name = "buttonMapa";
+            this.buttonMapa.Size = new System.Drawing.Size(255, 55);
+            this.buttonMapa.TabIndex = 11;
+            this.buttonMapa.Text = "            Mapa  ";
+            this.buttonMapa.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonMapa.UseVisualStyleBackColor = true;
+            this.buttonMapa.Click += new System.EventHandler(this.buttonMapa_Click);
+            this.buttonMapa.Leave += new System.EventHandler(this.button_Leave);
             // 
             // buttonConfigurações
             // 
@@ -302,6 +323,7 @@
         private System.Windows.Forms.Button buttonDados;
         private System.Windows.Forms.Panel panelFormLoader;
         private System.Windows.Forms.Label labelTitleSelection;
+        private System.Windows.Forms.Button buttonMapa;
     }
 }
 
