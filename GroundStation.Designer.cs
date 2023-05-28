@@ -36,18 +36,16 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.comboBoxLogPacket = new System.Windows.Forms.ComboBox();
             this.buttonLogPacket = new System.Windows.Forms.Button();
-            this.labelInstruData = new System.Windows.Forms.Label();
-            this.labelInstruTitle = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.buttonDados = new System.Windows.Forms.Button();
             this.panelNav = new System.Windows.Forms.Panel();
-            this.buttonConfigurações = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.panelFormLoader = new System.Windows.Forms.Panel();
+            this.labelTitleSelection = new System.Windows.Forms.Label();
             this.buttonExit = new System.Windows.Forms.Button();
+            this.buttonDados = new System.Windows.Forms.Button();
+            this.buttonConfigurações = new System.Windows.Forms.Button();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.labelControlData = new System.Windows.Forms.Label();
-            this.labelControlTitle = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -104,7 +102,7 @@
             this.buttonConnect.Name = "buttonConnect";
             this.buttonConnect.Size = new System.Drawing.Size(85, 32);
             this.buttonConnect.TabIndex = 2;
-            this.buttonConnect.Text = "Connect";
+            this.buttonConnect.Text = "Abrir";
             this.buttonConnect.UseVisualStyleBackColor = true;
             this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
             // 
@@ -138,29 +136,6 @@
             this.buttonLogPacket.UseVisualStyleBackColor = true;
             this.buttonLogPacket.Click += new System.EventHandler(this.buttonLogPacket_Click);
             // 
-            // labelInstruData
-            // 
-            this.labelInstruData.AutoSize = true;
-            this.labelInstruData.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInstruData.ForeColor = System.Drawing.Color.Coral;
-            this.labelInstruData.Location = new System.Drawing.Point(286, 105);
-            this.labelInstruData.Name = "labelInstruData";
-            this.labelInstruData.Size = new System.Drawing.Size(79, 25);
-            this.labelInstruData.TabIndex = 7;
-            this.labelInstruData.Text = "Dados";
-            this.labelInstruData.Click += new System.EventHandler(this.labelInstrumentation_Click);
-            // 
-            // labelInstruTitle
-            // 
-            this.labelInstruTitle.AutoSize = true;
-            this.labelInstruTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInstruTitle.ForeColor = System.Drawing.Color.Coral;
-            this.labelInstruTitle.Location = new System.Drawing.Point(285, 51);
-            this.labelInstruTitle.Name = "labelInstruTitle";
-            this.labelInstruTitle.Size = new System.Drawing.Size(223, 32);
-            this.labelInstruTitle.TabIndex = 8;
-            this.labelInstruTitle.Text = "Instrumentação";
-            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
@@ -176,28 +151,8 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(255, 529);
+            this.panel1.Size = new System.Drawing.Size(255, 597);
             this.panel1.TabIndex = 9;
-            // 
-            // buttonDados
-            // 
-            this.buttonDados.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonDados.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.buttonDados.FlatAppearance.BorderSize = 0;
-            this.buttonDados.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonDados.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDados.ForeColor = System.Drawing.Color.Coral;
-            this.buttonDados.Image = global::SimpleExample.Properties.Resources.settings;
-            this.buttonDados.Location = new System.Drawing.Point(0, 419);
-            this.buttonDados.Name = "buttonDados";
-            this.buttonDados.Size = new System.Drawing.Size(255, 55);
-            this.buttonDados.TabIndex = 10;
-            this.buttonDados.Text = "Dados";
-            this.buttonDados.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonDados.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.buttonDados.UseVisualStyleBackColor = true;
-            this.buttonDados.Click += new System.EventHandler(this.buttonDados_Click);
-            this.buttonDados.Leave += new System.EventHandler(this.button_Leave);
             // 
             // panelNav
             // 
@@ -206,26 +161,6 @@
             this.panelNav.Name = "panelNav";
             this.panelNav.Size = new System.Drawing.Size(3, 50);
             this.panelNav.TabIndex = 9;
-            // 
-            // buttonConfigurações
-            // 
-            this.buttonConfigurações.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonConfigurações.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.buttonConfigurações.FlatAppearance.BorderSize = 0;
-            this.buttonConfigurações.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonConfigurações.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonConfigurações.ForeColor = System.Drawing.Color.Coral;
-            this.buttonConfigurações.Image = global::SimpleExample.Properties.Resources.settings;
-            this.buttonConfigurações.Location = new System.Drawing.Point(0, 474);
-            this.buttonConfigurações.Name = "buttonConfigurações";
-            this.buttonConfigurações.Size = new System.Drawing.Size(255, 55);
-            this.buttonConfigurações.TabIndex = 8;
-            this.buttonConfigurações.Text = "Configurações";
-            this.buttonConfigurações.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonConfigurações.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.buttonConfigurações.UseVisualStyleBackColor = true;
-            this.buttonConfigurações.Click += new System.EventHandler(this.buttonConfigurações_Click);
-            this.buttonConfigurações.Leave += new System.EventHandler(this.button_Leave);
             // 
             // panel2
             // 
@@ -236,15 +171,24 @@
             this.panel2.Size = new System.Drawing.Size(255, 138);
             this.panel2.TabIndex = 7;
             // 
-            // pictureBox2
+            // panelFormLoader
             // 
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(0, 3);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(252, 135);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
+            this.panelFormLoader.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelFormLoader.Location = new System.Drawing.Point(255, 117);
+            this.panelFormLoader.Name = "panelFormLoader";
+            this.panelFormLoader.Size = new System.Drawing.Size(910, 480);
+            this.panelFormLoader.TabIndex = 11;
+            // 
+            // labelTitleSelection
+            // 
+            this.labelTitleSelection.AutoSize = true;
+            this.labelTitleSelection.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTitleSelection.ForeColor = System.Drawing.Color.Coral;
+            this.labelTitleSelection.Location = new System.Drawing.Point(270, 68);
+            this.labelTitleSelection.Name = "labelTitleSelection";
+            this.labelTitleSelection.Size = new System.Drawing.Size(101, 32);
+            this.labelTitleSelection.TabIndex = 15;
+            this.labelTitleSelection.Text = "Dados";
             // 
             // buttonExit
             // 
@@ -256,51 +200,76 @@
             this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonExit.ForeColor = System.Drawing.Color.MistyRose;
-            this.buttonExit.Location = new System.Drawing.Point(924, 24);
+            this.buttonExit.Location = new System.Drawing.Point(1106, 24);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(47, 35);
             this.buttonExit.TabIndex = 10;
             this.buttonExit.UseVisualStyleBackColor = true;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
             // 
+            // buttonDados
+            // 
+            this.buttonDados.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonDados.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonDados.FlatAppearance.BorderSize = 0;
+            this.buttonDados.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonDados.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDados.ForeColor = System.Drawing.Color.Coral;
+            this.buttonDados.Image = global::SimpleExample.Properties.Resources.diagram;
+            this.buttonDados.Location = new System.Drawing.Point(0, 487);
+            this.buttonDados.Name = "buttonDados";
+            this.buttonDados.Size = new System.Drawing.Size(255, 55);
+            this.buttonDados.TabIndex = 10;
+            this.buttonDados.Text = "            Dados  ";
+            this.buttonDados.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonDados.UseVisualStyleBackColor = true;
+            this.buttonDados.Click += new System.EventHandler(this.buttonDados_Click);
+            this.buttonDados.Leave += new System.EventHandler(this.button_Leave);
+            // 
+            // buttonConfigurações
+            // 
+            this.buttonConfigurações.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonConfigurações.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonConfigurações.FlatAppearance.BorderSize = 0;
+            this.buttonConfigurações.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonConfigurações.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonConfigurações.ForeColor = System.Drawing.Color.Coral;
+            this.buttonConfigurações.Image = global::SimpleExample.Properties.Resources.settings;
+            this.buttonConfigurações.Location = new System.Drawing.Point(0, 542);
+            this.buttonConfigurações.Name = "buttonConfigurações";
+            this.buttonConfigurações.Size = new System.Drawing.Size(255, 55);
+            this.buttonConfigurações.TabIndex = 8;
+            this.buttonConfigurações.Text = "Configurações";
+            this.buttonConfigurações.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonConfigurações.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonConfigurações.UseVisualStyleBackColor = true;
+            this.buttonConfigurações.Click += new System.EventHandler(this.buttonConfigurações_Click);
+            this.buttonConfigurações.Leave += new System.EventHandler(this.button_Leave);
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(0, 3);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(252, 135);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
+            // 
             // mavlinkheartbeattBindingSource
             // 
             this.mavlinkheartbeattBindingSource.DataSource = typeof(Mavlink.mavlink_heartbeat_t);
-            // 
-            // labelControlData
-            // 
-            this.labelControlData.AutoSize = true;
-            this.labelControlData.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControlData.ForeColor = System.Drawing.Color.Coral;
-            this.labelControlData.Location = new System.Drawing.Point(286, 356);
-            this.labelControlData.Name = "labelControlData";
-            this.labelControlData.Size = new System.Drawing.Size(79, 25);
-            this.labelControlData.TabIndex = 11;
-            this.labelControlData.Text = "Dados";
-            // 
-            // labelControlTitle
-            // 
-            this.labelControlTitle.AutoSize = true;
-            this.labelControlTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControlTitle.ForeColor = System.Drawing.Color.Coral;
-            this.labelControlTitle.Location = new System.Drawing.Point(285, 302);
-            this.labelControlTitle.Name = "labelControlTitle";
-            this.labelControlTitle.Size = new System.Drawing.Size(130, 32);
-            this.labelControlTitle.TabIndex = 12;
-            this.labelControlTitle.Text = "Controle";
             // 
             // GroundStation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
-            this.ClientSize = new System.Drawing.Size(983, 529);
-            this.Controls.Add(this.labelControlData);
-            this.Controls.Add(this.labelControlTitle);
+            this.ClientSize = new System.Drawing.Size(1165, 597);
+            this.Controls.Add(this.panelFormLoader);
+            this.Controls.Add(this.labelTitleSelection);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.labelInstruData);
-            this.Controls.Add(this.labelInstruTitle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "GroundStation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -324,17 +293,15 @@
         private System.Windows.Forms.ComboBox comboBoxLogPacket;
         private System.Windows.Forms.BindingSource mavlinkheartbeattBindingSource;
         private System.Windows.Forms.Button buttonLogPacket;
-        private System.Windows.Forms.Label labelInstruData;
-        private System.Windows.Forms.Label labelInstruTitle;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button buttonConfigurações;
         private System.Windows.Forms.Panel panelNav;
         private System.Windows.Forms.Button buttonExit;
-        private System.Windows.Forms.Label labelControlData;
-        private System.Windows.Forms.Label labelControlTitle;
         private System.Windows.Forms.Button buttonDados;
+        private System.Windows.Forms.Panel panelFormLoader;
+        private System.Windows.Forms.Label labelTitleSelection;
     }
 }
 

@@ -34,13 +34,17 @@ namespace SimpleExample
         // Store the previous mouse position for dragging
         private Point previousMousePosition;
 
+        Form formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+        Form formDados = new FormDados() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+        Control labelInstrumentationData;
+        Control labelControlData;
+
         public GroundStation()
         {
             InitializeComponent();
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
             MouseDown += Form_MouseDown_Drag;
-            MouseMove += Form_MouseMove_Drag;
-
+            MouseMove += Form_MouseMove_Drag;          
         }
 
         // This is the function that will allow the form to be rounded
@@ -90,18 +94,21 @@ namespace SimpleExample
 
         private void GroundStation_Load(object sender, EventArgs e)
         {
-            SetSerialPortDefaults("COM4", 9600);            
+            SetSerialPortDefaults("COM2", 9600);            
         }
 
         private void SetSerialPortDefaults(string portName, int baudRate)
         {
-            comboBoxSerialPort.DataSource = SerialPort.GetPortNames();
+           
+            comboBoxBaudRate.SelectedItem = baudRate.ToString();
+            String[] portNames = SerialPort.GetPortNames();   
+            comboBoxSerialPort.DataSource = portNames;
+            if (portNames.Length == 0) return;
             foreach (var item in SerialPort.GetPortNames())
             {
                 // Sets default value
                 if (item == portName) comboBoxSerialPort.SelectedItem = item;
             }
-            comboBoxBaudRate.SelectedItem = baudRate.ToString();
             buttonConnect.PerformClick();
         }
 
@@ -109,31 +116,40 @@ namespace SimpleExample
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            // if the port is open close it
-            if (serialPort1.IsOpen)
+            try
             {
-                serialPort1.Close();
-                buttonConnect.Text = "Open";
-                return;
+                // if the port is open close it
+                if (serialPort1.IsOpen)
+                {
+                    serialPort1.Close();
+                    buttonConnect.Text = "Abrir";
+                    return;
+                }
+
+                // set the comport options
+                serialPort1.PortName = comboBoxSerialPort.Text;
+                serialPort1.BaudRate = int.Parse(comboBoxBaudRate.Text);
+
+                // open the comport
+                serialPort1.Open();
+                buttonConnect.Text = "Fechar";
+
+
+                // set timeout to 2 seconds
+                serialPort1.ReadTimeout = 2000;
+
+                BackgroundWorker serialWorker = new BackgroundWorker();
+
+                serialWorker.DoWork += serialWorker_ReadData;
+
+                serialWorker.RunWorkerAsync();
             }
-
-            // set the comport options
-            serialPort1.PortName = comboBoxSerialPort.Text;
-            serialPort1.BaudRate = int.Parse(comboBoxBaudRate.Text);
-
-            // open the comport
-            serialPort1.Open();
-            buttonConnect.Text = "Close";
-            
-
-            // set timeout to 2 seconds
-            serialPort1.ReadTimeout = 2000;
-
-            BackgroundWorker serialWorker = new BackgroundWorker();
-
-            serialWorker.DoWork += serialWorker_ReadData;
-
-            serialWorker.RunWorkerAsync();
+            catch (Exception exception)
+            {
+                MessageBox.Show($"{exception.Message}\n" +
+                    $"Verifique se a porta existe ou já está sendo usada por outro programa.");
+            }
+          
         }
 
         private void serialWorker_ReadData(object sender, DoWorkEventArgs e)
@@ -201,37 +217,33 @@ namespace SimpleExample
             Console.WriteLine(message.MsgTypename);
             switch (message.MsgID)
             {
-                case (byte)Mavlink.MAVLINK_MSG_ID.NAMED_VALUE_INT:
-                    {
-                        var payload = (Mavlink.mavlink_named_value_int_t)message.Payload;
-                        labelInstruTitle.BeginInvoke((Action)(() => labelInstruTitle.Text = $"Param: {Encoding.UTF8.GetString(payload.name)}" + "]"));
-                        labelInstruData.BeginInvoke((Action)(() => labelInstruData.Text = $"Value: {payload.value}"));
-                        break;
-                    }
+               
                 case (byte)Mavlink.MAVLINK_MSG_ID.CONTROL_SYSTEM:
                     {
                         var payload = (Mavlink.mavlink_control_system_t)message.Payload;
                         String leftPumpState = DecodePumpMask(payload.pump_mask, 1);
                         String rightPumpState = DecodePumpMask(payload.pump_mask, 0);
+                        labelControlData = FormExchange.GetControl<Label>(nameof(formDados), nameof(labelControlData));
                         labelControlData.BeginInvoke(
-                            (Action)(() => labelControlData.Text = $"Sinal PoT:{payload.potentiometer_signal:F2}V\n" +
+                            (Action)(() => labelControlData.Text = $"Sinal Pot:{payload.potentiometer_signal:F2}V\n" +
                             $"Sinal Encoder:{payload.dac_output:F2}V\n" +
                             $"Bomba Esquerda:{leftPumpState}\n" +
                             $"Bomba direita: {rightPumpState}")
-                            );                       
+                            );           
+                        
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.INSTRUMENTATION:
                     {
                         Random random = new Random();
                         var payload = (Mavlink.mavlink_instrumentation_t)message.Payload;
-                        labelInstruTitle.BeginInvoke((Action)(() => labelInstruTitle.Text = $"Instrumentação"));
-                        labelInstruData.BeginInvoke((Action)(() => labelInstruData.Text = $"Corrente do motor: {payload.current_zero:F2}A\n" +
+                        labelInstrumentationData = FormExchange.GetControl<Label>(formDados.Name, "labelInstrumentationData");
+                        labelInstrumentationData.BeginInvoke(new Action(() => labelInstrumentationData.Text = $"Corrente do motor: {payload.current_zero:F2}A\n" +
                         $"Corrente do MPPT: {payload.current_one:F2}A\n" +
                         $"Corrente auxiliar: {payload.current_two:F2}A\n" +
                         $"Tensão do sistema: {payload.battery_voltage:F2}V\n" +
-                        $"Temperatura do MPPT: {random.Next(30,50)}°C\n" +
-                        $"Temperatura do Motor: {random.Next(40, 60)}°C"));
+                        $"Temperatura do MPPT: {random.Next(30, 50)}°C\n" +
+                        $"Temperatura do Motor: {random.Next(40, 60)}°C"));                    
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.TEMPERATURES:
@@ -248,11 +260,20 @@ namespace SimpleExample
                     {
                         break;
                     }
-               
+
+                case (byte)Mavlink.MAVLINK_MSG_ID.NAMED_VALUE_INT:
+                    {
+                        //var payload = (Mavlink.mavlink_named_value_int_t)message.Payload;
+                        //Insert some UI logic here to use this message for testing new variables quickly. Otherwise leave empty.
+                        break;
+                    }
+
                 default:
                     break;
             }
         }
+
+       
 
         private String DecodePumpMask(byte mask, byte index)
         {
@@ -292,33 +313,32 @@ namespace SimpleExample
         {
             comboBoxSerialPort.DataSource = SerialPort.GetPortNames();      
         }
-          
-        private void buttonLogPacket_Click(object sender, EventArgs e)
-        {
-            // Send and log a mavlink heartbeat message to the console
-            byte[] buffer = mavParser.GenerateMAVLinkPacket10(Mavlink.MAVLINK_MSG_ID.HEARTBEAT,
-                new Mavlink.mavlink_heartbeat_t()
-                {
-                    custom_mode = (uint)Mavlink.MAV_MODE.MANUAL_DISARMED,
-                    type = (byte)Mavlink.MAV_TYPE.GCS,
-                    autopilot = (byte)Mavlink.MAV_AUTOPILOT.INVALID,
-                    base_mode = (byte)Mavlink.MAV_MODE_FLAG.SAFETY_ARMED,
-                    system_status = (byte)Mavlink.MAV_STATE.STANDBY,
-                    mavlink_version= 1
-                }, this.SysIDLocal, this.CompIDLocal);
-            serialPort1.Write(buffer, 0, buffer.Length);
-            WriteBufferConsole(buffer, "", true);
-
-        }
-
+           
         private void buttonConfigurações_Click(object sender, EventArgs e)
         {
-            button_Click(sender, e);      
+            button_Click(sender, e);
+            panelFormLoader.Controls.Clear();
+            panelFormLoader.Controls.Add(formConfigurações);
+            labelTitleSelection.Text = "Configurações";
+            formConfigurações.Show();
+
         }
 
         private void buttonDados_Click(object sender, EventArgs e)
         {
             button_Click(sender, e);
+            panelFormLoader.Controls.Clear();
+            panelFormLoader.Controls.Add(formDados);         
+            formDados.Show();
+            FormExchange.GetControl<Label>(nameof(formDados), nameof(labelInstrumentationData)).Text = 
+            $"Corrente do motor: 5A\n" +
+            $"Corrente do MPPT: 10A\n" +
+            $"Corrente auxiliar: 2A\n" +
+            $"Tensão do sistema: 48V\n" +
+            $"Temperatura do MPPT: 40°C\n" +
+            $"Temperatura do Motor: 50°C";
+            labelTitleSelection.Text = "Dados";
+
         }
 
         private void button_Click(object sender, EventArgs e)
@@ -337,6 +357,7 @@ namespace SimpleExample
             button.BackColor = Color.FromArgb(24, 30, 54);       
         }
 
+
         private void labelInstrumentation_Click(object sender, EventArgs e)
         {
 
@@ -354,5 +375,24 @@ namespace SimpleExample
             comboBox.BeginInvoke(new Action(() => { this.Focus(); }));
 
         }
+
+        private void buttonLogPacket_Click(object sender, EventArgs e)
+        {
+            // Send and log a mavlink heartbeat message to the console
+            byte[] buffer = mavParser.GenerateMAVLinkPacket10(Mavlink.MAVLINK_MSG_ID.HEARTBEAT,
+                new Mavlink.mavlink_heartbeat_t()
+                {
+                    custom_mode = (uint)Mavlink.MAV_MODE.MANUAL_DISARMED,
+                    type = (byte)Mavlink.MAV_TYPE.GCS,
+                    autopilot = (byte)Mavlink.MAV_AUTOPILOT.INVALID,
+                    base_mode = (byte)Mavlink.MAV_MODE_FLAG.SAFETY_ARMED,
+                    system_status = (byte)Mavlink.MAV_STATE.STANDBY,
+                    mavlink_version = 1
+                }, this.SysIDLocal, this.CompIDLocal);
+            serialPort1.Write(buffer, 0, buffer.Length);
+            WriteBufferConsole(buffer, "", true);
+
+        }
+
     }
 }
