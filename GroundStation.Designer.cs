@@ -39,8 +39,9 @@
             this.labelInstruData = new System.Windows.Forms.Label();
             this.labelInstruTitle = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonDados = new System.Windows.Forms.Button();
             this.panelNav = new System.Windows.Forms.Panel();
-            this.buttonSettings = new System.Windows.Forms.Button();
+            this.buttonConfigurações = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.buttonExit = new System.Windows.Forms.Button();
@@ -55,8 +56,10 @@
             // 
             // comboBoxSerialPort
             // 
-            this.comboBoxSerialPort.BackColor = System.Drawing.Color.White;
+            this.comboBoxSerialPort.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.comboBoxSerialPort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBoxSerialPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxSerialPort.ForeColor = System.Drawing.Color.Coral;
             this.comboBoxSerialPort.FormattingEnabled = true;
             this.comboBoxSerialPort.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.comboBoxSerialPort.IntegralHeight = false;
@@ -68,7 +71,10 @@
             // 
             // comboBoxBaudRate
             // 
+            this.comboBoxBaudRate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.comboBoxBaudRate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBoxBaudRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxBaudRate.ForeColor = System.Drawing.Color.Coral;
             this.comboBoxBaudRate.FormattingEnabled = true;
             this.comboBoxBaudRate.Items.AddRange(new object[] {
             "9600",
@@ -78,7 +84,7 @@
             "38400",
             "57600",
             "115200"});
-            this.comboBoxBaudRate.Location = new System.Drawing.Point(77, 163);
+            this.comboBoxBaudRate.Location = new System.Drawing.Point(87, 163);
             this.comboBoxBaudRate.Name = "comboBoxBaudRate";
             this.comboBoxBaudRate.Size = new System.Drawing.Size(55, 21);
             this.comboBoxBaudRate.TabIndex = 1;
@@ -100,13 +106,16 @@
             // 
             // comboBoxLogPacket
             // 
+            this.comboBoxLogPacket.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.comboBoxLogPacket.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBoxLogPacket.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxLogPacket.ForeColor = System.Drawing.Color.Coral;
             this.comboBoxLogPacket.FormattingEnabled = true;
             this.comboBoxLogPacket.Items.AddRange(new object[] {
             "heartbeat"});
             this.comboBoxLogPacket.Location = new System.Drawing.Point(12, 203);
             this.comboBoxLogPacket.Name = "comboBoxLogPacket";
-            this.comboBoxLogPacket.Size = new System.Drawing.Size(120, 21);
+            this.comboBoxLogPacket.Size = new System.Drawing.Size(130, 21);
             this.comboBoxLogPacket.TabIndex = 5;
             // 
             // buttonLogPacket
@@ -133,7 +142,7 @@
             this.labelInstruData.Size = new System.Drawing.Size(79, 25);
             this.labelInstruData.TabIndex = 7;
             this.labelInstruData.Text = "Dados";
-            this.labelInstruData.Click += new System.EventHandler(this.labelInt_Click);
+            this.labelInstruData.Click += new System.EventHandler(this.labelInstrumentation_Click);
             // 
             // labelInstruTitle
             // 
@@ -149,9 +158,10 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.panel1.Controls.Add(this.buttonDados);
             this.panel1.Controls.Add(this.panelNav);
             this.panel1.Controls.Add(this.comboBoxSerialPort);
-            this.panel1.Controls.Add(this.buttonSettings);
+            this.panel1.Controls.Add(this.buttonConfigurações);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.comboBoxBaudRate);
             this.panel1.Controls.Add(this.buttonConnect);
@@ -163,6 +173,26 @@
             this.panel1.Size = new System.Drawing.Size(255, 529);
             this.panel1.TabIndex = 9;
             // 
+            // buttonDados
+            // 
+            this.buttonDados.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonDados.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonDados.FlatAppearance.BorderSize = 0;
+            this.buttonDados.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonDados.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDados.ForeColor = System.Drawing.Color.Coral;
+            this.buttonDados.Image = global::SimpleExample.Properties.Resources.settings;
+            this.buttonDados.Location = new System.Drawing.Point(0, 419);
+            this.buttonDados.Name = "buttonDados";
+            this.buttonDados.Size = new System.Drawing.Size(255, 55);
+            this.buttonDados.TabIndex = 10;
+            this.buttonDados.Text = "Dados";
+            this.buttonDados.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonDados.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonDados.UseVisualStyleBackColor = true;
+            this.buttonDados.Click += new System.EventHandler(this.buttonDados_Click);
+            this.buttonDados.Leave += new System.EventHandler(this.button_Leave);
+            // 
             // panelNav
             // 
             this.panelNav.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
@@ -171,25 +201,25 @@
             this.panelNav.Size = new System.Drawing.Size(3, 50);
             this.panelNav.TabIndex = 9;
             // 
-            // buttonSettings
+            // buttonConfigurações
             // 
-            this.buttonSettings.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonSettings.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.buttonSettings.FlatAppearance.BorderSize = 0;
-            this.buttonSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSettings.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSettings.ForeColor = System.Drawing.Color.Coral;
-            this.buttonSettings.Image = global::SimpleExample.Properties.Resources.settings;
-            this.buttonSettings.Location = new System.Drawing.Point(0, 474);
-            this.buttonSettings.Name = "buttonSettings";
-            this.buttonSettings.Size = new System.Drawing.Size(255, 55);
-            this.buttonSettings.TabIndex = 8;
-            this.buttonSettings.Text = "Settings";
-            this.buttonSettings.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.buttonSettings.UseVisualStyleBackColor = true;
-            this.buttonSettings.Click += new System.EventHandler(this.buttonSettings_Click);
-            this.buttonSettings.Leave += new System.EventHandler(this.buttonSettings_Leave);
+            this.buttonConfigurações.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonConfigurações.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonConfigurações.FlatAppearance.BorderSize = 0;
+            this.buttonConfigurações.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonConfigurações.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonConfigurações.ForeColor = System.Drawing.Color.Coral;
+            this.buttonConfigurações.Image = global::SimpleExample.Properties.Resources.settings;
+            this.buttonConfigurações.Location = new System.Drawing.Point(0, 474);
+            this.buttonConfigurações.Name = "buttonConfigurações";
+            this.buttonConfigurações.Size = new System.Drawing.Size(255, 55);
+            this.buttonConfigurações.TabIndex = 8;
+            this.buttonConfigurações.Text = "Configurações";
+            this.buttonConfigurações.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonConfigurações.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonConfigurações.UseVisualStyleBackColor = true;
+            this.buttonConfigurações.Click += new System.EventHandler(this.buttonConfigurações_Click);
+            this.buttonConfigurações.Leave += new System.EventHandler(this.button_Leave);
             // 
             // panel2
             // 
@@ -293,11 +323,12 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Button buttonSettings;
+        private System.Windows.Forms.Button buttonConfigurações;
         private System.Windows.Forms.Panel panelNav;
         private System.Windows.Forms.Button buttonExit;
         private System.Windows.Forms.Label labelControlData;
         private System.Windows.Forms.Label labelControlTitle;
+        private System.Windows.Forms.Button buttonDados;
     }
 }
 

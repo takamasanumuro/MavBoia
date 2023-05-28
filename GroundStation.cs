@@ -287,37 +287,7 @@ namespace SimpleExample
             }
             Console.WriteLine();
         }
-
-        T ReadSomeData<T>(byte sysid, byte compid, int timeout = 2000)
-        {
-            DateTime deadLine = DateTime.Now.AddMilliseconds(timeout);
-
-            lock (serialLock)
-            {
-                // read the current buffered bytes
-                while (DateTime.Now < deadLine)
-                {
-                    var message = mavParser.ReadPacket(serialPort1.BaseStream);
-
-                    // check its not null, and its addressed to us
-                    if (message == null || sysid != message.SysID || compid != message.CompID)
-                        continue;
-
-                    Console.WriteLine(message);
-                    Console.WriteLine(message);
-
-                    if (message.Payload.GetType() == typeof(T))
-                    {
-                        return (T) message.Payload;
-                    }
-                }
-            }
-
-            throw new Exception("No packet match found");
-        }
-
-       
-
+   
         private void comboBoxSerialPort_Click(object sender, EventArgs e)
         {
             comboBoxSerialPort.DataSource = SerialPort.GetPortNames();      
@@ -341,20 +311,33 @@ namespace SimpleExample
 
         }
 
-        private void buttonSettings_Click(object sender, EventArgs e)
+        private void buttonConfigurações_Click(object sender, EventArgs e)
         {
-            panelNav.Height = buttonSettings.Height;
-            panelNav.Top = buttonSettings.Top;
-            panelNav.Left = buttonSettings.Left;
-            buttonSettings.BackColor = Color.FromArgb(46, 51, 73);            
+            button_Click(sender, e);      
         }
 
-        private void buttonSettings_Leave(object sender, EventArgs e)
+        private void buttonDados_Click(object sender, EventArgs e)
         {
-            buttonSettings.BackColor = Color.FromArgb(24, 30, 54);
+            button_Click(sender, e);
         }
 
-        private void labelInt_Click(object sender, EventArgs e)
+        private void button_Click(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            panelNav.Height = button.Height;
+            panelNav.Top = button.Top;
+            panelNav.Left = button.Left;
+            panelNav.BringToFront();
+            button.BackColor = Color.FromArgb(46, 51, 73);
+        }
+    
+        private void button_Leave(object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BackColor = Color.FromArgb(24, 30, 54);       
+        }
+
+        private void labelInstrumentation_Click(object sender, EventArgs e)
         {
 
         }
@@ -364,5 +347,7 @@ namespace SimpleExample
             // Close application
             System.Windows.Forms.Application.Exit();
         }
+
+      
     }
 }
