@@ -57,6 +57,7 @@
             // comboBoxSerialPort
             // 
             this.comboBoxSerialPort.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
+            this.comboBoxSerialPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSerialPort.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxSerialPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxSerialPort.ForeColor = System.Drawing.Color.Coral;
@@ -67,11 +68,13 @@
             this.comboBoxSerialPort.Name = "comboBoxSerialPort";
             this.comboBoxSerialPort.Size = new System.Drawing.Size(55, 21);
             this.comboBoxSerialPort.TabIndex = 0;
+            this.comboBoxSerialPort.DropDownClosed += new System.EventHandler(this.comboBox_RemoveBlueHighlight_DropdownClosed);
             this.comboBoxSerialPort.Click += new System.EventHandler(this.comboBoxSerialPort_Click);
             // 
             // comboBoxBaudRate
             // 
             this.comboBoxBaudRate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
+            this.comboBoxBaudRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxBaudRate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxBaudRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxBaudRate.ForeColor = System.Drawing.Color.Coral;
@@ -88,6 +91,7 @@
             this.comboBoxBaudRate.Name = "comboBoxBaudRate";
             this.comboBoxBaudRate.Size = new System.Drawing.Size(55, 21);
             this.comboBoxBaudRate.TabIndex = 1;
+            this.comboBoxBaudRate.DropDownClosed += new System.EventHandler(this.comboBox_RemoveBlueHighlight_DropdownClosed);
             // 
             // buttonConnect
             // 
@@ -107,6 +111,7 @@
             // comboBoxLogPacket
             // 
             this.comboBoxLogPacket.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
+            this.comboBoxLogPacket.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxLogPacket.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBoxLogPacket.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxLogPacket.ForeColor = System.Drawing.Color.Coral;
@@ -117,6 +122,7 @@
             this.comboBoxLogPacket.Name = "comboBoxLogPacket";
             this.comboBoxLogPacket.Size = new System.Drawing.Size(130, 21);
             this.comboBoxLogPacket.TabIndex = 5;
+            this.comboBoxLogPacket.DropDownClosed += new System.EventHandler(this.comboBox_RemoveBlueHighlight_DropdownClosed);
             // 
             // buttonLogPacket
             // 

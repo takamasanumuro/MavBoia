@@ -348,6 +348,11 @@ namespace SimpleExample
             System.Windows.Forms.Application.Exit();
         }
 
-      
+        private void comboBox_RemoveBlueHighlight_DropdownClosed(object sender, EventArgs e)
+        {
+            ComboBox comboBox = (ComboBox)sender;
+            comboBox.BeginInvoke(new Action(() => { this.Focus(); }));
+
+        }
     }
 }
