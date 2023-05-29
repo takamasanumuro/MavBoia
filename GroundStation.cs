@@ -34,9 +34,9 @@ namespace SimpleExample
         // Store the previous mouse position for dragging
         private Point previousMousePosition;
 
-        Form formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        Form formDados = new FormDados() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        Form formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+        FormConfigurações formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+        FormDados formDados = new FormDados() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+        FormMapa formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         Control labelInstrumentationData;
         Control labelControlData;
 
@@ -95,7 +95,22 @@ namespace SimpleExample
 
         private void GroundStation_Load(object sender, EventArgs e)
         {
-            SetSerialPortDefaults("COM2", 9600);            
+            SetSerialPortDefaults("COM2", 9600);
+            LoadForms();
+        }
+
+        // Ensure all forms are loaded and ready to receive data.
+        private void LoadForms()
+        {
+            List<Form> forms = new List<Form>() { formConfigurações, formDados, formMapa };
+            foreach (var form in forms)
+            {
+                panelFormLoader.Controls.Add(form);
+                form.Show();
+            }
+            panelFormLoader.Controls.Clear();
+            panelFormLoader.Controls.Add(formMapa);
+            panelFormLoader.Show();
         }
 
         private void SetSerialPortDefaults(string portName, int baudRate)
@@ -255,6 +270,20 @@ namespace SimpleExample
 
                 case (byte)Mavlink.MAVLINK_MSG_ID.GPS_GPRMC_SENTENCE:
                     {
+                        var payload = (Mavlink.mavlink_gps_gprmc_sentence_t)message.Payload;
+                        try
+                        {
+                            String sentence = Encoding.ASCII.GetString(payload.gprmc_sentence, 8, payload.gprmc_sentence.Length - 8);
+                            GPRMCData gpsData = GPRMCParser.Parse(sentence);
+                            formMapa.UpdateLocation(gpsData.Latitude, gpsData.Longitude);
+                            
+                        Console.WriteLine($"GPS received: {gpsData.Latitude}/{gpsData.Longitude}");
+
+                        }
+                        catch (Exception exception)
+                        {
+                            Debug.WriteLine($"{DateTime.Now} --> {exception.Message}");
+                        }
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.GPS_LAT_LNG:

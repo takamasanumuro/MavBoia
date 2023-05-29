@@ -99,6 +99,7 @@
     <Compile Include="FormMapa.Designer.cs">
       <DependentUpon>FormMapa.cs</DependentUpon>
     </Compile>
+    <Compile Include="GPRMCParser.cs" />
     <Compile Include="Mavlink.cs" />
     <Compile Include="MavlinkCRC.cs" />
     <Compile Include="MavlinkMessage.cs" />

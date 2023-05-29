@@ -11,11 +11,13 @@ namespace SimpleExample
 {
     public partial class FormMapa : Form
     {
-        PointLatLng boatLocation = new PointLatLng(-22.8570241, -43.0955684);
+        bool UseTimer = false;
+        public PointLatLng boatLocation = new PointLatLng(-22.8570241, -43.0955684);
         Bitmap boatIcon = new Bitmap("Resources/boaticon1.bmp");
         public FormMapa()
         {
             InitializeComponent();
+            
         }
 
         private void mapControl_Load(object sender, EventArgs e)
@@ -23,9 +25,16 @@ namespace SimpleExample
             mapControl.MapProvider = BingMapProvider.Instance;
             GMaps.Instance.Mode = AccessMode.ServerAndCache;
             mapControl.Position = boatLocation; // Initially centralizes map on top of boat marker position.
+            mapControl.MinZoom = 13;
+            mapControl.MaxZoom = 17;
+            mapControl.Zoom = 15;
             SetupGPSMarker();
-            timerMap.Enabled = true;
-            timerMap.Interval = 1000;
+            if (UseTimer)
+            {
+                timerMap.Enabled = true;
+                timerMap.Interval = 1000;
+            }
+           
         }
 
         private void SetupGPSMarker()
@@ -37,7 +46,7 @@ namespace SimpleExample
             mapControl.Overlays.Add(boatOverlay);
         }
 
-        public void UpdateGPSIcon(bool ShouldRotate = false)
+        private void UpdateGPSIcon(bool ShouldRotate = false)
         {
             if (!ShouldRotate)
             {
@@ -57,6 +66,13 @@ namespace SimpleExample
             }
             boatIcon = rotatedBitmap;
             mapControl.Overlays[0].Markers[0] = new GMarkerGoogle(boatLocation, boatIcon);
+        }
+
+        public void UpdateLocation(double lat, double lng)
+        {
+            boatLocation.Lat = lat;
+            boatLocation.Lng = lng;
+            UpdateGPSIcon(false);
         }
 
         private void timerMap_Tick(object sender, EventArgs e)
