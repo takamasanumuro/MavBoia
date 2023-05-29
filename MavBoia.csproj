@@ -157,6 +157,9 @@
     <None Include="Resources\Close.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\boaticon1.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Colors.txt" />
     <None Include="Resources\diagram.png" />
   </ItemGroup>

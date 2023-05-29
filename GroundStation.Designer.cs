@@ -36,9 +36,9 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.comboBoxLogPacket = new System.Windows.Forms.ComboBox();
             this.buttonLogPacket = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panelLateral = new System.Windows.Forms.Panel();
             this.panelNav = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panelTopLeft = new System.Windows.Forms.Panel();
             this.panelFormLoader = new System.Windows.Forms.Panel();
             this.labelTitleSelection = new System.Windows.Forms.Label();
             this.buttonExit = new System.Windows.Forms.Button();
@@ -47,8 +47,8 @@
             this.buttonConfigurações = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.panelLateral.SuspendLayout();
+            this.panelTopLeft.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mavlinkheartbeattBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -137,24 +137,24 @@
             this.buttonLogPacket.UseVisualStyleBackColor = true;
             this.buttonLogPacket.Click += new System.EventHandler(this.buttonLogPacket_Click);
             // 
-            // panel1
+            // panelLateral
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
-            this.panel1.Controls.Add(this.buttonDados);
-            this.panel1.Controls.Add(this.buttonMapa);
-            this.panel1.Controls.Add(this.panelNav);
-            this.panel1.Controls.Add(this.comboBoxSerialPort);
-            this.panel1.Controls.Add(this.buttonConfigurações);
-            this.panel1.Controls.Add(this.panel2);
-            this.panel1.Controls.Add(this.comboBoxBaudRate);
-            this.panel1.Controls.Add(this.buttonConnect);
-            this.panel1.Controls.Add(this.comboBoxLogPacket);
-            this.panel1.Controls.Add(this.buttonLogPacket);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(255, 597);
-            this.panel1.TabIndex = 9;
+            this.panelLateral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.panelLateral.Controls.Add(this.buttonDados);
+            this.panelLateral.Controls.Add(this.buttonMapa);
+            this.panelLateral.Controls.Add(this.panelNav);
+            this.panelLateral.Controls.Add(this.comboBoxSerialPort);
+            this.panelLateral.Controls.Add(this.buttonConfigurações);
+            this.panelLateral.Controls.Add(this.panelTopLeft);
+            this.panelLateral.Controls.Add(this.comboBoxBaudRate);
+            this.panelLateral.Controls.Add(this.buttonConnect);
+            this.panelLateral.Controls.Add(this.comboBoxLogPacket);
+            this.panelLateral.Controls.Add(this.buttonLogPacket);
+            this.panelLateral.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panelLateral.Location = new System.Drawing.Point(0, 0);
+            this.panelLateral.Name = "panelLateral";
+            this.panelLateral.Size = new System.Drawing.Size(255, 597);
+            this.panelLateral.TabIndex = 9;
             // 
             // panelNav
             // 
@@ -164,14 +164,14 @@
             this.panelNav.Size = new System.Drawing.Size(3, 50);
             this.panelNav.TabIndex = 9;
             // 
-            // panel2
+            // panelTopLeft
             // 
-            this.panel2.Controls.Add(this.pictureBox2);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(255, 138);
-            this.panel2.TabIndex = 7;
+            this.panelTopLeft.Controls.Add(this.pictureBox2);
+            this.panelTopLeft.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTopLeft.Location = new System.Drawing.Point(0, 0);
+            this.panelTopLeft.Name = "panelTopLeft";
+            this.panelTopLeft.Size = new System.Drawing.Size(255, 119);
+            this.panelTopLeft.TabIndex = 7;
             // 
             // panelFormLoader
             // 
@@ -269,10 +269,11 @@
             // 
             // pictureBox2
             // 
+            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(0, 3);
+            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(252, 135);
+            this.pictureBox2.Size = new System.Drawing.Size(255, 119);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 0;
             this.pictureBox2.TabStop = false;
@@ -290,14 +291,14 @@
             this.Controls.Add(this.panelFormLoader);
             this.Controls.Add(this.labelTitleSelection);
             this.Controls.Add(this.buttonExit);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panelLateral);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "GroundStation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BoatStation";
             this.Load += new System.EventHandler(this.GroundStation_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
+            this.panelLateral.ResumeLayout(false);
+            this.panelTopLeft.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mavlinkheartbeattBindingSource)).EndInit();
             this.ResumeLayout(false);
@@ -314,8 +315,8 @@
         private System.Windows.Forms.ComboBox comboBoxLogPacket;
         private System.Windows.Forms.BindingSource mavlinkheartbeattBindingSource;
         private System.Windows.Forms.Button buttonLogPacket;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panelLateral;
+        private System.Windows.Forms.Panel panelTopLeft;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button buttonConfigurações;
         private System.Windows.Forms.Panel panelNav;
