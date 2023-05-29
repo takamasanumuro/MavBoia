@@ -95,7 +95,7 @@ namespace SimpleExample
 
         private void GroundStation_Load(object sender, EventArgs e)
         {
-            SetSerialPortDefaults("COM2", 9600);
+            SetSerialPortDefaults("COM4", 9600);
             LoadForms();
         }
 
@@ -148,6 +148,8 @@ namespace SimpleExample
 
                 // open the comport
                 serialPort1.Open();
+                serialPort1.DiscardInBuffer();
+                serialPort1.DiscardOutBuffer();
                 buttonConnect.Text = "Fechar";
 
 
