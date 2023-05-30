@@ -41,6 +41,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CustomControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\CustomControls.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -80,6 +84,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FancyComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="FormConfigurações.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -158,12 +165,16 @@
     <None Include="Resources\Close.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\diagram1.png" />
+    <EmbeddedResource Include="DLLs\CustomUIControls.dll" />
     <Content Include="Resources\boaticon1.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\chart-diagram.png" />
     <Content Include="Resources\Colors.txt" />
     <None Include="Resources\diagram.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.IO.Ports;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SimpleExample
@@ -18,7 +13,7 @@ namespace SimpleExample
     public partial class GroundStation : Form
     {
         //Mavlink parser responsible for parsing and deparsing mavlink packets
-        private Mavlink.MavlinkParser mavParser = new Mavlink.MavlinkParser();
+        private Mavlink.MavlinkParser mavlinkParser = new Mavlink.MavlinkParser();
         // locking to prevent thread collisions on serial port
         private object serialLock = new object();
         private byte SysIDLocal { get;  set; } = 0xFF;
@@ -45,9 +40,11 @@ namespace SimpleExample
             InitializeComponent();
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
             MouseDown += Form_MouseDown_Drag;
-            MouseMove += Form_MouseMove_Drag;          
+            MouseMove += Form_MouseMove_Drag;
+            
+        
         }
-
+        #region Form Rounding and Dragging
         // This is the function that will allow the form to be rounded
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
@@ -90,13 +87,16 @@ namespace SimpleExample
                 Top += e.Y - previousMousePosition.Y;
             }
         }
+        #endregion
 
         #region Form Initialization Defaults
 
         private void GroundStation_Load(object sender, EventArgs e)
         {
-            SetSerialPortDefaults("COM4", 9600);
-            LoadForms();
+           
+                SetSerialPortDefaults("COM4", 9600);
+                LoadForms();
+
         }
 
         // Ensure all forms are loaded and ready to receive data.
@@ -110,6 +110,7 @@ namespace SimpleExample
             }
             panelFormLoader.Controls.Clear();
             panelFormLoader.Controls.Add(formMapa);
+            panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Show();
         }
 
@@ -130,6 +131,7 @@ namespace SimpleExample
 
         #endregion
 
+
         private void buttonConnect_Click(object sender, EventArgs e)
         {
             try
@@ -143,24 +145,22 @@ namespace SimpleExample
                 }
 
                 // set the comport options
-                serialPort1.PortName = comboBoxSerialPort.Text;
-                serialPort1.BaudRate = int.Parse(comboBoxBaudRate.Text);
+                serialPort1.PortName = comboBoxSerialPort.SelectedItem.ToString();
+                serialPort1.BaudRate = int.Parse(comboBoxBaudRate.SelectedItem.ToString());
 
                 // open the comport
                 serialPort1.Open();
-                serialPort1.DiscardInBuffer();
-                serialPort1.DiscardOutBuffer();
                 buttonConnect.Text = "Fechar";
 
 
                 // set timeout to 2 seconds
                 serialPort1.ReadTimeout = 2000;
 
-                BackgroundWorker serialWorker = new BackgroundWorker();
+                BackgroundWorker workerSerialPort = new BackgroundWorker();
 
-                serialWorker.DoWork += serialWorker_ReadData;
+                workerSerialPort.DoWork += workerSerialPort_ReadData;
 
-                serialWorker.RunWorkerAsync();
+                workerSerialPort.RunWorkerAsync();
             }
             catch (Exception exception)
             {
@@ -170,7 +170,7 @@ namespace SimpleExample
           
         }
 
-        private void serialWorker_ReadData(object sender, DoWorkEventArgs e)
+        private void workerSerialPort_ReadData(object sender, DoWorkEventArgs e)
         {
             while (serialPort1.IsOpen)
             {
@@ -179,51 +179,20 @@ namespace SimpleExample
                     Mavlink.MavlinkMessage message;
                     lock (serialLock)
                     {
-                        // read any valid packet from the port
-                        message = mavParser.ReadPacket(serialPort1.BaseStream);
-                        
-                      
-                        // check its valid
+                        message = mavlinkParser.ReadPacket(serialPort1.BaseStream);
                         if (message == null || message.Payload == null)
                             continue;
                     }
-
-                    // check to see if its a hb packet from the comport
-                    if (message.Payload.GetType() == typeof(Mavlink.mavlink_heartbeat_t))
-                    {
-                        var receivedHeartbeat = (Mavlink.mavlink_heartbeat_t)message.Payload;
-
-                        // save the sysid and compid of the seen MAV
-                        var targetSysID = message.SysID;
-                        var targetCompID = message.CompID;
-
-                        // request streams at 2 hz
-                        var buffer = mavParser.GenerateMAVLinkPacket10(Mavlink.MAVLINK_MSG_ID.REQUEST_DATA_STREAM,
-                            new Mavlink.mavlink_request_data_stream_t()
-                            {
-                                req_message_rate = (UInt16)2,
-                                target_system = targetSysID,
-                                target_component = targetCompID,
-                                req_stream_id = (byte)Mavlink.MAV_DATA_STREAM.ALL,
-                                start_stop = 1
-                            },SysIDLocal, CompIDLocal);
-
-                        WriteBufferConsole(buffer, "Requesting data", true);
-                        serialPort1.Write(buffer, 0, buffer.Length);
-
-                        buffer = mavParser.GenerateMAVLinkPacket10(Mavlink.MAVLINK_MSG_ID.HEARTBEAT, receivedHeartbeat);
-                        WriteBufferConsole(buffer, "Sending heartbeat back", true);
-                        serialPort1.Write(buffer, 0, buffer.Length);
-                    }
-
-                    // from here we should check the the message is addressed to us
+             
+                    // Check the the message is addressed to us
                     if (VehicleSysID != message.SysID || VehicleCompID != message.CompID)
                         continue;
                     
                     ProcessMessage(message);
                 }
-                catch
+                catch (Exception serialException)
                 {
+                    Console.WriteLine($"{serialException.Message} at {System.DateTime.Now}");
                 }
 
                 System.Threading.Thread.Sleep(1);
@@ -304,7 +273,7 @@ namespace SimpleExample
                     break;
             }
         }
-
+        
        
 
         private String DecodePumpMask(byte mask, byte index)
@@ -345,11 +314,19 @@ namespace SimpleExample
         {
             comboBoxSerialPort.DataSource = SerialPort.GetPortNames();      
         }
+
+        
+        private void SetFormLoaderSmall()
+        {
+            panelFormLoader.Size = new System.Drawing.Size(910, 480);
+            panelFormLoader.Dock = DockStyle.Bottom;
+        }
            
         private void buttonConfigurações_Click(object sender, EventArgs e)
         {
             button_Click(sender, e);
             panelFormLoader.Controls.Clear();
+            SetFormLoaderSmall();
             panelFormLoader.Controls.Add(formConfigurações);
             labelTitleSelection.Text = "Configurações";
             formConfigurações.Show();
@@ -360,7 +337,8 @@ namespace SimpleExample
         {
             button_Click(sender, e);
             panelFormLoader.Controls.Clear();
-            panelFormLoader.Controls.Add(formDados);         
+            SetFormLoaderSmall();
+            panelFormLoader.Controls.Add(formDados);
             formDados.Show();
             FormExchange.GetControl<Label>(nameof(formDados), nameof(labelInstrumentationData)).Text = 
             $"Corrente do motor: 5A\n" +
@@ -370,15 +348,17 @@ namespace SimpleExample
             $"Temperatura do MPPT: 40°C\n" +
             $"Temperatura do Motor: 50°C";
             labelTitleSelection.Text = "Dados";
-
+                    
         }
 
         private void buttonMapa_Click(object sender, EventArgs e)
         {
             button_Click(sender, e);
             panelFormLoader.Controls.Clear();
+            panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Controls.Add(formMapa);
             formMapa.Show();
+           
             labelTitleSelection.Text = "Mapa";
 
         }
@@ -421,7 +401,7 @@ namespace SimpleExample
         private void buttonLogPacket_Click(object sender, EventArgs e)
         {
             // Send and log a mavlink heartbeat message to the console
-            byte[] buffer = mavParser.GenerateMAVLinkPacket10(Mavlink.MAVLINK_MSG_ID.HEARTBEAT,
+            byte[] buffer = mavlinkParser.GenerateMAVLinkPacket10(Mavlink.MAVLINK_MSG_ID.HEARTBEAT,
                 new Mavlink.mavlink_heartbeat_t()
                 {
                     custom_mode = (uint)Mavlink.MAV_MODE.MANUAL_DISARMED,
@@ -436,6 +416,24 @@ namespace SimpleExample
 
         }
 
-       
+        private void comboBoxSerialPort_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void comboBoxLogPacket_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxBaudRate_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labelTitleSelection_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
