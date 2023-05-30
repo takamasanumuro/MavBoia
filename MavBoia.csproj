@@ -45,7 +45,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\AdvancedHMIControls.dll</HintPath>
     </Reference>
-    <Reference Include="AdvancedHMIDrivers, Version=3.9.9.24, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="CustomControls">
       <HintPath>DLLs\CustomControls.dll</HintPath>
     </Reference>
@@ -74,6 +73,14 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OpcComRcw, Version=2.0.105.1, Culture=neutral, PublicKeyToken=9a40e993cbface53, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLLs\OpcComRcw.dll</HintPath>
+    </Reference>
+    <Reference Include="OpcNetApi, Version=2.1.105.1, Culture=neutral, PublicKeyToken=9a40e993cbface53, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLLs\OpcNetApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -200,9 +207,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\diagram1.png" />
+    <Content Include="DLLs\AdvancedHMIControls.dll" />
     <Content Include="DLLs\CustomControls.dll" />
     <Content Include="DLLs\Glg.NetCE.dll" />
     <Content Include="DLLs\JurassicGLG.dll" />
+    <Content Include="DLLs\MfgControl.AdvancedHMI.Controls.dll" />
+    <Content Include="DLLs\MfgControl.AdvancedHMI.Drivers.dll" />
+    <Content Include="DLLs\OpcComRcw.dll" />
+    <Content Include="DLLs\OpcNetApi.Com.dll" />
+    <Content Include="DLLs\OpcNetApi.dll" />
     <Content Include="Resources\boaticon1.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

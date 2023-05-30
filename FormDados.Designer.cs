@@ -32,9 +32,7 @@
             this.labelControlData = new System.Windows.Forms.Label();
             this.labelControlTitle = new System.Windows.Forms.Label();
             this.labelInstrumentationData = new System.Windows.Forms.Label();
-            this.labelInstrumentationTitle = new System.Windows.Forms.Label();
-            this.ethernetIPforCLXCom1 = new AdvancedHMIDrivers.EthernetIPforCLXCom(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.ethernetIPforCLXCom1)).BeginInit();
+            this.labelInstrumentationTitle = new System.Windows.Forms.Label();                 
             this.SuspendLayout();
             // 
             // labelControlData
@@ -81,19 +79,7 @@
             this.labelInstrumentationTitle.TabIndex = 14;
             this.labelInstrumentationTitle.Text = "Instrumentação";
             // 
-            // ethernetIPforCLXCom1
-            // 
-            this.ethernetIPforCLXCom1.CIPConnectionSize = 508;
-            this.ethernetIPforCLXCom1.DisableMultiServiceRequest = false;
-            this.ethernetIPforCLXCom1.DisableSubscriptions = false;
-            this.ethernetIPforCLXCom1.IniFileName = "";
-            this.ethernetIPforCLXCom1.IniFileSection = null;
-            this.ethernetIPforCLXCom1.IPAddress = "192.168.0.10";
-            this.ethernetIPforCLXCom1.PollRateOverride = 500;
-            this.ethernetIPforCLXCom1.Port = 44818;
-            this.ethernetIPforCLXCom1.ProcessorSlot = 0;
-            this.ethernetIPforCLXCom1.RoutePath = null;
-            this.ethernetIPforCLXCom1.Timeout = 4000;
+            
             // 
             // FormDados
             // 
@@ -108,7 +94,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FormDados";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.ethernetIPforCLXCom1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -120,6 +105,6 @@
         public System.Windows.Forms.Label labelControlTitle;
         public System.Windows.Forms.Label labelInstrumentationData;
         public System.Windows.Forms.Label labelInstrumentationTitle;
-        private AdvancedHMIDrivers.EthernetIPforCLXCom ethernetIPforCLXCom1;
+        
     }
 }

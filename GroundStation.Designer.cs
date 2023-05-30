@@ -47,12 +47,10 @@
             this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.comboBoxSerialPort = new CustomControls.FancyComboBox();
             this.comboBoxBaudRate = new CustomControls.FancyComboBox();
-            this.ethernetIPforCLXCom1 = new AdvancedHMIDrivers.EthernetIPforCLXCom(this.components);
             this.panelLateral.SuspendLayout();
             this.panelTopLeft.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mavlinkheartbeattBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ethernetIPforCLXCom1)).BeginInit();
             this.SuspendLayout();
             // 
             // panelLateral
@@ -291,19 +289,6 @@
             this.comboBoxBaudRate.Texts = "";
             this.comboBoxBaudRate.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxBaudRate_OnSelectedIndexChanged);
             // 
-            // ethernetIPforCLXCom1
-            // 
-            this.ethernetIPforCLXCom1.CIPConnectionSize = 508;
-            this.ethernetIPforCLXCom1.DisableMultiServiceRequest = false;
-            this.ethernetIPforCLXCom1.DisableSubscriptions = false;
-            this.ethernetIPforCLXCom1.IniFileName = "";
-            this.ethernetIPforCLXCom1.IniFileSection = null;
-            this.ethernetIPforCLXCom1.IPAddress = "192.168.0.10";
-            this.ethernetIPforCLXCom1.PollRateOverride = 500;
-            this.ethernetIPforCLXCom1.Port = 44818;
-            this.ethernetIPforCLXCom1.ProcessorSlot = 0;
-            this.ethernetIPforCLXCom1.RoutePath = null;
-            this.ethernetIPforCLXCom1.Timeout = 4000;
             // 
             // GroundStation
             // 
@@ -327,7 +312,6 @@
             this.panelTopLeft.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mavlinkheartbeattBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ethernetIPforCLXCom1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -351,7 +335,7 @@
         private CustomControls.RJControls.RJButton buttonConnect;
         private System.Windows.Forms.Label labelTitleSelection;
         private System.Windows.Forms.Button buttonGraficos;
-        private AdvancedHMIDrivers.EthernetIPforCLXCom ethernetIPforCLXCom1;
+        
     }
 }
 
