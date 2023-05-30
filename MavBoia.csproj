@@ -164,9 +164,9 @@
     <EmbeddedResource Include="GroundStation.resx">
       <DependentUpon>GroundStation.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="GLGChart\stripchart_combo.g">
+    <AdditionalFiles Include="GLGChart\stripchart_combo.g">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </AdditionalFiles>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\MAVLink+mavlink_gps_status_t.datasource" />
     <None Include="Properties\DataSources\MAVLink+mavlink_heartbeat_t.datasource" />

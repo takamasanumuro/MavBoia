@@ -94,11 +94,10 @@ namespace SimpleExample
             default drawing filename defined by DefaultDrawingName.
          */  
          if( DrawingName == null )
-           DrawingName = DefaultDrawingName;     
-         
-         String drawing_file = 
-           Path.Combine( Application.StartupPath, DrawingName );
-         
+           DrawingName = DefaultDrawingName;
+      
+         String drawing_file = Directory.GetFiles(Application.StartupPath, DrawingName, SearchOption.AllDirectories).FirstOrDefault();
+        
          // Load a specified drawing.
          glg_chart.LoadDrawing( drawing_file );
 
