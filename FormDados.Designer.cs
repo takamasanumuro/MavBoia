@@ -32,6 +32,7 @@
             this.labelControlTitle = new System.Windows.Forms.Label();
             this.labelInstrumentationData = new System.Windows.Forms.Label();
             this.labelInstrumentationTitle = new System.Windows.Forms.Label();
+            this.labelConfigCallback = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelControlData
@@ -78,12 +79,24 @@
             this.labelInstrumentationTitle.TabIndex = 14;
             this.labelInstrumentationTitle.Text = "Instrumentação";
             // 
+            // labelConfigCallback
+            // 
+            this.labelConfigCallback.AutoSize = true;
+            this.labelConfigCallback.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelConfigCallback.ForeColor = System.Drawing.Color.Coral;
+            this.labelConfigCallback.Location = new System.Drawing.Point(541, 160);
+            this.labelConfigCallback.Name = "labelConfigCallback";
+            this.labelConfigCallback.Size = new System.Drawing.Size(132, 32);
+            this.labelConfigCallback.TabIndex = 20;
+            this.labelConfigCallback.Text = "Callback";
+            // 
             // FormDados
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(910, 480);
+            this.Controls.Add(this.labelConfigCallback);
             this.Controls.Add(this.labelControlData);
             this.Controls.Add(this.labelControlTitle);
             this.Controls.Add(this.labelInstrumentationData);
@@ -102,5 +115,6 @@
         public System.Windows.Forms.Label labelControlTitle;
         public System.Windows.Forms.Label labelInstrumentationData;
         public System.Windows.Forms.Label labelInstrumentationTitle;
+        private System.Windows.Forms.Label labelConfigCallback;
     }
 }

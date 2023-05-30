@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GroundStation));
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.panelLateral = new System.Windows.Forms.Panel();
+            this.buttonGraficos = new System.Windows.Forms.Button();
             this.buttonDados = new System.Windows.Forms.Button();
             this.buttonMapa = new System.Windows.Forms.Button();
             this.panelNav = new System.Windows.Forms.Panel();
@@ -40,12 +41,12 @@
             this.panelTopRight = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panelFormLoader = new System.Windows.Forms.Panel();
-            this.buttonExit = new System.Windows.Forms.Button();
-            this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.buttonConnect = new CustomControls.RJControls.RJButton();
             this.labelTitleSelection = new System.Windows.Forms.Label();
             this.comboBoxSerialPort = new CustomControls.FancyComboBox();
             this.comboBoxBaudRate = new CustomControls.FancyComboBox();
+            this.buttonExit = new System.Windows.Forms.Button();
+            this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panelLateral.SuspendLayout();
             this.panelTopLeft.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -55,6 +56,7 @@
             // panelLateral
             // 
             this.panelLateral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.panelLateral.Controls.Add(this.buttonGraficos);
             this.panelLateral.Controls.Add(this.buttonDados);
             this.panelLateral.Controls.Add(this.buttonMapa);
             this.panelLateral.Controls.Add(this.panelNav);
@@ -65,6 +67,25 @@
             this.panelLateral.Name = "panelLateral";
             this.panelLateral.Size = new System.Drawing.Size(228, 597);
             this.panelLateral.TabIndex = 9;
+            // 
+            // buttonGraficos
+            // 
+            this.buttonGraficos.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonGraficos.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonGraficos.FlatAppearance.BorderSize = 0;
+            this.buttonGraficos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonGraficos.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonGraficos.ForeColor = System.Drawing.Color.Coral;
+            this.buttonGraficos.Image = global::SimpleExample.Properties.Resources.charts;
+            this.buttonGraficos.Location = new System.Drawing.Point(0, 377);
+            this.buttonGraficos.Name = "buttonGraficos";
+            this.buttonGraficos.Size = new System.Drawing.Size(228, 55);
+            this.buttonGraficos.TabIndex = 12;
+            this.buttonGraficos.Text = "          Graficos  ";
+            this.buttonGraficos.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonGraficos.UseVisualStyleBackColor = true;
+            this.buttonGraficos.Click += new System.EventHandler(this.buttonGraficos_Click);
+            this.buttonGraficos.Leave += new System.EventHandler(this.button_Leave);
             // 
             // buttonDados
             // 
@@ -168,27 +189,6 @@
             this.panelFormLoader.Size = new System.Drawing.Size(937, 480);
             this.panelFormLoader.TabIndex = 11;
             // 
-            // buttonExit
-            // 
-            this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExit.BackgroundImage = global::SimpleExample.Properties.Resources.Close;
-            this.buttonExit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.buttonExit.FlatAppearance.BorderSize = 0;
-            this.buttonExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonExit.ForeColor = System.Drawing.Color.MistyRose;
-            this.buttonExit.Location = new System.Drawing.Point(1106, 24);
-            this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(47, 35);
-            this.buttonExit.TabIndex = 10;
-            this.buttonExit.UseVisualStyleBackColor = true;
-            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
-            // 
-            // mavlinkheartbeattBindingSource
-            // 
-            this.mavlinkheartbeattBindingSource.DataSource = typeof(Mavlink.mavlink_heartbeat_t);
-            // 
             // buttonConnect
             // 
             this.buttonConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
@@ -268,6 +268,27 @@
             this.comboBoxBaudRate.Texts = "";
             this.comboBoxBaudRate.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxBaudRate_OnSelectedIndexChanged);
             // 
+            // buttonExit
+            // 
+            this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExit.BackgroundImage = global::SimpleExample.Properties.Resources.Close;
+            this.buttonExit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.buttonExit.FlatAppearance.BorderSize = 0;
+            this.buttonExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonExit.ForeColor = System.Drawing.Color.MistyRose;
+            this.buttonExit.Location = new System.Drawing.Point(1106, 24);
+            this.buttonExit.Name = "buttonExit";
+            this.buttonExit.Size = new System.Drawing.Size(47, 35);
+            this.buttonExit.TabIndex = 10;
+            this.buttonExit.UseVisualStyleBackColor = true;
+            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
+            // 
+            // mavlinkheartbeattBindingSource
+            // 
+            this.mavlinkheartbeattBindingSource.DataSource = typeof(Mavlink.mavlink_heartbeat_t);
+            // 
             // GroundStation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -312,6 +333,7 @@
         private CustomControls.FancyComboBox comboBoxSerialPort;
         private CustomControls.RJControls.RJButton buttonConnect;
         private System.Windows.Forms.Label labelTitleSelection;
+        private System.Windows.Forms.Button buttonGraficos;
     }
 }
 

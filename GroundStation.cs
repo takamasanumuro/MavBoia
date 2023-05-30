@@ -29,9 +29,10 @@ namespace SimpleExample
         // Store the previous mouse position for dragging
         private Point previousMousePosition;
 
-        FormConfigurações formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+        FormChart formGraficos = new FormChart() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         FormDados formDados = new FormDados() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         FormMapa formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+        FormConfigurações formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         Control labelInstrumentationData;
         Control labelControlData;
 
@@ -94,7 +95,7 @@ namespace SimpleExample
         private void GroundStation_Load(object sender, EventArgs e)
         {
            
-                SetSerialPortDefaults("COM4", 9600);
+                SetSerialPortDefaults("COM3", 9600);
                 LoadForms();
 
         }
@@ -321,15 +322,15 @@ namespace SimpleExample
             panelFormLoader.Size = new System.Drawing.Size(910, 480);
             panelFormLoader.Dock = DockStyle.Bottom;
         }
-           
-        private void buttonConfigurações_Click(object sender, EventArgs e)
+
+        private void buttonGraficos_Click(object sender, EventArgs e)
         {
             button_Click(sender, e);
             panelFormLoader.Controls.Clear();
-            SetFormLoaderSmall();
-            panelFormLoader.Controls.Add(formConfigurações);
-            labelTitleSelection.Text = "Configurações";
-            formConfigurações.Show();
+            panelFormLoader.Dock = DockStyle.Fill;
+            panelFormLoader.Controls.Add(formGraficos);
+            formGraficos.Show();
+            labelTitleSelection.Text = "Gráficos";
 
         }
 
@@ -363,6 +364,18 @@ namespace SimpleExample
 
         }
 
+        private void buttonConfigurações_Click(object sender, EventArgs e)
+        {
+            button_Click(sender, e);
+            panelFormLoader.Controls.Clear();
+            SetFormLoaderSmall();
+            panelFormLoader.Controls.Add(formConfigurações);
+            labelTitleSelection.Text = "Configurações";
+            formConfigurações.Show();
+
+        }
+
+
         private void button_Click(object sender, EventArgs e)
         {
             Button button = (Button)sender;
@@ -377,12 +390,6 @@ namespace SimpleExample
         {
             Button button = (Button)sender;
             button.BackColor = Color.FromArgb(24, 30, 54);       
-        }
-
-
-        private void labelInstrumentation_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void buttonExit_Click(object sender, EventArgs e)
@@ -435,5 +442,7 @@ namespace SimpleExample
         {
 
         }
+
+        
     }
 }
