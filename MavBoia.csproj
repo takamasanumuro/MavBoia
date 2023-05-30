@@ -41,6 +41,11 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AdvancedHMIControls, Version=3.9.9.24, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\AdvancedHMIControls.dll</HintPath>
+    </Reference>
+    <Reference Include="AdvancedHMIDrivers, Version=3.9.9.24, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="CustomControls">
       <HintPath>DLLs\CustomControls.dll</HintPath>
     </Reference>
@@ -64,6 +69,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLLs\JurassicGLG.dll</HintPath>
     </Reference>
+    <Reference Include="MfgControl.AdvancedHMI.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="MfgControl.AdvancedHMI.Drivers, Version=3.99.19.2, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -88,6 +96,7 @@
       <HintPath>packages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>

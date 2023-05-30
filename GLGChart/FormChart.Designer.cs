@@ -32,6 +32,7 @@ namespace SimpleExample
             this.Configuration2Btn = new System.Windows.Forms.Button();
             this.StatusLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             // 
             // Configuration1Btn
             // 

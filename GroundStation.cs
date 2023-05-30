@@ -443,6 +443,9 @@ namespace SimpleExample
 
         }
 
-        
+        private void barMeter1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

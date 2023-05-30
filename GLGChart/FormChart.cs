@@ -74,7 +74,6 @@ namespace SimpleExample
          // Create GlgComboChart, passing a parent container.
          glg_chart = new GlgComboChart( this );
          
-         
          // Add GLG control to the form.
          Controls.Add( glg_chart ); 
          
@@ -287,10 +286,12 @@ namespace SimpleExample
           SetConfiguration( new ConfigInfo( CONFIG2_TITLE, CONFIG2_FILE,
                                             ConfigTable2 ) );
       }
-   }
+
       
-   ////////////////////////////////////////////////////////////////////////
-   public class ConfigInfo
+    }
+
+    ////////////////////////////////////////////////////////////////////////
+    public class ConfigInfo
    {
       public String config_title;
       public String config_file;

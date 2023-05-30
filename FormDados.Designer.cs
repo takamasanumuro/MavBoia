@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.labelControlData = new System.Windows.Forms.Label();
             this.labelControlTitle = new System.Windows.Forms.Label();
             this.labelInstrumentationData = new System.Windows.Forms.Label();
             this.labelInstrumentationTitle = new System.Windows.Forms.Label();
-            this.labelConfigCallback = new System.Windows.Forms.Label();
+            this.ethernetIPforCLXCom1 = new AdvancedHMIDrivers.EthernetIPforCLXCom(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.ethernetIPforCLXCom1)).BeginInit();
             this.SuspendLayout();
             // 
             // labelControlData
@@ -79,16 +81,19 @@
             this.labelInstrumentationTitle.TabIndex = 14;
             this.labelInstrumentationTitle.Text = "Instrumentação";
             // 
-            // labelConfigCallback
+            // ethernetIPforCLXCom1
             // 
-            this.labelConfigCallback.AutoSize = true;
-            this.labelConfigCallback.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelConfigCallback.ForeColor = System.Drawing.Color.Coral;
-            this.labelConfigCallback.Location = new System.Drawing.Point(541, 160);
-            this.labelConfigCallback.Name = "labelConfigCallback";
-            this.labelConfigCallback.Size = new System.Drawing.Size(132, 32);
-            this.labelConfigCallback.TabIndex = 20;
-            this.labelConfigCallback.Text = "Callback";
+            this.ethernetIPforCLXCom1.CIPConnectionSize = 508;
+            this.ethernetIPforCLXCom1.DisableMultiServiceRequest = false;
+            this.ethernetIPforCLXCom1.DisableSubscriptions = false;
+            this.ethernetIPforCLXCom1.IniFileName = "";
+            this.ethernetIPforCLXCom1.IniFileSection = null;
+            this.ethernetIPforCLXCom1.IPAddress = "192.168.0.10";
+            this.ethernetIPforCLXCom1.PollRateOverride = 500;
+            this.ethernetIPforCLXCom1.Port = 44818;
+            this.ethernetIPforCLXCom1.ProcessorSlot = 0;
+            this.ethernetIPforCLXCom1.RoutePath = null;
+            this.ethernetIPforCLXCom1.Timeout = 4000;
             // 
             // FormDados
             // 
@@ -96,7 +101,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(910, 480);
-            this.Controls.Add(this.labelConfigCallback);
             this.Controls.Add(this.labelControlData);
             this.Controls.Add(this.labelControlTitle);
             this.Controls.Add(this.labelInstrumentationData);
@@ -104,6 +108,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FormDados";
             this.Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)(this.ethernetIPforCLXCom1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -115,6 +120,6 @@
         public System.Windows.Forms.Label labelControlTitle;
         public System.Windows.Forms.Label labelInstrumentationData;
         public System.Windows.Forms.Label labelInstrumentationTitle;
-        private System.Windows.Forms.Label labelConfigCallback;
+        private AdvancedHMIDrivers.EthernetIPforCLXCom ethernetIPforCLXCom1;
     }
 }

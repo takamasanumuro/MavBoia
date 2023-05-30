@@ -43,14 +43,16 @@
             this.panelFormLoader = new System.Windows.Forms.Panel();
             this.buttonConnect = new CustomControls.RJControls.RJButton();
             this.labelTitleSelection = new System.Windows.Forms.Label();
-            this.comboBoxSerialPort = new CustomControls.FancyComboBox();
-            this.comboBoxBaudRate = new CustomControls.FancyComboBox();
             this.buttonExit = new System.Windows.Forms.Button();
             this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.comboBoxSerialPort = new CustomControls.FancyComboBox();
+            this.comboBoxBaudRate = new CustomControls.FancyComboBox();
+            this.ethernetIPforCLXCom1 = new AdvancedHMIDrivers.EthernetIPforCLXCom(this.components);
             this.panelLateral.SuspendLayout();
             this.panelTopLeft.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mavlinkheartbeattBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ethernetIPforCLXCom1)).BeginInit();
             this.SuspendLayout();
             // 
             // panelLateral
@@ -221,6 +223,27 @@
             this.labelTitleSelection.Text = "Dados";
             this.labelTitleSelection.Click += new System.EventHandler(this.labelTitleSelection_Click);
             // 
+            // buttonExit
+            // 
+            this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExit.BackgroundImage = global::SimpleExample.Properties.Resources.Close;
+            this.buttonExit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.buttonExit.FlatAppearance.BorderSize = 0;
+            this.buttonExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonExit.ForeColor = System.Drawing.Color.MistyRose;
+            this.buttonExit.Location = new System.Drawing.Point(1106, 24);
+            this.buttonExit.Name = "buttonExit";
+            this.buttonExit.Size = new System.Drawing.Size(47, 35);
+            this.buttonExit.TabIndex = 10;
+            this.buttonExit.UseVisualStyleBackColor = true;
+            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
+            // 
+            // mavlinkheartbeattBindingSource
+            // 
+            this.mavlinkheartbeattBindingSource.DataSource = typeof(Mavlink.mavlink_heartbeat_t);
+            // 
             // comboBoxSerialPort
             // 
             this.comboBoxSerialPort.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -268,26 +291,19 @@
             this.comboBoxBaudRate.Texts = "";
             this.comboBoxBaudRate.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxBaudRate_OnSelectedIndexChanged);
             // 
-            // buttonExit
+            // ethernetIPforCLXCom1
             // 
-            this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExit.BackgroundImage = global::SimpleExample.Properties.Resources.Close;
-            this.buttonExit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.buttonExit.FlatAppearance.BorderSize = 0;
-            this.buttonExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonExit.ForeColor = System.Drawing.Color.MistyRose;
-            this.buttonExit.Location = new System.Drawing.Point(1106, 24);
-            this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(47, 35);
-            this.buttonExit.TabIndex = 10;
-            this.buttonExit.UseVisualStyleBackColor = true;
-            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
-            // 
-            // mavlinkheartbeattBindingSource
-            // 
-            this.mavlinkheartbeattBindingSource.DataSource = typeof(Mavlink.mavlink_heartbeat_t);
+            this.ethernetIPforCLXCom1.CIPConnectionSize = 508;
+            this.ethernetIPforCLXCom1.DisableMultiServiceRequest = false;
+            this.ethernetIPforCLXCom1.DisableSubscriptions = false;
+            this.ethernetIPforCLXCom1.IniFileName = "";
+            this.ethernetIPforCLXCom1.IniFileSection = null;
+            this.ethernetIPforCLXCom1.IPAddress = "192.168.0.10";
+            this.ethernetIPforCLXCom1.PollRateOverride = 500;
+            this.ethernetIPforCLXCom1.Port = 44818;
+            this.ethernetIPforCLXCom1.ProcessorSlot = 0;
+            this.ethernetIPforCLXCom1.RoutePath = null;
+            this.ethernetIPforCLXCom1.Timeout = 4000;
             // 
             // GroundStation
             // 
@@ -311,6 +327,7 @@
             this.panelTopLeft.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mavlinkheartbeattBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ethernetIPforCLXCom1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -334,6 +351,7 @@
         private CustomControls.RJControls.RJButton buttonConnect;
         private System.Windows.Forms.Label labelTitleSelection;
         private System.Windows.Forms.Button buttonGraficos;
+        private AdvancedHMIDrivers.EthernetIPforCLXCom ethernetIPforCLXCom1;
     }
 }
 
