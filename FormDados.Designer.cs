@@ -28,11 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.labelControlData = new System.Windows.Forms.Label();
             this.labelControlTitle = new System.Windows.Forms.Label();
             this.labelInstrumentationData = new System.Windows.Forms.Label();
-            this.labelInstrumentationTitle = new System.Windows.Forms.Label();                 
+            this.labelInstrumentationTitle = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelControlData
@@ -78,8 +77,6 @@
             this.labelInstrumentationTitle.Size = new System.Drawing.Size(223, 32);
             this.labelInstrumentationTitle.TabIndex = 14;
             this.labelInstrumentationTitle.Text = "Instrumentação";
-            // 
-            
             // 
             // FormDados
             // 

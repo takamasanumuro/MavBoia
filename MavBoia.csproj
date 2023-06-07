@@ -41,10 +41,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AdvancedHMIControls, Version=3.9.9.24, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\AdvancedHMIControls.dll</HintPath>
-    </Reference>
+    <Reference Include="AdvancedHMIControls, Version=3.9.9.24, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="CustomControls">
       <HintPath>DLLs\CustomControls.dll</HintPath>
     </Reference>

@@ -38,7 +38,7 @@ public class GlgComboChart : GlgControl
       by the parent container, using RANDOM_DATA flag or command 
       line option -random-data or live-data. 
    */
-   public bool RandomData = false;
+   public bool RandomData = true;
 
    // Disable warnings about unused ParentContainer.
 #pragma warning disable 0414
