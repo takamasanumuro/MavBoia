@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -42,6 +43,7 @@ namespace SimpleExample
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
+            
             
         
         }
@@ -95,7 +97,7 @@ namespace SimpleExample
         private void GroundStation_Load(object sender, EventArgs e)
         {
            
-                SetSerialPortDefaults("COM3", 9600);
+                SetSerialPortDefaults("COM25", 57600);
                 LoadForms();
 
         }
@@ -156,6 +158,8 @@ namespace SimpleExample
 
                 // set timeout to 2 seconds
                 serialPort1.ReadTimeout = 2000;
+                serialPort1.DiscardInBuffer();
+                
 
                 BackgroundWorker workerSerialPort = new BackgroundWorker();
 
@@ -184,16 +188,12 @@ namespace SimpleExample
                         if (message == null || message.Payload == null)
                             continue;
                     }
-             
-                    // Check the the message is addressed to us
-                    if (VehicleSysID != message.SysID || VehicleCompID != message.CompID)
-                        continue;
-                    
+                               
                     ProcessMessage(message);
                 }
                 catch (Exception serialException)
                 {
-                    Console.WriteLine($"{serialException.Message} at {System.DateTime.Now}");
+                     Console.WriteLine($"{serialException.Message} at {System.DateTime.Now}");
                 }
 
                 System.Threading.Thread.Sleep(1);
@@ -202,9 +202,32 @@ namespace SimpleExample
 
         void ProcessMessage(Mavlink.MavlinkMessage message)
         {
-            Console.WriteLine(message.MsgTypename);
+            //Console.WriteLine($"{message.MsgTypename} + {serialPort1.BytesToRead}");
             switch (message.MsgID)
             {
+
+                case (byte)Mavlink.MAVLINK_MSG_ID.HEARTBEAT:
+                    {
+                        var payload = (Mavlink.mavlink_heartbeat_t)message.Payload;
+                        Console.WriteLine($"Heartbeat: {payload.autopilot} {payload.base_mode} {payload.custom_mode} {payload.mavlink_version}");
+                        // Send heartbeat back
+                        Mavlink.mavlink_heartbeat_t heartbeat = new Mavlink.mavlink_heartbeat_t() { autopilot = 3, base_mode = 0, custom_mode = 0, mavlink_version = 3, system_status = 4 };
+                        byte[] heartbeatBuffer = mavlinkParser.GenerateMAVLinkPacket10(Mavlink.MAVLINK_MSG_ID.HEARTBEAT, heartbeat);
+                        lock(serialLock)
+                        {
+                            serialPort1.Write(heartbeatBuffer, 0, heartbeatBuffer.Length);
+                            Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                        }
+                        // request data stream
+                        //Mavlink.mavlink_request_data_stream_t requestedStream = new Mavlink.mavlink_request_data_stream_t() { req_message_rate = 1, req_stream_id = 0, start_stop = 1, target_component = 0, target_system = 1 };
+                        //byte[] requestedStreamBuffer = mavlinkParser.GenerateMAVLinkPacket10(Mavlink.MAVLINK_MSG_ID.REQUEST_DATA_STREAM, requestedStream);
+                        //lock (serialLock)
+                        //{
+                        //    serialPort1.Write(requestedStreamBuffer, 0, requestedStreamBuffer.Length);
+                        //}
+                        
+                        break;
+                    }
                
                 case (byte)Mavlink.MAVLINK_MSG_ID.CONTROL_SYSTEM:
                     {
@@ -274,8 +297,9 @@ namespace SimpleExample
                     break;
             }
         }
-        
-       
+
+
+
 
         private String DecodePumpMask(byte mask, byte index)
         {

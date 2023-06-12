@@ -32,18 +32,19 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GroundStation));
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.panelLateral = new System.Windows.Forms.Panel();
-            this.buttonGraficos = new System.Windows.Forms.Button();
-            this.buttonDados = new System.Windows.Forms.Button();
-            this.buttonMapa = new System.Windows.Forms.Button();
             this.panelNav = new System.Windows.Forms.Panel();
-            this.buttonConfigurações = new System.Windows.Forms.Button();
             this.panelTopLeft = new System.Windows.Forms.Panel();
             this.panelTopRight = new System.Windows.Forms.Panel();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panelFormLoader = new System.Windows.Forms.Panel();
             this.buttonConnect = new CustomControls.RJControls.RJButton();
             this.labelTitleSelection = new System.Windows.Forms.Label();
             this.buttonExit = new System.Windows.Forms.Button();
+            this.buttonPixhawk = new System.Windows.Forms.Button();
+            this.buttonGraficos = new System.Windows.Forms.Button();
+            this.buttonDados = new System.Windows.Forms.Button();
+            this.buttonMapa = new System.Windows.Forms.Button();
+            this.buttonConfigurações = new System.Windows.Forms.Button();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.comboBoxSerialPort = new CustomControls.FancyComboBox();
             this.comboBoxBaudRate = new CustomControls.FancyComboBox();
@@ -56,6 +57,7 @@
             // panelLateral
             // 
             this.panelLateral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.panelLateral.Controls.Add(this.buttonPixhawk);
             this.panelLateral.Controls.Add(this.buttonGraficos);
             this.panelLateral.Controls.Add(this.buttonDados);
             this.panelLateral.Controls.Add(this.buttonMapa);
@@ -68,63 +70,6 @@
             this.panelLateral.Size = new System.Drawing.Size(228, 597);
             this.panelLateral.TabIndex = 9;
             // 
-            // buttonGraficos
-            // 
-            this.buttonGraficos.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonGraficos.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.buttonGraficos.FlatAppearance.BorderSize = 0;
-            this.buttonGraficos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonGraficos.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonGraficos.ForeColor = System.Drawing.Color.Coral;
-            this.buttonGraficos.Image = global::SimpleExample.Properties.Resources.charts;
-            this.buttonGraficos.Location = new System.Drawing.Point(0, 377);
-            this.buttonGraficos.Name = "buttonGraficos";
-            this.buttonGraficos.Size = new System.Drawing.Size(228, 55);
-            this.buttonGraficos.TabIndex = 12;
-            this.buttonGraficos.Text = "          Graficos  ";
-            this.buttonGraficos.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.buttonGraficos.UseVisualStyleBackColor = true;
-            this.buttonGraficos.Click += new System.EventHandler(this.buttonGraficos_Click);
-            this.buttonGraficos.Leave += new System.EventHandler(this.button_Leave);
-            // 
-            // buttonDados
-            // 
-            this.buttonDados.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonDados.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.buttonDados.FlatAppearance.BorderSize = 0;
-            this.buttonDados.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonDados.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDados.ForeColor = System.Drawing.Color.Coral;
-            this.buttonDados.Image = global::SimpleExample.Properties.Resources.diagram;
-            this.buttonDados.Location = new System.Drawing.Point(0, 432);
-            this.buttonDados.Name = "buttonDados";
-            this.buttonDados.Size = new System.Drawing.Size(228, 55);
-            this.buttonDados.TabIndex = 10;
-            this.buttonDados.Text = "            Dados  ";
-            this.buttonDados.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.buttonDados.UseVisualStyleBackColor = true;
-            this.buttonDados.Click += new System.EventHandler(this.buttonDados_Click);
-            this.buttonDados.Leave += new System.EventHandler(this.button_Leave);
-            // 
-            // buttonMapa
-            // 
-            this.buttonMapa.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonMapa.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.buttonMapa.FlatAppearance.BorderSize = 0;
-            this.buttonMapa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonMapa.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonMapa.ForeColor = System.Drawing.Color.Coral;
-            this.buttonMapa.Image = global::SimpleExample.Properties.Resources.mapicon;
-            this.buttonMapa.Location = new System.Drawing.Point(0, 487);
-            this.buttonMapa.Name = "buttonMapa";
-            this.buttonMapa.Size = new System.Drawing.Size(228, 55);
-            this.buttonMapa.TabIndex = 11;
-            this.buttonMapa.Text = "            Mapa  ";
-            this.buttonMapa.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.buttonMapa.UseVisualStyleBackColor = true;
-            this.buttonMapa.Click += new System.EventHandler(this.buttonMapa_Click);
-            this.buttonMapa.Leave += new System.EventHandler(this.button_Leave);
-            // 
             // panelNav
             // 
             this.panelNav.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
@@ -132,26 +77,6 @@
             this.panelNav.Name = "panelNav";
             this.panelNav.Size = new System.Drawing.Size(3, 50);
             this.panelNav.TabIndex = 9;
-            // 
-            // buttonConfigurações
-            // 
-            this.buttonConfigurações.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonConfigurações.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.buttonConfigurações.FlatAppearance.BorderSize = 0;
-            this.buttonConfigurações.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonConfigurações.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonConfigurações.ForeColor = System.Drawing.Color.Coral;
-            this.buttonConfigurações.Image = global::SimpleExample.Properties.Resources.settings;
-            this.buttonConfigurações.Location = new System.Drawing.Point(0, 542);
-            this.buttonConfigurações.Name = "buttonConfigurações";
-            this.buttonConfigurações.Size = new System.Drawing.Size(228, 55);
-            this.buttonConfigurações.TabIndex = 8;
-            this.buttonConfigurações.Text = "Configurações";
-            this.buttonConfigurações.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonConfigurações.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.buttonConfigurações.UseVisualStyleBackColor = true;
-            this.buttonConfigurações.Click += new System.EventHandler(this.buttonConfigurações_Click);
-            this.buttonConfigurações.Leave += new System.EventHandler(this.button_Leave);
             // 
             // panelTopLeft
             // 
@@ -169,17 +94,6 @@
             this.panelTopRight.Name = "panelTopRight";
             this.panelTopRight.Size = new System.Drawing.Size(910, 113);
             this.panelTopRight.TabIndex = 17;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(228, 119);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
             // 
             // panelFormLoader
             // 
@@ -238,6 +152,111 @@
             this.buttonExit.UseVisualStyleBackColor = true;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
             // 
+            // buttonPixhawk
+            // 
+            this.buttonPixhawk.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonPixhawk.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonPixhawk.FlatAppearance.BorderSize = 0;
+            this.buttonPixhawk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonPixhawk.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonPixhawk.ForeColor = System.Drawing.Color.Coral;
+            this.buttonPixhawk.Image = global::SimpleExample.Properties.Resources.charts;
+            this.buttonPixhawk.Location = new System.Drawing.Point(0, 322);
+            this.buttonPixhawk.Name = "buttonPixhawk";
+            this.buttonPixhawk.Size = new System.Drawing.Size(228, 55);
+            this.buttonPixhawk.TabIndex = 13;
+            this.buttonPixhawk.Text = "          Pixhawk  ";
+            this.buttonPixhawk.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonPixhawk.UseVisualStyleBackColor = true;
+            // 
+            // buttonGraficos
+            // 
+            this.buttonGraficos.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonGraficos.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonGraficos.FlatAppearance.BorderSize = 0;
+            this.buttonGraficos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonGraficos.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonGraficos.ForeColor = System.Drawing.Color.Coral;
+            this.buttonGraficos.Image = global::SimpleExample.Properties.Resources.charts;
+            this.buttonGraficos.Location = new System.Drawing.Point(0, 377);
+            this.buttonGraficos.Name = "buttonGraficos";
+            this.buttonGraficos.Size = new System.Drawing.Size(228, 55);
+            this.buttonGraficos.TabIndex = 12;
+            this.buttonGraficos.Text = "          Graficos  ";
+            this.buttonGraficos.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonGraficos.UseVisualStyleBackColor = true;
+            this.buttonGraficos.Click += new System.EventHandler(this.buttonGraficos_Click);
+            this.buttonGraficos.Leave += new System.EventHandler(this.button_Leave);
+            // 
+            // buttonDados
+            // 
+            this.buttonDados.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonDados.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonDados.FlatAppearance.BorderSize = 0;
+            this.buttonDados.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonDados.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDados.ForeColor = System.Drawing.Color.Coral;
+            this.buttonDados.Image = global::SimpleExample.Properties.Resources.diagram;
+            this.buttonDados.Location = new System.Drawing.Point(0, 432);
+            this.buttonDados.Name = "buttonDados";
+            this.buttonDados.Size = new System.Drawing.Size(228, 55);
+            this.buttonDados.TabIndex = 10;
+            this.buttonDados.Text = "            Dados  ";
+            this.buttonDados.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonDados.UseVisualStyleBackColor = true;
+            this.buttonDados.Click += new System.EventHandler(this.buttonDados_Click);
+            this.buttonDados.Leave += new System.EventHandler(this.button_Leave);
+            // 
+            // buttonMapa
+            // 
+            this.buttonMapa.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonMapa.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonMapa.FlatAppearance.BorderSize = 0;
+            this.buttonMapa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonMapa.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonMapa.ForeColor = System.Drawing.Color.Coral;
+            this.buttonMapa.Image = global::SimpleExample.Properties.Resources.mapicon;
+            this.buttonMapa.Location = new System.Drawing.Point(0, 487);
+            this.buttonMapa.Name = "buttonMapa";
+            this.buttonMapa.Size = new System.Drawing.Size(228, 55);
+            this.buttonMapa.TabIndex = 11;
+            this.buttonMapa.Text = "            Mapa  ";
+            this.buttonMapa.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonMapa.UseVisualStyleBackColor = true;
+            this.buttonMapa.Click += new System.EventHandler(this.buttonMapa_Click);
+            this.buttonMapa.Leave += new System.EventHandler(this.button_Leave);
+            // 
+            // buttonConfigurações
+            // 
+            this.buttonConfigurações.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonConfigurações.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonConfigurações.FlatAppearance.BorderSize = 0;
+            this.buttonConfigurações.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonConfigurações.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonConfigurações.ForeColor = System.Drawing.Color.Coral;
+            this.buttonConfigurações.Image = global::SimpleExample.Properties.Resources.settings;
+            this.buttonConfigurações.Location = new System.Drawing.Point(0, 542);
+            this.buttonConfigurações.Name = "buttonConfigurações";
+            this.buttonConfigurações.Size = new System.Drawing.Size(228, 55);
+            this.buttonConfigurações.TabIndex = 8;
+            this.buttonConfigurações.Text = "Configurações";
+            this.buttonConfigurações.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonConfigurações.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonConfigurações.UseVisualStyleBackColor = true;
+            this.buttonConfigurações.Click += new System.EventHandler(this.buttonConfigurações_Click);
+            this.buttonConfigurações.Leave += new System.EventHandler(this.button_Leave);
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(228, 119);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
+            // 
             // mavlinkheartbeattBindingSource
             // 
             this.mavlinkheartbeattBindingSource.DataSource = typeof(Mavlink.mavlink_heartbeat_t);
@@ -289,7 +308,6 @@
             this.comboBoxBaudRate.Texts = "";
             this.comboBoxBaudRate.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxBaudRate_OnSelectedIndexChanged);
             // 
-            // 
             // GroundStation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -335,7 +353,7 @@
         private CustomControls.RJControls.RJButton buttonConnect;
         private System.Windows.Forms.Label labelTitleSelection;
         private System.Windows.Forms.Button buttonGraficos;
-        
+        private System.Windows.Forms.Button buttonPixhawk;
     }
 }
 
