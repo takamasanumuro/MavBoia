@@ -64,7 +64,7 @@ public partial class Mavlink
                     if (messageInfo.Type == null)
                         return null;
 
-                    _payload = Activator.CreateInstance(messageInfo.Type);
+                    _payload = Activator.CreateInstance(messageInfo.Type); // create instance of the message type at runtime
 
                     try
                     {

@@ -34,6 +34,8 @@ namespace SimpleExample
         FormDados formDados = new FormDados() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         FormMapa formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         FormConfigurações formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+        FormPixhawk formPixhawk = new FormPixhawk() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+
         Control labelInstrumentationData;
         Control labelControlData;
 
@@ -43,9 +45,7 @@ namespace SimpleExample
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
-            
-            
-        
+                  
         }
         #region Form Rounding and Dragging
         // This is the function that will allow the form to be rounded
@@ -97,7 +97,7 @@ namespace SimpleExample
         private void GroundStation_Load(object sender, EventArgs e)
         {
            
-                SetSerialPortDefaults("COM25", 57600);
+                //SetSerialPortDefaults("COM7", 57600);
                 LoadForms();
 
         }
@@ -105,16 +105,16 @@ namespace SimpleExample
         // Ensure all forms are loaded and ready to receive data.
         private void LoadForms()
         {
-            List<Form> forms = new List<Form>() { formConfigurações, formDados, formMapa };
+            List<Form> forms = new List<Form>() { formConfigurações, formDados, formMapa, formPixhawk };
             foreach (var form in forms)
             {
-                panelFormLoader.Controls.Add(form);
-                form.Show();
+                panelFormLoader.Controls.Add(form); // All forms must be added to the container
+                form.Show(); // Forms must be shown at least once to be initialized
             }
-            panelFormLoader.Controls.Clear();
-            panelFormLoader.Controls.Add(formMapa);
-            panelFormLoader.Dock = DockStyle.Fill;
-            panelFormLoader.Show();
+            panelFormLoader.Controls.Clear(); // Clear the forms and select the default form to be shown next
+            panelFormLoader.Controls.Add(formMapa); // Select default form to be shown here
+            panelFormLoader.Dock = DockStyle.Fill;  // Fill the whole panel size with the form
+            panelFormLoader.Show(); // Show the form
         }
 
         private void SetSerialPortDefaults(string portName, int baudRate)
@@ -196,13 +196,13 @@ namespace SimpleExample
                      Console.WriteLine($"{serialException.Message} at {System.DateTime.Now}");
                 }
 
-                System.Threading.Thread.Sleep(1);
+                System.Threading.Thread.Sleep(10);
             }
         }
 
         void ProcessMessage(Mavlink.MavlinkMessage message)
         {
-            //Console.WriteLine($"{message.MsgTypename} + {serialPort1.BytesToRead}");
+            Console.WriteLine($"{message.MsgTypename} + {serialPort1.BytesToRead}");
             switch (message.MsgID)
             {
 
@@ -210,13 +210,13 @@ namespace SimpleExample
                     {
                         var payload = (Mavlink.mavlink_heartbeat_t)message.Payload;
                         Console.WriteLine($"Heartbeat: {payload.autopilot} {payload.base_mode} {payload.custom_mode} {payload.mavlink_version}");
+                        
                         // Send heartbeat back
                         Mavlink.mavlink_heartbeat_t heartbeat = new Mavlink.mavlink_heartbeat_t() { autopilot = 3, base_mode = 0, custom_mode = 0, mavlink_version = 3, system_status = 4 };
                         byte[] heartbeatBuffer = mavlinkParser.GenerateMAVLinkPacket10(Mavlink.MAVLINK_MSG_ID.HEARTBEAT, heartbeat);
-                        lock(serialLock)
+                        lock (serialLock) 
                         {
                             serialPort1.Write(heartbeatBuffer, 0, heartbeatBuffer.Length);
-                            Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                         }
                         // request data stream
                         //Mavlink.mavlink_request_data_stream_t requestedStream = new Mavlink.mavlink_request_data_stream_t() { req_message_rate = 1, req_stream_id = 0, start_stop = 1, target_component = 0, target_system = 1 };
@@ -235,6 +235,7 @@ namespace SimpleExample
                         String leftPumpState = DecodePumpMask(payload.pump_mask, 1);
                         String rightPumpState = DecodePumpMask(payload.pump_mask, 0);
                         labelControlData = FormExchange.GetControl<Label>(nameof(formDados), nameof(labelControlData));
+                        
                         labelControlData.BeginInvoke(
                             (Action)(() => labelControlData.Text = $"Sinal Pot:{payload.potentiometer_signal:F2}V\n" +
                             $"Sinal Encoder:{payload.dac_output:F2}V\n" +
@@ -349,7 +350,7 @@ namespace SimpleExample
 
         private void buttonGraficos_Click(object sender, EventArgs e)
         {
-            button_Click(sender, e);
+            button_GenericClickHandler(sender, e);
             panelFormLoader.Controls.Clear();
             panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Controls.Add(formGraficos);
@@ -360,7 +361,7 @@ namespace SimpleExample
 
         private void buttonDados_Click(object sender, EventArgs e)
         {
-            button_Click(sender, e);
+            button_GenericClickHandler(sender, e);
             panelFormLoader.Controls.Clear();
             SetFormLoaderSmall();
             panelFormLoader.Controls.Add(formDados);
@@ -378,19 +379,18 @@ namespace SimpleExample
 
         private void buttonMapa_Click(object sender, EventArgs e)
         {
-            button_Click(sender, e);
+            button_GenericClickHandler(sender, e);
             panelFormLoader.Controls.Clear();
             panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Controls.Add(formMapa);
             formMapa.Show();
-           
             labelTitleSelection.Text = "Mapa";
 
         }
 
         private void buttonConfigurações_Click(object sender, EventArgs e)
         {
-            button_Click(sender, e);
+            button_GenericClickHandler(sender, e);
             panelFormLoader.Controls.Clear();
             SetFormLoaderSmall();
             panelFormLoader.Controls.Add(formConfigurações);
@@ -400,14 +400,14 @@ namespace SimpleExample
         }
 
 
-        private void button_Click(object sender, EventArgs e)
+        private void button_GenericClickHandler(object sender, EventArgs e)
         {
-            Button button = (Button)sender;
-            panelNav.Height = button.Height;
-            panelNav.Top = button.Top;
-            panelNav.Left = button.Left;
-            panelNav.BringToFront();
-            button.BackColor = Color.FromArgb(46, 51, 73);
+            Button button = (Button)sender; // Get the button that was clicked
+            panelNav.Height = button.Height; //Position the blue highlight panel
+            panelNav.Top = button.Top; //Position the blue highlight panel
+            panelNav.Left = button.Left; //Position the blue highlight panel
+            panelNav.BringToFront(); // Puts it on top of the other controls
+            button.BackColor = Color.FromArgb(46, 51, 73); // Change the button back color.
         }
     
         private void button_Leave(object sender, EventArgs e)
@@ -470,6 +470,16 @@ namespace SimpleExample
         private void barMeter1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonPixhawk_Click(object sender, EventArgs e)
+        {
+            button_GenericClickHandler(sender, e);
+            panelFormLoader.Controls.Clear();
+            SetFormLoaderSmall();
+            panelFormLoader.Controls.Add(formPixhawk);
+            formMapa.Show();
+            labelTitleSelection.Text = "";
         }
     }
 }

@@ -32,19 +32,19 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GroundStation));
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.panelLateral = new System.Windows.Forms.Panel();
-            this.panelNav = new System.Windows.Forms.Panel();
-            this.panelTopLeft = new System.Windows.Forms.Panel();
-            this.panelTopRight = new System.Windows.Forms.Panel();
-            this.panelFormLoader = new System.Windows.Forms.Panel();
-            this.buttonConnect = new CustomControls.RJControls.RJButton();
-            this.labelTitleSelection = new System.Windows.Forms.Label();
-            this.buttonExit = new System.Windows.Forms.Button();
             this.buttonPixhawk = new System.Windows.Forms.Button();
             this.buttonGraficos = new System.Windows.Forms.Button();
             this.buttonDados = new System.Windows.Forms.Button();
             this.buttonMapa = new System.Windows.Forms.Button();
+            this.panelNav = new System.Windows.Forms.Panel();
             this.buttonConfigurações = new System.Windows.Forms.Button();
+            this.panelTopLeft = new System.Windows.Forms.Panel();
+            this.panelTopRight = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.panelFormLoader = new System.Windows.Forms.Panel();
+            this.buttonConnect = new CustomControls.RJControls.RJButton();
+            this.labelTitleSelection = new System.Windows.Forms.Label();
+            this.buttonExit = new System.Windows.Forms.Button();
             this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.comboBoxSerialPort = new CustomControls.FancyComboBox();
             this.comboBoxBaudRate = new CustomControls.FancyComboBox();
@@ -70,88 +70,6 @@
             this.panelLateral.Size = new System.Drawing.Size(228, 597);
             this.panelLateral.TabIndex = 9;
             // 
-            // panelNav
-            // 
-            this.panelNav.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
-            this.panelNav.Location = new System.Drawing.Point(3, 479);
-            this.panelNav.Name = "panelNav";
-            this.panelNav.Size = new System.Drawing.Size(3, 50);
-            this.panelNav.TabIndex = 9;
-            // 
-            // panelTopLeft
-            // 
-            this.panelTopLeft.Controls.Add(this.panelTopRight);
-            this.panelTopLeft.Controls.Add(this.pictureBox2);
-            this.panelTopLeft.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTopLeft.Location = new System.Drawing.Point(0, 0);
-            this.panelTopLeft.Name = "panelTopLeft";
-            this.panelTopLeft.Size = new System.Drawing.Size(228, 119);
-            this.panelTopLeft.TabIndex = 7;
-            // 
-            // panelTopRight
-            // 
-            this.panelTopRight.Location = new System.Drawing.Point(255, 3);
-            this.panelTopRight.Name = "panelTopRight";
-            this.panelTopRight.Size = new System.Drawing.Size(910, 113);
-            this.panelTopRight.TabIndex = 17;
-            // 
-            // panelFormLoader
-            // 
-            this.panelFormLoader.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelFormLoader.Location = new System.Drawing.Point(228, 117);
-            this.panelFormLoader.Name = "panelFormLoader";
-            this.panelFormLoader.Size = new System.Drawing.Size(937, 480);
-            this.panelFormLoader.TabIndex = 11;
-            // 
-            // buttonConnect
-            // 
-            this.buttonConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
-            this.buttonConnect.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
-            this.buttonConnect.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.buttonConnect.BorderRadius = 10;
-            this.buttonConnect.BorderSize = 0;
-            this.buttonConnect.FlatAppearance.BorderSize = 0;
-            this.buttonConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonConnect.ForeColor = System.Drawing.Color.Coral;
-            this.buttonConnect.Location = new System.Drawing.Point(418, 12);
-            this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(74, 25);
-            this.buttonConnect.TabIndex = 17;
-            this.buttonConnect.Text = "Abrir";
-            this.buttonConnect.TextColor = System.Drawing.Color.Coral;
-            this.buttonConnect.UseVisualStyleBackColor = false;
-            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
-            // 
-            // labelTitleSelection
-            // 
-            this.labelTitleSelection.AutoSize = true;
-            this.labelTitleSelection.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTitleSelection.ForeColor = System.Drawing.Color.Coral;
-            this.labelTitleSelection.Location = new System.Drawing.Point(271, 73);
-            this.labelTitleSelection.Name = "labelTitleSelection";
-            this.labelTitleSelection.Size = new System.Drawing.Size(101, 32);
-            this.labelTitleSelection.TabIndex = 15;
-            this.labelTitleSelection.Text = "Dados";
-            this.labelTitleSelection.Click += new System.EventHandler(this.labelTitleSelection_Click);
-            // 
-            // buttonExit
-            // 
-            this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExit.BackgroundImage = global::SimpleExample.Properties.Resources.Close;
-            this.buttonExit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.buttonExit.FlatAppearance.BorderSize = 0;
-            this.buttonExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonExit.ForeColor = System.Drawing.Color.MistyRose;
-            this.buttonExit.Location = new System.Drawing.Point(1106, 24);
-            this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(47, 35);
-            this.buttonExit.TabIndex = 10;
-            this.buttonExit.UseVisualStyleBackColor = true;
-            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
-            // 
             // buttonPixhawk
             // 
             this.buttonPixhawk.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -168,6 +86,7 @@
             this.buttonPixhawk.Text = "          Pixhawk  ";
             this.buttonPixhawk.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.buttonPixhawk.UseVisualStyleBackColor = true;
+            this.buttonPixhawk.Click += new System.EventHandler(this.buttonPixhawk_Click);
             // 
             // buttonGraficos
             // 
@@ -226,6 +145,14 @@
             this.buttonMapa.Click += new System.EventHandler(this.buttonMapa_Click);
             this.buttonMapa.Leave += new System.EventHandler(this.button_Leave);
             // 
+            // panelNav
+            // 
+            this.panelNav.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.panelNav.Location = new System.Drawing.Point(3, 479);
+            this.panelNav.Name = "panelNav";
+            this.panelNav.Size = new System.Drawing.Size(3, 50);
+            this.panelNav.TabIndex = 9;
+            // 
             // buttonConfigurações
             // 
             this.buttonConfigurações.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -246,6 +173,23 @@
             this.buttonConfigurações.Click += new System.EventHandler(this.buttonConfigurações_Click);
             this.buttonConfigurações.Leave += new System.EventHandler(this.button_Leave);
             // 
+            // panelTopLeft
+            // 
+            this.panelTopLeft.Controls.Add(this.panelTopRight);
+            this.panelTopLeft.Controls.Add(this.pictureBox2);
+            this.panelTopLeft.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTopLeft.Location = new System.Drawing.Point(0, 0);
+            this.panelTopLeft.Name = "panelTopLeft";
+            this.panelTopLeft.Size = new System.Drawing.Size(228, 119);
+            this.panelTopLeft.TabIndex = 7;
+            // 
+            // panelTopRight
+            // 
+            this.panelTopRight.Location = new System.Drawing.Point(255, 3);
+            this.panelTopRight.Name = "panelTopRight";
+            this.panelTopRight.Size = new System.Drawing.Size(910, 113);
+            this.panelTopRight.TabIndex = 17;
+            // 
             // pictureBox2
             // 
             this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -256,6 +200,63 @@
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 0;
             this.pictureBox2.TabStop = false;
+            // 
+            // panelFormLoader
+            // 
+            this.panelFormLoader.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelFormLoader.Location = new System.Drawing.Point(228, 117);
+            this.panelFormLoader.Name = "panelFormLoader";
+            this.panelFormLoader.Size = new System.Drawing.Size(937, 480);
+            this.panelFormLoader.TabIndex = 11;
+            // 
+            // buttonConnect
+            // 
+            this.buttonConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.buttonConnect.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.buttonConnect.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.buttonConnect.BorderRadius = 10;
+            this.buttonConnect.BorderSize = 0;
+            this.buttonConnect.FlatAppearance.BorderSize = 0;
+            this.buttonConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonConnect.ForeColor = System.Drawing.Color.Coral;
+            this.buttonConnect.Location = new System.Drawing.Point(418, 12);
+            this.buttonConnect.Name = "buttonConnect";
+            this.buttonConnect.Size = new System.Drawing.Size(74, 25);
+            this.buttonConnect.TabIndex = 17;
+            this.buttonConnect.Text = "Abrir";
+            this.buttonConnect.TextColor = System.Drawing.Color.Coral;
+            this.buttonConnect.UseVisualStyleBackColor = false;
+            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
+            // 
+            // labelTitleSelection
+            // 
+            this.labelTitleSelection.AutoSize = true;
+            this.labelTitleSelection.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTitleSelection.ForeColor = System.Drawing.Color.Coral;
+            this.labelTitleSelection.Location = new System.Drawing.Point(271, 73);
+            this.labelTitleSelection.Name = "labelTitleSelection";
+            this.labelTitleSelection.Size = new System.Drawing.Size(101, 32);
+            this.labelTitleSelection.TabIndex = 15;
+            this.labelTitleSelection.Text = "Dados";
+            this.labelTitleSelection.Click += new System.EventHandler(this.labelTitleSelection_Click);
+            // 
+            // buttonExit
+            // 
+            this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExit.BackgroundImage = global::SimpleExample.Properties.Resources.Close;
+            this.buttonExit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.buttonExit.FlatAppearance.BorderSize = 0;
+            this.buttonExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonExit.ForeColor = System.Drawing.Color.MistyRose;
+            this.buttonExit.Location = new System.Drawing.Point(1106, 24);
+            this.buttonExit.Name = "buttonExit";
+            this.buttonExit.Size = new System.Drawing.Size(47, 35);
+            this.buttonExit.TabIndex = 10;
+            this.buttonExit.UseVisualStyleBackColor = true;
+            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
             // 
             // mavlinkheartbeattBindingSource
             // 

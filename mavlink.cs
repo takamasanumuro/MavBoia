@@ -217,7 +217,7 @@ public partial class Mavlink
 
         public override string ToString()
         {
-            return String.Format("{0} - {1}",Name,MsgID);
+            return String.Format("{0} - {1}", Name, MsgID);
         }
     }   
 
@@ -344,13 +344,13 @@ public partial class Mavlink
         AUTOPILOT_VERSION = 148,
         LANDING_TARGET = 149,
         FENCE_STATUS = 162,
-        ////////////////////
+        // \/\/\/\/\/\/\/\/\/\/ CUSTOM MAVLINK MESSAGES SHOULD USE THIS SPAN FOR THEIR IDs \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
         CONTROL_SYSTEM = 170,
         INSTRUMENTATION = 171,
         TEMPERATURES = 172,
         GPS_GPRMC_SENTENCE = 176,
         GPS_LAT_LNG = 177,
-        ////////////////////
+        // /\/\/\/\/\/\/\/\/\/\ CUSTOM MAVLINK MESSAGES SHOULD USE THIS SPAN FOR THEIR IDs /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
         MAG_CAL_REPORT = 192,
         EFI_STATUS = 225,
         ESTIMATOR_STATUS = 230,
