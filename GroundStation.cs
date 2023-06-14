@@ -13,57 +13,70 @@ namespace SimpleExample
 {
     public partial class GroundStation : Form
     {
+        
+        // Store the previous mouse position for dragging
+        private Point previousMousePosition;
+
+        readonly FormChart formGraficos;
+        readonly FormDados formDados;
+        readonly FormMapa formMapa;
+        readonly FormConfigurações formConfigurações;
+        readonly FormPixhawk formPixhawk;
+
         //Mavlink parser responsible for parsing and deparsing mavlink packets
-        private Mavlink.MavlinkParser mavlinkParser = new Mavlink.MavlinkParser();
+        private readonly Mavlink.MavlinkParser mavlinkParser = new Mavlink.MavlinkParser();
         // locking to prevent thread collisions on serial port
-        private object serialLock = new object();
+        private readonly object serialLock = new object();
         private byte SysIDLocal { get;  set; } = 0xFF;
         private byte CompIDLocal { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_MISSIONPLANNER;
 
         private byte VehicleSysID { get; set; } = 0x01;
         private byte VehicleCompID { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER;
 
-        // Constants for form rounding and dragging
-        private const int WM_NCHITTEST = 0x84;
-        private const int HT_CAPTION = 0x2;
-
-        // Store the previous mouse position for dragging
-        private Point previousMousePosition;
-
-        FormChart formGraficos = new FormChart() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        FormDados formDados = new FormDados() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        FormMapa formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        FormConfigurações formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        FormPixhawk formPixhawk = new FormPixhawk() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-
-        Control labelInstrumentationData;
-        Control labelControlData;
 
         public GroundStation()
         {
             InitializeComponent();
+            SetupRoundDraggableForm();
+
+            formGraficos = new FormChart() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+            formDados = new FormDados() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+            formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+            formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+            formPixhawk = new FormPixhawk(this) { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+              
+        }
+
+        #region Form Rounding and Dragging
+
+        // This function will allow the form to be rounded and draggable instead of the default sharp rectangle shape that Winforms provides.
+        private void SetupRoundDraggableForm()
+        {
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
-                  
         }
-        #region Form Rounding and Dragging
+
+       
         // This is the function that will allow the form to be rounded
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
          (
-              int nLeftRect,
-              int nTopRect,
-              int nRightRect,
-              int nBottomRect,
-              int nWidthEllipse,
-             int nHeightEllipse
-
+            int nLeftRect,
+            int nTopRect,
+            int nRightRect,
+            int nBottomRect,
+            int nWidthEllipse,
+            int nHeightEllipse
           );
 
         // Allows form to be dragged.
         protected override void WndProc(ref Message m)
         {
+            // Constants for form rounding and dragging
+            const int WM_NCHITTEST = 0x84;
+            const int HT_CAPTION = 0x02;
+
             // Override WndProc to enable dragging
             if (m.Msg == WM_NCHITTEST)
             {
@@ -90,7 +103,7 @@ namespace SimpleExample
                 Top += e.Y - previousMousePosition.Y;
             }
         }
-        #endregion
+        #endregion // Form Rounding and Dragging
 
         #region Form Initialization Defaults
 
@@ -155,17 +168,14 @@ namespace SimpleExample
                 serialPort1.Open();
                 buttonConnect.Text = "Fechar";
 
-
                 // set timeout to 2 seconds
                 serialPort1.ReadTimeout = 2000;
                 serialPort1.DiscardInBuffer();
                 
-
                 BackgroundWorker workerSerialPort = new BackgroundWorker();
-
                 workerSerialPort.DoWork += workerSerialPort_ReadData;
-
                 workerSerialPort.RunWorkerAsync();
+
             }
             catch (Exception exception)
             {
@@ -234,7 +244,7 @@ namespace SimpleExample
                         var payload = (Mavlink.mavlink_control_system_t)message.Payload;
                         String leftPumpState = DecodePumpMask(payload.pump_mask, 1);
                         String rightPumpState = DecodePumpMask(payload.pump_mask, 0);
-                        labelControlData = FormExchange.GetControl<Label>(nameof(formDados), nameof(labelControlData));
+                        Label labelControlData = FormExchange.GetControl<Label>(nameof(formDados), nameof(labelControlData));
                         
                         labelControlData.BeginInvoke(
                             (Action)(() => labelControlData.Text = $"Sinal Pot:{payload.potentiometer_signal:F2}V\n" +
@@ -249,7 +259,7 @@ namespace SimpleExample
                     {
                         Random random = new Random();
                         var payload = (Mavlink.mavlink_instrumentation_t)message.Payload;
-                        labelInstrumentationData = FormExchange.GetControl<Label>(formDados.Name, "labelInstrumentationData");
+                        Label labelInstrumentationData = FormExchange.GetControl<Label>(formDados.Name, "labelInstrumentationData");
                         labelInstrumentationData.BeginInvoke(new Action(() => labelInstrumentationData.Text = $"Corrente do motor: {payload.current_zero:F2}A\n" +
                         $"Corrente do MPPT: {payload.current_one:F2}A\n" +
                         $"Corrente auxiliar: {payload.current_two:F2}A\n" +
@@ -273,7 +283,7 @@ namespace SimpleExample
                             GPRMCData gpsData = GPRMCParser.Parse(sentence);
                             formMapa.UpdateLocation(gpsData.Latitude, gpsData.Longitude);
                             
-                        Console.WriteLine($"GPS received: {gpsData.Latitude}/{gpsData.Longitude}");
+                            Console.WriteLine($"GPS received: {gpsData.Latitude}/{gpsData.Longitude}");
 
                         }
                         catch (Exception exception)
@@ -366,13 +376,14 @@ namespace SimpleExample
             SetFormLoaderSmall();
             panelFormLoader.Controls.Add(formDados);
             formDados.Show();
+            Label labelInstrumentationData;
             FormExchange.GetControl<Label>(nameof(formDados), nameof(labelInstrumentationData)).Text = 
-            $"Corrente do motor: 5A\n" +
-            $"Corrente do MPPT: 10A\n" +
-            $"Corrente auxiliar: 2A\n" +
-            $"Tensão do sistema: 48V\n" +
-            $"Temperatura do MPPT: 40°C\n" +
-            $"Temperatura do Motor: 50°C";
+                $"Corrente do motor: 5A\n" +
+                $"Corrente do MPPT: 10A\n" +
+                $"Corrente auxiliar: 2A\n" +
+                $"Tensão do sistema: 48V\n" +
+                $"Temperatura do MPPT: 40°C\n" +
+                $"Temperatura do Motor: 50°C";
             labelTitleSelection.Text = "Dados";
                     
         }

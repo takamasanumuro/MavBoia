@@ -337,7 +337,6 @@
         }
 
         #endregion
-        private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.BindingSource mavlinkheartbeattBindingSource;
         private System.Windows.Forms.Panel panelLateral;
         private System.Windows.Forms.Panel panelTopLeft;
@@ -355,6 +354,7 @@
         private System.Windows.Forms.Label labelTitleSelection;
         private System.Windows.Forms.Button buttonGraficos;
         private System.Windows.Forms.Button buttonPixhawk;
+        public System.IO.Ports.SerialPort serialPort1;
     }
 }
 

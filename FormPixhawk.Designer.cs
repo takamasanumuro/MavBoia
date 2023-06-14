@@ -127,7 +127,7 @@
             this.comboBoxCommandSelection.Size = new System.Drawing.Size(210, 23);
             this.comboBoxCommandSelection.TabIndex = 18;
             this.comboBoxCommandSelection.Texts = "";
-            this.comboBoxCommandSelection.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxCommandSelection_OnSelectedIndexChanged);
+            
             // 
             // FormPixhawk
             // 

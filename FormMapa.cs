@@ -11,13 +11,15 @@ namespace SimpleExample
 {
     public partial class FormMapa : Form
     {
+        
         bool UseTimer = false;
         public PointLatLng boatLocation = new PointLatLng(-22.8570241, -43.0955684);
         Bitmap boatIcon = new Bitmap("Resources/boaticon1.bmp");
+
         public FormMapa()
         {
             InitializeComponent();
-            
+                 
         }
 
         private void mapControl_Load(object sender, EventArgs e)
