@@ -112,7 +112,6 @@ public partial class Mavlink
             if (readCount >= Mavlink.MAVLINK2_MAX_PACKET_LEN)
             {
                 Console.WriteLine("No header found");
-                return null;
                 throw new InvalidDataException("No header found in data");
             }
 
@@ -131,24 +130,10 @@ public partial class Mavlink
             // packet length
             const int numCRCBytes = 2;
             int lengthToRead = buffer[1] + numCRCBytes;
-            if (buffer[0] == MAVLINK2_STX)
-            {
-                //lengthToRead = buffer[1] + headerLengthSTX + 2 - 2; // data + header + checksum - magic - length
-                if ((buffer[2] & MAVLINK_IFLAG_SIGNED) > 0)
-                {
-                    lengthToRead += MAVLINK2_SIGNATURE_BLOCK_LEN;
-                }
-            }
-            else
-            {
-                //lengthToRead = buffer[1]; + headerLengthSTX + 2 - 2; // data + header + checksum - U - length    
-            }
-
+            
             try
             {
-                //read rest of packet
-                //ReadWithTimeout(baseStream, buffer, headerLengthSTX, lengthToRead - (headerLengthSTX - 2));
-                
+                //read rest of packet      
                 ReadWithTimeout(baseStream, buffer, headerLengthSTX, lengthToRead);               
             }
             catch (EndOfStreamException)
@@ -170,8 +155,7 @@ public partial class Mavlink
             }
 
             // check crc
-            if ((message.Crc16 >> 8) != (crc >> 8) ||
-                      (message.Crc16 & 0xff) != (crc & 0xff))
+            if ((message.Crc16 >> 8) != (crc >> 8) || (message.Crc16 & 0xff) != (crc & 0xff))
             {
                 BadCrc++;
                 // crc fail
