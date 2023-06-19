@@ -32,6 +32,8 @@
             this.labelControlTitle = new System.Windows.Forms.Label();
             this.labelInstrumentationData = new System.Windows.Forms.Label();
             this.labelInstrumentationTitle = new System.Windows.Forms.Label();
+            this.labelTemperatura = new System.Windows.Forms.Label();
+            this.labelTemperaturaDados = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelControlData
@@ -78,12 +80,36 @@
             this.labelInstrumentationTitle.TabIndex = 14;
             this.labelInstrumentationTitle.Text = "Instrumentação";
             // 
+            // labelTemperatura
+            // 
+            this.labelTemperatura.AutoSize = true;
+            this.labelTemperatura.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTemperatura.ForeColor = System.Drawing.Color.Coral;
+            this.labelTemperatura.Location = new System.Drawing.Point(464, 60);
+            this.labelTemperatura.Name = "labelTemperatura";
+            this.labelTemperatura.Size = new System.Drawing.Size(187, 32);
+            this.labelTemperatura.TabIndex = 17;
+            this.labelTemperatura.Text = "Temperatura";
+            // 
+            // labelTemperaturaDados
+            // 
+            this.labelTemperaturaDados.AutoSize = true;
+            this.labelTemperaturaDados.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTemperaturaDados.ForeColor = System.Drawing.Color.Coral;
+            this.labelTemperaturaDados.Location = new System.Drawing.Point(465, 114);
+            this.labelTemperaturaDados.Name = "labelTemperaturaDados";
+            this.labelTemperaturaDados.Size = new System.Drawing.Size(79, 25);
+            this.labelTemperaturaDados.TabIndex = 18;
+            this.labelTemperaturaDados.Text = "Dados";
+            // 
             // FormDados
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(910, 480);
+            this.Controls.Add(this.labelTemperaturaDados);
+            this.Controls.Add(this.labelTemperatura);
             this.Controls.Add(this.labelControlData);
             this.Controls.Add(this.labelControlTitle);
             this.Controls.Add(this.labelInstrumentationData);
@@ -102,6 +128,7 @@
         public System.Windows.Forms.Label labelControlTitle;
         public System.Windows.Forms.Label labelInstrumentationData;
         public System.Windows.Forms.Label labelInstrumentationTitle;
-        
+        public System.Windows.Forms.Label labelTemperatura;
+        public System.Windows.Forms.Label labelTemperaturaDados;
     }
 }

@@ -2,14 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using static Mavlink;
 
+// Custom message structs created using Mavgen are located on bottom of file.
 
 /// <summary>
 /// Mavlink constants, enums, payload structs and message infos are stored here
 /// </summary>
 public partial class Mavlink
 {
-    public const string MAVLINK_BUILD_DATE = "Sun May 14 2023";
+    public const string MAVLINK_BUILD_DATE = "Mon Jun 19 2023";
     public const string MAVLINK_WIRE_PROTOCOL_VERSION = "1.0";
     public const int MAVLINK_MAX_PAYLOAD_LEN = 255;
 
@@ -38,7 +40,13 @@ public partial class Mavlink
     public const byte MAVLINK_COMMAND_24BIT = 0;
         
     public const bool MAVLINK_NEED_BYTE_SWAP = (MAVLINK_ENDIAN == MAVLINK_LITTLE_ENDIAN);
-        
+
+    public const byte MAVLINK_VERSION = 3;
+
+    public const byte MAVLINK_IFLAG_SIGNED = 0x01;
+
+    public const byte MAVLINK_IFLAG_MASK = 0x01;
+
     // msgid, name, crc, minlength, length, type
     public static MessageInfo[] MavlinkMessageInfoTable = new MessageInfo[] {
         new MessageInfo(0, "HEARTBEAT", 50, 9, 9, typeof( mavlink_heartbeat_t )), // none 24 bit
@@ -162,10 +170,10 @@ public partial class Mavlink
         new MessageInfo(149, "LANDING_TARGET", 200, 30, 30, typeof( mavlink_landing_target_t )), // none 24 bit
         new MessageInfo(162, "FENCE_STATUS", 189, 8, 8, typeof( mavlink_fence_status_t )), // none 24 bit
         new MessageInfo(170, "CONTROL_SYSTEM", 202, 9, 9, typeof( mavlink_control_system_t )), // none 24 bit
-        new MessageInfo(171, "INSTRUMENTATION", 179, 16, 16, typeof( mavlink_instrumentation_t )), // none 24 bit
-        new MessageInfo(172, "TEMPERATURES", 60, 8, 8, typeof( mavlink_temperatures_t )), // none 24 bit
-        new MessageInfo(176, "GPS_GPRMC_SENTENCE", 30, 80, 80, typeof( mavlink_gps_gprmc_sentence_t )), // none 24 bit
-        new MessageInfo(177, "GPS_LAT_LNG", 248, 8, 8, typeof( mavlink_gps_lat_lng_t )), // none 24 bit
+        new MessageInfo(171, "INSTRUMENTATION", 143, 16, 16, typeof( mavlink_instrumentation_t )), // none 24 bit
+        new MessageInfo(172, "TEMPERATURES", 159, 8, 8, typeof( mavlink_temperatures_t )), // none 24 bit
+        new MessageInfo(173, "GPS_INFO", 182, 17, 17, typeof( mavlink_gps_info_t )), // none 24 bit
+        new MessageInfo(174, "GPS_INFO_POS", 85, 8, 8, typeof( mavlink_gps_info_pos_t )), // none 24 bit
         new MessageInfo(192, "MAG_CAL_REPORT", 36, 44, 44, typeof( mavlink_mag_cal_report_t )), // none 24 bit
         new MessageInfo(225, "EFI_STATUS", 208, 65, 65, typeof( mavlink_efi_status_t )), // none 24 bit
         new MessageInfo(230, "ESTIMATOR_STATUS", 163, 42, 42, typeof( mavlink_estimator_status_t )), // none 24 bit
@@ -191,10 +199,6 @@ public partial class Mavlink
 
     };
 
-    public const byte MAVLINK_VERSION = 3;
-
-    public const byte MAVLINK_IFLAG_SIGNED=  0x01;
-    public const byte MAVLINK_IFLAG_MASK   = 0x01;
 
     public struct MessageInfo
     {
@@ -344,13 +348,15 @@ public partial class Mavlink
         AUTOPILOT_VERSION = 148,
         LANDING_TARGET = 149,
         FENCE_STATUS = 162,
-        ////////////////////
+        //////////////////// USER DEFINED MAVLINK MESSAGES HERE
+       
         CONTROL_SYSTEM = 170,
         INSTRUMENTATION = 171,
         TEMPERATURES = 172,
-        GPS_GPRMC_SENTENCE = 176,
-        GPS_LAT_LNG = 177,
-        ////////////////////
+        GPS_INFO = 173,
+        GPS_INFO_POS = 174,
+
+        //////////////////// USER DEFINED MAVLINK MESSAGES HERE
         MAG_CAL_REPORT = 192,
         EFI_STATUS = 225,
         ESTIMATOR_STATUS = 230,
@@ -12992,7 +12998,8 @@ public partial class Mavlink
         public  byte mavlink_version;
     
     };
-  
+
+    /// extensions_start 0
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 9)]
     ///<summary>  Bitfield that encodes whether the pumps are active or not. </summary>
     public struct mavlink_control_system_t
@@ -13004,13 +13011,13 @@ public partial class Mavlink
             this.pump_mask = pump_mask;
 
         }
-        /// <summary>DAC output.  [mV] </summary>
+        /// <summary>Digital-Analog converter output to control the motor.  [mV] </summary>
         [Units("[mV]")]
-        [Description("DAC output.")]
+        [Description("Digital-Analog converter output to control the motor.")]
         public float dac_output;
-        /// <summary>Potentiometer output.  [mV] </summary>
+        /// <summary>Potentiometer output to control the motor.  [mV] </summary>
         [Units("[mV]")]
-        [Description("Potentiometer output.")]
+        [Description("Potentiometer output to control the motor.")]
         public float potentiometer_signal;
         /// <summary>Bitfield that encodes whether the pumps are active or not.   </summary>
         [Units("")]
@@ -13019,16 +13026,18 @@ public partial class Mavlink
 
     };
 
+
+    /// extensions_start 0
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 16)]
     ///<summary>  Instrumentation data for 3 current sensors and 1 voltage sensor. </summary>
     public struct mavlink_instrumentation_t
     {
-        public mavlink_instrumentation_t(float current_zero, float current_one, float current_two, float battery_voltage)
+        public mavlink_instrumentation_t(float current_zero, float current_one, float current_two, float voltage_battery)
         {
             this.current_zero = current_zero;
             this.current_one = current_one;
             this.current_two = current_two;
-            this.battery_voltage = battery_voltage;
+            this.voltage_battery = voltage_battery;
 
         }
         /// <summary>Current Sensor 0  [mA] </summary>
@@ -13046,66 +13055,91 @@ public partial class Mavlink
         /// <summary>Voltage sensor.  [mA] </summary>
         [Units("[mA]")]
         [Description("Voltage sensor.")]
-        public float battery_voltage;
+        public float voltage_battery;
 
     };
 
+
+    /// extensions_start 0
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 8)]
     ///<summary>  Temperature data for motor and MPPT. </summary>
     public struct mavlink_temperatures_t
     {
-        public mavlink_temperatures_t(float motor_temp, float mppt_temp)
+        public mavlink_temperatures_t(float temperature_motor, float temperature_mppt)
         {
-            this.motor_temp = motor_temp;
-            this.mppt_temp = mppt_temp;
+            this.temperature_motor = temperature_motor;
+            this.temperature_mppt = temperature_mppt;
 
         }
         /// <summary>Motor temperature.  [degC] </summary>
         [Units("[degC]")]
         [Description("Motor temperature.")]
-        public float motor_temp;
+        public float temperature_motor;
         /// <summary>MPPT temperature.  [degC] </summary>
         [Units("[degC]")]
         [Description("MPPT temperature.")]
-        public float mppt_temp;
+        public float temperature_mppt;
 
     };
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 80)]
-    ///<summary>  Output GPRMC NMEA string from GPS sensor.  </summary>
-    public struct mavlink_gps_gprmc_sentence_t
+
+    /// extensions_start 0
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 17)]
+    ///<summary>  GPS data from NEO-6M module.  </summary>
+    public struct mavlink_gps_info_t
     {
-        public mavlink_gps_gprmc_sentence_t(byte[] gprmc_sentence)
+        public mavlink_gps_info_t(float latitude, float longitude, float speed, float course, byte satellites_visible)
         {
-            this.gprmc_sentence = gprmc_sentence;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.speed = speed;
+            this.course = course;
+            this.satellites_visible = satellites_visible;
 
         }
-        /// <summary>GPRMC NMEA sentence.   </summary>
+        /// <summary>Latitude info. Sixth decimal digit represents 11cm resolution   </summary>
         [Units("")]
-        [Description("GPRMC NMEA sentence.")]
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 80)]
-        public byte[] gprmc_sentence;
+        [Description("Latitude info. Sixth decimal digit represents 11cm resolution")]
+        public float latitude;
+        /// <summary>Longitude info. Sixth decimal digit represents 11cm resolution   </summary>
+        [Units("")]
+        [Description("Longitude info. Sixth decimal digit represents 11cm resolution")]
+        public float longitude;
+        /// <summary>Speed  [km/h] </summary>
+        [Units("[km/h]")]
+        [Description("Speed")]
+        public float speed;
+        /// <summary>Course  [deg] </summary>
+        [Units("[deg]")]
+        [Description("Course")]
+        public float course;
+        /// <summary>Number of visible satellites   </summary>
+        [Units("")]
+        [Description("Number of visible satellites")]
+        public byte satellites_visible;
 
     };
 
+
+    /// extensions_start 0
     [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 8)]
-    ///<summary>  Output latitude and longitude from GPS sensor.  </summary>
-    public struct mavlink_gps_lat_lng_t
+    ///<summary>  GPS latitude and longitude data from NEO-6M module.  </summary>
+    public struct mavlink_gps_info_pos_t
     {
-        public mavlink_gps_lat_lng_t(int latitude, int longitude)
+        public mavlink_gps_info_pos_t(float latitude, float longitude)
         {
             this.latitude = latitude;
             this.longitude = longitude;
 
         }
-        /// <summary>Latitude.  [degE7] </summary>
-        [Units("[degE7]")]
-        [Description("Latitude.")]
-        public int latitude;
-        /// <summary>Longitude.  [degE7] </summary>
-        [Units("[degE7]")]
-        [Description("Longitude.")]
-        public int longitude;
+        /// <summary>Latitude info. Sixth decimal digit represents 11cm resolution   </summary>
+        [Units("")]
+        [Description("Latitude info. Sixth decimal digit represents 11cm resolution")]
+        public float latitude;
+        /// <summary>Longitude info. Sixth decimal digit represents 11cm resolution   </summary>
+        [Units("")]
+        [Description("Longitude info. Sixth decimal digit represents 11cm resolution")]
+        public float longitude;
 
     };
 

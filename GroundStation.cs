@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Opc.Cpx;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,27 +15,19 @@ namespace SimpleExample
     {
         //Mavlink parser responsible for parsing and deparsing mavlink packets
         private Mavlink.MavlinkParser mavlinkParser = new Mavlink.MavlinkParser();
-        // locking to prevent thread collisions on serial port
-        private object serialLock = new object();
-        private byte SysIDLocal { get;  set; } = 0xFF;
+        
+        private object serialLock = new object(); // lock to prevent thread collisions on serial port
+        private byte SysIDLocal { get;  set; } = 0xFF; // Default System ID for ground stations.
         private byte CompIDLocal { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_MISSIONPLANNER;
-
-        private byte VehicleSysID { get; set; } = 0x01;
+        private byte VehicleSysID { get; set; } = 0x01; // Default System ID for vehicles.
         private byte VehicleCompID { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER;
-
-        // Constants for form rounding and dragging
-        private const int WM_NCHITTEST = 0x84;
-        private const int HT_CAPTION = 0x2;
-
-        // Store the previous mouse position for dragging
-        private Point previousMousePosition;
-
+ 
         FormChart formGraficos = new FormChart() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         FormDados formDados = new FormDados() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         FormMapa formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         FormConfigurações formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        Control labelInstrumentationData;
-        Control labelControlData;
+
+        private Point previousMousePosition; // Store the previous mouse position for dragging the form around
 
         public GroundStation()
         {
@@ -62,6 +55,9 @@ namespace SimpleExample
         // Allows form to be dragged.
         protected override void WndProc(ref Message m)
         {
+            // Constants for form rounding and dragging
+            const int WM_NCHITTEST = 0x84;
+            const int HT_CAPTION = 0x2;
             // Override WndProc to enable dragging
             if (m.Msg == WM_NCHITTEST)
             {
@@ -145,32 +141,29 @@ namespace SimpleExample
                     return;
                 }
 
-                // set the comport options
+                // Configure the port based on selected options and opens it.
                 serialPort1.PortName = comboBoxSerialPort.SelectedItem.ToString();
                 serialPort1.BaudRate = int.Parse(comboBoxBaudRate.SelectedItem.ToString());
-
-                // open the comport
+                serialPort1.ReadTimeout = 2000;
                 serialPort1.Open();
                 buttonConnect.Text = "Fechar";
 
-
-                // set timeout to 2 seconds
-                serialPort1.ReadTimeout = 2000;
-
+                // Read data from serial port on a background thread in order to not block the UI thread.        
                 BackgroundWorker workerSerialPort = new BackgroundWorker();
-
                 workerSerialPort.DoWork += workerSerialPort_ReadData;
-
                 workerSerialPort.RunWorkerAsync();
             }
             catch (Exception exception)
             {
-                MessageBox.Show($"{exception.Message}\n" +
-                    $"Verifique se a porta existe ou já está sendo usada por outro programa.");
-            }
-          
+                MessageBox.Show($"{exception.Message}\n" + $"Verifique se a porta existe ou já está sendo usada por outro programa.");
+            }    
         }
 
+        /// <summary>
+        /// Reads data from the serial port and processes it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void workerSerialPort_ReadData(object sender, DoWorkEventArgs e)
         {
             while (serialPort1.IsOpen)
@@ -187,7 +180,7 @@ namespace SimpleExample
              
                     // Check the the message is addressed to us
                     if (VehicleSysID != message.SysID || VehicleCompID != message.CompID)
-                        continue;
+                        // Not implemented for now;
                     
                     ProcessMessage(message);
                 }
@@ -200,69 +193,68 @@ namespace SimpleExample
             }
         }
 
+        /// <summary>
+        /// Process received Mavlink message based on its message ID.
+        /// </summary>
+        /// <param name="message"></param>
         void ProcessMessage(Mavlink.MavlinkMessage message)
         {
             Console.WriteLine(message.MsgTypename);
             switch (message.MsgID)
             {
+                // Delegates and lambda expressions must be used to update the UI from a different thread.
                
                 case (byte)Mavlink.MAVLINK_MSG_ID.CONTROL_SYSTEM:
                     {
                         var payload = (Mavlink.mavlink_control_system_t)message.Payload;
                         String leftPumpState = DecodePumpMask(payload.pump_mask, 1);
                         String rightPumpState = DecodePumpMask(payload.pump_mask, 0);
-                        labelControlData = FormExchange.GetControl<Label>(nameof(formDados), nameof(labelControlData));
-                        labelControlData.BeginInvoke(
-                            (Action)(() => labelControlData.Text = $"Sinal Pot:{payload.potentiometer_signal:F2}V\n" +
+                        formDados.labelControlData.BeginInvoke( new Action(() => formDados.labelControlData.Text = 
+                            $"Sinal Pot:{payload.potentiometer_signal:F2}V\n" +
                             $"Sinal Encoder:{payload.dac_output:F2}V\n" +
                             $"Bomba Esquerda:{leftPumpState}\n" +
-                            $"Bomba direita: {rightPumpState}")
-                            );           
-                        
+                            $"Bomba direita: {rightPumpState}"));
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.INSTRUMENTATION:
                     {
                         Random random = new Random();
                         var payload = (Mavlink.mavlink_instrumentation_t)message.Payload;
-                        labelInstrumentationData = FormExchange.GetControl<Label>(formDados.Name, "labelInstrumentationData");
-                        labelInstrumentationData.BeginInvoke(new Action(() => labelInstrumentationData.Text = $"Corrente do motor: {payload.current_zero:F2}A\n" +
-                        $"Corrente do MPPT: {payload.current_one:F2}A\n" +
-                        $"Corrente auxiliar: {payload.current_two:F2}A\n" +
-                        $"Tensão do sistema: {payload.battery_voltage:F2}V\n" +
-                        $"Temperatura do MPPT: {random.Next(30, 50)}°C\n" +
-                        $"Temperatura do Motor: {random.Next(40, 60)}°C"));                    
+                        formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
+                            $"Corrente do motor: {payload.current_zero:F2}A\n" +
+                            $"Corrente do MPPT: {payload.current_one:F2}A\n" +
+                            $"Corrente auxiliar: {payload.current_two:F2}A\n" +
+                            $"Tensão do sistema: {payload.voltage_battery:F2}V\n"));                 
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.TEMPERATURES:
                     {
-
+                        var payload = (Mavlink.mavlink_temperatures_t)message.Payload;
+                        formDados.labelTemperaturaDados.BeginInvoke(new Action(() => formDados.labelTemperaturaDados.Text = 
+                            $"Temperatura do motor: {payload.temperature_motor:F2}°C\n" +
+                            $"Temperatura do MPPT: {payload.temperature_mppt:F2}°C\n"));
                         break;
                     }
 
-                case (byte)Mavlink.MAVLINK_MSG_ID.GPS_GPRMC_SENTENCE:
+                case (byte)Mavlink.MAVLINK_MSG_ID.GPS_INFO:
                     {
-                        var payload = (Mavlink.mavlink_gps_gprmc_sentence_t)message.Payload;
-                        try
-                        {
-                            String sentence = Encoding.ASCII.GetString(payload.gprmc_sentence, 8, payload.gprmc_sentence.Length - 8);
-                            GPRMCData gpsData = GPRMCParser.Parse(sentence);
-                            formMapa.UpdateLocation(gpsData.Latitude, gpsData.Longitude);
-                            
-                        Console.WriteLine($"GPS received: {gpsData.Latitude}/{gpsData.Longitude}");
+                        var payload = (Mavlink.mavlink_gps_info_t)message.Payload;
+                      
+                        float latitude = payload.latitude;
+                        float longitude = payload.longitude;
+                        float course = payload.course;
+                        float speed = payload.speed;
+                        byte satellites = payload.satellites_visible;
 
-                        }
-                        catch (Exception exception)
+                        if ((latitude != -1.0f) && (longitude != -1.0f))
                         {
-                            Debug.WriteLine($"{DateTime.Now} --> {exception.Message}");
+                            formMapa.UpdateLocation(latitude, longitude);
                         }
+
+                        Console.WriteLine($"GPS received: Lat:{latitude}/Long:{longitude}/Course:{course}/Speed:{speed}/Satellites:{satellites}");                    
                         break;
                     }
-                case (byte)Mavlink.MAVLINK_MSG_ID.GPS_LAT_LNG:
-                    {
-                        break;
-                    }
-
+      
                 case (byte)Mavlink.MAVLINK_MSG_ID.NAMED_VALUE_INT:
                     {
                         //var payload = (Mavlink.mavlink_named_value_int_t)message.Payload;
@@ -274,8 +266,7 @@ namespace SimpleExample
                     break;
             }
         }
-        
-       
+             
 
         private String DecodePumpMask(byte mask, byte index)
         {
@@ -311,12 +302,19 @@ namespace SimpleExample
             Console.WriteLine();
         }
    
+        /// <summary>
+        /// Updates the serial port list when the user clicks on the combo box.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void comboBoxSerialPort_Click(object sender, EventArgs e)
         {
             comboBoxSerialPort.DataSource = SerialPort.GetPortNames();      
         }
 
-        
+        /// <summary>
+        /// Sets the form loader panel back to small size.
+        /// </summary>
         private void SetFormLoaderSmall()
         {
             panelFormLoader.Size = new System.Drawing.Size(910, 480);
@@ -325,7 +323,7 @@ namespace SimpleExample
 
         private void buttonGraficos_Click(object sender, EventArgs e)
         {
-            button_Click(sender, e);
+            ButtonGenericClickCallback(sender, e);
             panelFormLoader.Controls.Clear();
             panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Controls.Add(formGraficos);
@@ -336,25 +334,25 @@ namespace SimpleExample
 
         private void buttonDados_Click(object sender, EventArgs e)
         {
-            button_Click(sender, e);
+            ButtonGenericClickCallback(sender, e);
             panelFormLoader.Controls.Clear();
             SetFormLoaderSmall();
             panelFormLoader.Controls.Add(formDados);
             formDados.Show();
-            FormExchange.GetControl<Label>(nameof(formDados), nameof(labelInstrumentationData)).Text = 
-            $"Corrente do motor: 5A\n" +
-            $"Corrente do MPPT: 10A\n" +
-            $"Corrente auxiliar: 2A\n" +
-            $"Tensão do sistema: 48V\n" +
-            $"Temperatura do MPPT: 40°C\n" +
-            $"Temperatura do Motor: 50°C";
+            formDados.labelInstrumentationData.Text = 
+                $"Corrente do motor: 5A\n" +
+                $"Corrente do MPPT: 10A\n" +
+                $"Corrente auxiliar: 2A\n" +
+                $"Tensão do sistema: 48V\n" +
+                $"Temperatura do MPPT: 40°C\n" +
+                $"Temperatura do Motor: 50°C";
             labelTitleSelection.Text = "Dados";
                     
         }
 
         private void buttonMapa_Click(object sender, EventArgs e)
         {
-            button_Click(sender, e);
+            ButtonGenericClickCallback(sender, e);
             panelFormLoader.Controls.Clear();
             panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Controls.Add(formMapa);
@@ -366,7 +364,7 @@ namespace SimpleExample
 
         private void buttonConfigurações_Click(object sender, EventArgs e)
         {
-            button_Click(sender, e);
+            ButtonGenericClickCallback(sender, e);
             panelFormLoader.Controls.Clear();
             SetFormLoaderSmall();
             panelFormLoader.Controls.Add(formConfigurações);
@@ -375,8 +373,12 @@ namespace SimpleExample
 
         }
 
-
-        private void button_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Callback for all buttons in the sidebar. Sets the panelNav position and color, which is the thin blue bar that tracks the buttons.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonGenericClickCallback(object sender, EventArgs e)
         {
             Button button = (Button)sender;
             panelNav.Height = button.Height;
@@ -396,13 +398,6 @@ namespace SimpleExample
         {
             // Close application
             System.Windows.Forms.Application.Exit();
-        }
-
-        private void comboBox_RemoveBlueHighlight_DropdownClosed(object sender, EventArgs e)
-        {
-            ComboBox comboBox = (ComboBox)sender;
-            comboBox.BeginInvoke(new Action(() => { this.Focus(); }));
-
         }
 
         private void buttonLogPacket_Click(object sender, EventArgs e)
@@ -428,11 +423,6 @@ namespace SimpleExample
             
         }
 
-        private void comboBoxLogPacket_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void comboBoxBaudRate_OnSelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -443,9 +433,5 @@ namespace SimpleExample
 
         }
 
-        private void barMeter1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
