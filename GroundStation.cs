@@ -218,7 +218,6 @@ namespace SimpleExample
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.INSTRUMENTATION:
                     {
-                        Random random = new Random();
                         var payload = (Mavlink.mavlink_instrumentation_t)message.Payload;
                         formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
                             $"Corrente do motor: {payload.current_zero:F2}A\n" +
