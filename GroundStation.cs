@@ -219,11 +219,21 @@ namespace SimpleExample
                 case (byte)Mavlink.MAVLINK_MSG_ID.INSTRUMENTATION:
                     {
                         var payload = (Mavlink.mavlink_instrumentation_t)message.Payload;
+                        float currentMotor = payload.current_zero;
+                        float currentBattery = payload.current_one;
+                        float currentMPPT = payload.current_two;
+                        float battery_voltage = payload.voltage_battery;
+
+                        FormDados.currentMotor = currentMotor;
+                        FormDados.currentBattery = currentBattery;
+                        FormDados.currentMPPT = currentMPPT;
+                        FormDados.batteryVoltage = battery_voltage;
+
                         formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
-                            $"Corrente do motor: {payload.current_zero:F2}A\n" +
-                            $"Corrente do MPPT: {payload.current_one:F2}A\n" +
-                            $"Corrente auxiliar: {payload.current_two:F2}A\n" +
-                            $"Tensão do sistema: {payload.voltage_battery:F2}V\n"));                 
+                            $"Corrente do motor: {currentMotor:F2}A\n" +
+                            $"Corrente da bateria: {currentBattery:F2}A\n" +
+                            $"Corrente do MPPT: {currentMPPT:F2}A\n" +
+                            $"Tensão do sistema: {battery_voltage:F2}V\n"));                 
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.TEMPERATURES:

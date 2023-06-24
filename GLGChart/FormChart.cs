@@ -29,7 +29,7 @@
         */
         public static ChartConfigRecord[] ConfigTable1 = new ChartConfigRecord[] {
           
-            new ChartConfigRecord( "Tensao da Bateria", "V", "Voltage", -1,
+            new ChartConfigRecord( "Tensao da Bateria", "V", "Tensao", -1,
                             45, 60, new GlgPoint( 0.5, 0.0, 0.65 ), false ),
             new ChartConfigRecord( "Corrente do Motor", "Amp", "CorrenteMotor", -1,
                             0, 70, new GlgPoint( 0.65, 0.0, 0.35 ), true ),

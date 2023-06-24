@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GenLogic;
+using SimpleExample;
 
 /////////////////////////////////////////////////////////////////////// 
 // Application should provide custom implemnetation of LiveDataFeed.
@@ -90,15 +91,57 @@ public class ChartLiveDataFeed : ChartDataFeedInterface
     // Query plot data based on the tag source, which represents variable
     // name or a process database tag.
     ///////////////////////////////////////////////////////////////////////
-    public List<PlotDataPoint> GetPlotData( string tag_source )
+    public List<PlotDataPoint> GetPlotData(string tag_source)
     {
-        if (GlgComboChart.IsUndefined( tag_source ))
+        if (GlgComboChart.IsUndefined(tag_source))
+            return null;
+
+        List<PlotDataPoint> data_array = new List<PlotDataPoint>();
+        PlotDataPoint data_point = new PlotDataPoint();
+        tag_source = tag_source.ToLower();
+        data_point.value = 0;
+        if (tag_source.Contains("corrente") && tag_source.Contains("motor"))
+        {
+            data_point.value = FormDados.currentMotor;
+        }
+        else if (tag_source.Contains("corrente") && tag_source.Contains("mppt"))
+        {
+            data_point.value = FormDados.currentMPPT;
+        }
+        else if (tag_source.Contains("corrente") && tag_source.Contains("bateria"))
+        {
+            data_point.value = FormDados.currentBattery;
+        }
+        else if (tag_source.Contains("tensao"))
+        {
+            data_point.value = FormDados.batteryVoltage;
+        }
+
+        data_point.value_valid = true;
+        if (glg_chart.SUPPLY_TIME_STAMP)
+            data_point.time_stamp = GlgComboChart.GetCurrTime();
+        else
+            // Chart will automatically supply time stamp using current time.
+            data_point.time_stamp = 0.0;
+
+        data_array.Add(data_point);
+        
+        return data_array;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Query plot data based on the tag source, which represents variable
+    // name or a process database tag.
+    ///////////////////////////////////////////////////////////////////////
+    public List<PlotDataPoint> BACKUPGetPlotData(string tag_source)
+    {
+        if (GlgComboChart.IsUndefined(tag_source))
             return null;
 
         List<PlotDataPoint> data_array = new List<PlotDataPoint>();
         int num_samples = 10;
         Random rand = new Random();
-        for (int i = 0; i < num_samples; ++i )
+        for (int i = 0; i < num_samples; ++i)
         {
             // MY EDITED CODE HERE
             PlotDataPoint data_point = new PlotDataPoint();
@@ -115,13 +158,13 @@ public class ChartLiveDataFeed : ChartDataFeedInterface
         return data_array;
     }
 
-   ///////////////////////////////////////////////////////////////////////
-   // Query historical chart data for the specified time interval based
-   // in the tag index (datasource variable index).
-   // See GetHistPlotData( string tag_source, ... ) for querying based on
-   // the tag source (variable name).
-   /////////////////////////////////////////////////////////////////////// 
-   public List<PlotDataPoint>
+    ///////////////////////////////////////////////////////////////////////
+    // Query historical chart data for the specified time interval based
+    // in the tag index (datasource variable index).
+    // See GetHistPlotData( string tag_source, ... ) for querying based on
+    // the tag source (variable name).
+    /////////////////////////////////////////////////////////////////////// 
+    public List<PlotDataPoint>
      GetHistPlotData( int tag_index, double start_time, double end_time )
    {
       if( tag_index < 0 )

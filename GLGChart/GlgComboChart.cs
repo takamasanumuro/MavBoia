@@ -636,7 +636,6 @@ public class GlgComboChart : GlgControl
     {
       
         // Perform dynamic updates only if the drawing is ready and the timer is active.
-
         if (!Ready)
             return;
 
@@ -666,7 +665,6 @@ public class GlgComboChart : GlgControl
             {
                 AppInfo("Error getting plot data sample for " + plot_info.tag_source);
             }
-
             
     }
 
