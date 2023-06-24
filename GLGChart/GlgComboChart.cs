@@ -38,7 +38,7 @@ public class GlgComboChart : GlgControl
       by the parent container, using RANDOM_DATA flag or command 
       line option -random-data or live-data. 
    */
-   public bool RandomData = true;
+   public bool RandomData = false;
 
    // Disable warnings about unused ParentContainer.
 #pragma warning disable 0414
@@ -71,6 +71,7 @@ public class GlgComboChart : GlgControl
    
    // DataFeed object is used to supply data for animation.
    ChartDataFeedInterface DataFeed;
+   ChartLiveDataFeed ManualDataFeed;
 
    System.Timers.Timer timer = null;     /* Timer for periodic updates. */
    public int UpdateInterval = 100;      /* Update interval in msec. */
@@ -239,6 +240,7 @@ public class GlgComboChart : GlgControl
          DataFeed = new ChartLiveDataFeed( this );
          AppLog( "Using ChartLiveDataFeed." );
       }
+        ManualDataFeed = new ChartLiveDataFeed(this);
    }
 
    //////////////////////////////////////////////////////////////////////
@@ -524,197 +526,243 @@ public class GlgComboChart : GlgControl
    ////////////////////////////////////////////////////////////////////////
    // Show/hide ChartDialog.
    ////////////////////////////////////////////////////////////////////////
-   public void ShowChartDialog( bool show )
-   {
-      if( ChartDialog == null )
-        return;
+    public void ShowChartDialog( bool show )
+    {
+        if (ChartDialog == null)
+            return;
 
-      ChartDialog.SetDResource( "Visibility", show ? 1.0 : 0.0,
-                                true /*if changed*/ );
-   }
+        ChartDialog.SetDResource( "Visibility", show ? 1.0 : 0.0, true);
+    }
 
    const int row_height = 30;
 
    ////////////////////////////////////////////////////////////////////////
    // Set dialog size and position the dialog.
    ////////////////////////////////////////////////////////////////////////
-   void SetDialogSizeAndPosition( GlgObject dialog )
-   {
-      if( dialog == null )
-        return;
+    void SetDialogSizeAndPosition( GlgObject dialog )
+    {
+        if (dialog == null)
+            return;
    
-      int height = row_height * ChartMenuNumVisRows + 55;
-      int width = 180;
+        int height = row_height * ChartMenuNumVisRows + 55;
+        int width = 180;
 
-      // Disable dialog positioning by control points.
-      dialog.SetGResource( "Point1", 0.0, 0.0, 0.0 );
-      dialog.SetGResource( "Point2", 0.0, 0.0, 0.0 );
+        // Disable dialog positioning by control points.
+        dialog.SetGResource( "Point1", 0.0, 0.0, 0.0 );
+        dialog.SetGResource( "Point2", 0.0, 0.0, 0.0 );
 
-      // Set dialog initial position.
-      dialog.SetDResource( "Screen/XHint", 200.0 );
-      dialog.SetDResource( "Screen/YHint", 200.0 );
+        // Set dialog initial position.
+        dialog.SetDResource( "Screen/XHint", 200.0 );
+        dialog.SetDResource( "Screen/YHint", 200.0 );
     
-      dialog.SetDResource( "Screen/WidthHint", width );
-      dialog.SetDResource( "Screen/HeightHint", height );
-   }
+        dialog.SetDResource( "Screen/WidthHint", width );
+        dialog.SetDResource( "Screen/HeightHint", height );
+    }
    
-   ///////////////////////////////////////////////////////////////////////
-   // Invoked periodically with time interval = UpdateInterval.
-   ///////////////////////////////////////////////////////////////////////
-   public void OnTimerUpdate( object sender, System.Timers.ElapsedEventArgs e )
-   {
-      if( !TimerEnabled )
-        return;                 // Prevents race conditions.
+    ///////////////////////////////////////////////////////////////////////
+    // Invoked periodically with time interval = UpdateInterval.
+    ///////////////////////////////////////////////////////////////////////
+    public void OnTimerUpdate( object sender, System.Timers.ElapsedEventArgs e )
+    {
+        // Prevents race conditions.
+        if (!TimerEnabled )
+            return;                 
 
-      UpdateChart();            // Update the chart with new data.
+        ManualUpdateChart();            // Update the chart with new data.
+        timer.Start();            // Restart the timer. 
+    }
 
-      timer.Start();            // Restart the timer. 
-   }
+    ///////////////////////////////////////////////////////////////////////
+    // Push new data values to all lines in the chart.
+    // Invoked periodically by timer with time interval defined by
+    // UpdateInterval.
+    ///////////////////////////////////////////////////////////////////////
+    public void UpdateChart()
+    {
+        // Perform dynamic updates only if the drawing is ready and the timer is active.
+            
+        if (!Ready)
+            return;
 
-   ///////////////////////////////////////////////////////////////////////
-   // Push new data values to all lines in the chart.
-   // Invoked periodically by timer with time interval defined by
-   // UpdateInterval.
-   ///////////////////////////////////////////////////////////////////////
-   public void UpdateChart()
-   {
-      /* Perform dynamic updates only if the drawing is ready and the
-         timer is active.
-      */
-      if( !Ready )
-        return;
+        /* Demo: Store current time. It is used to generate a data sample's 
+            time stamp in demo mode when data come in packets.
+        */
+        current_time = GetCurrTime();
 
-      /* Demo: Store current time. It is used to generate a data sample's 
-         time stamp in demo mode when data come in packets.
-      */
-      current_time = GetCurrTime();
-
-      // Update plot lines with new data supplied by the DataFeed object.
-      for( int i=0; i<NumCharts; ++i )
-      {
-         /* Use DataFeed to get new data value. The DataFeed object
+        // Update plot lines with new data supplied by the DataFeed object.
+        for (int i = 0; i < NumCharts; ++i)
+        {
+            /* Use DataFeed to get new data value. The DataFeed object
             fills the data_point object with value, time_stamp, etc.
-         */
-         PlotInfo plot_info = ChartArray[ i ].plot_info;
-
-         List<PlotDataPoint> data_array = null;
-         if( USE_DATAVAR_NAME || plot_info.tag_index < 0 )
-           // Use data source variable name (tag_source). 
-           data_array = DataFeed.GetPlotData( plot_info.tag_source );
-         else
-           // Use data variable index, for example sensor number. 
-           data_array = DataFeed.GetPlotData( plot_info.tag_index );
-
-         if( data_array != null )
-         {
-            PushPlotData( plot_info, data_array );
-
-            // Setup chart hierarchy to prepare it for the time line update.
-            ChartArray[ i ].chart.SetupHierarchy();
-         }
-         else
-           AppInfo( "Error getting plot data sample for " +
-                    plot_info.tag_source );
-      }
-
-      /* Update the cross-hair line to follow the mouse cursor. 
-         If the cursor is outside one of the charts or the time axis, 
-         the cross-hair line will not be disabled.
-      */
-      DisplayCrossHairLine( CursorPosition );
-
-      UpdateGlg(); // Refresh display.
-
-      // Demo: Store time of the last update.
-      last_time = current_time;
-   }
-
-   ///////////////////////////////////////////////////////////////////////
-   public void PushPlotData( PlotInfo plot_info,
-                             List<PlotDataPoint> data_array )
-   {
-      if( plot_info == null || data_array == null )
-        return;
-      
-      int num_samples = data_array.Count;
-      bool quick_mode = true;
-      
-      for( int i=0; i<num_samples; ++i )
-      {
-         PlotDataPoint data_point = data_array[ i ];
-         
-         if( FAST_DATA_PROCESSING && SUPPLY_TIME_STAMP )
-         {
-            /* For performance optimization, low level API methods may be used
-               to push data into the plot's data buffer. Use quick_mode=true 
-               to speed-up the process even further. However, it will 
-               require the application to advance the time axis and 
-               handle auto-scaling manually.
             */
-            PushPlotPointDirect( plot_info, data_point, quick_mode );
-         }
-         else
-           PushPlotPoint( plot_info, data_point );
-      }
+            PlotInfo plot_info = ChartArray[i].plot_info;
 
-      // If quick mode is used, advance the time axis explicitly.
-      if( quick_mode && FAST_DATA_PROCESSING && SUPPLY_TIME_STAMP )
-        TimeAxis.SetDResource( "EndValue",
-                               data_array[  num_samples - 1 ].time_stamp );      
-   }
+            List<PlotDataPoint> data_array = null;
+            if (USE_DATAVAR_NAME || plot_info.tag_index < 0)
+            {
+                // Use data source variable name (tag_source). 
+                data_array = DataFeed.GetPlotData(plot_info.tag_source);
+            }
+            else
+            {
+                // Use data variable index, for example sensor number. 
+                data_array = DataFeed.GetPlotData(plot_info.tag_index);
+            }
+                
+            if (data_array != null)
+            {
+                PushPlotData(plot_info, data_array);
+                // Setup chart hierarchy to prepare it for the time line update.
+                ChartArray[i].chart.SetupHierarchy();
+            }
+            else
+            {
+                AppInfo("Error getting plot data sample for " + plot_info.tag_source);
+            }
+            
+        }
+
+        /* Update the cross-hair line to follow the mouse cursor. 
+        If the cursor is outside one of the charts or the time axis, 
+        the cross-hair line will not be disabled.
+        */
+        DisplayCrossHairLine(CursorPosition);
+        UpdateGlg(); // Refresh display.
+        // Demo: Store time of the last update.
+        last_time = current_time;
+    }
+
+    public void ManualUpdateChart()
+    {
+      
+        // Perform dynamic updates only if the drawing is ready and the timer is active.
+
+        if (!Ready)
+            return;
+
+        /* Demo: Store current time. It is used to generate a data sample's 
+            time stamp in demo mode when data come in packets.
+        */
+        current_time = GetCurrTime();
+
+        // Update plot lines with new data supplied by the DataFeed object.
+        for (int i = 0; i < NumCharts; ++i)
+        {
+            /* Use DataFeed to get new data value. The DataFeed object
+            fills the data_point object with value, time_stamp, etc.
+            */
+            PlotInfo plot_info = ChartArray[i].plot_info;
+
+            List<PlotDataPoint> data_array = null;         
+            data_array = ManualDataFeed.GetPlotData(plot_info.tag_source);
+ 
+            if (data_array != null)
+            {
+                PushPlotData(plot_info, data_array);
+                // Setup chart hierarchy to prepare it for the time line update.
+                ChartArray[i].chart.SetupHierarchy();
+            }
+            else
+            {
+                AppInfo("Error getting plot data sample for " + plot_info.tag_source);
+            }
+
+            
+    }
+
+        /* Update the cross-hair line to follow the mouse cursor. 
+        If the cursor is outside one of the charts or the time axis, 
+        the cross-hair line will not be disabled.
+        */
+        DisplayCrossHairLine(CursorPosition);
+        UpdateGlg(); // Refresh display.
+        // Demo: Store time of the last update.
+        last_time = current_time;
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    public void PushPlotData( PlotInfo plot_info, List<PlotDataPoint> data_array)
+    {
+        if (plot_info == null || data_array == null)
+            return;
+      
+        int num_samples = data_array.Count;
+        bool quick_mode = true;
+      
+        for (int i = 0; i < num_samples; ++i)
+        {
+            PlotDataPoint data_point = data_array[i];
+         
+            if (FAST_DATA_PROCESSING && SUPPLY_TIME_STAMP)
+            {
+                /* For performance optimization, low level API methods may be used
+                    to push data into the plot's data buffer. Use quick_mode=true 
+                    to speed-up the process even further. However, it will 
+                    require the application to advance the time axis and 
+                    handle auto-scaling manually.
+                */
+                PushPlotPointDirect( plot_info, data_point, quick_mode );
+            }
+            else
+                PushPlotPoint( plot_info, data_point );
+        }
+
+        // If quick mode is used, advance the time axis explicitly.
+        if (quick_mode && FAST_DATA_PROCESSING && SUPPLY_TIME_STAMP)
+        TimeAxis.SetDResource( "EndValue", data_array[num_samples - 1].time_stamp);
+
+    }
    
-   ///////////////////////////////////////////////////////////////////////
-   // Pushes the data_point's data into the plot.
-   ///////////////////////////////////////////////////////////////////////
-   public void PushPlotPoint( PlotInfo plot_info, PlotDataPoint data_point )
-   {
-      // Supply plot value for the chart via ValueEntryPoint.
-      plot_info.value_ep.SetDResource( null, data_point.value );
+    ///////////////////////////////////////////////////////////////////////
+    // Pushes the data_point's data into the plot.
+    ///////////////////////////////////////////////////////////////////////
+    public void PushPlotPoint( PlotInfo plot_info, PlotDataPoint data_point )
+    {
+        // Supply plot value for the chart via ValueEntryPoint.
+        plot_info.value_ep.SetDResource( null, data_point.value );
 
-      if( data_point.time_stamp != 0 )
-      {
-         /* Supply an optional time stamp. If not supplied, the chart will 
+        if (data_point.time_stamp != 0)
+        {
+            /* Supply an optional time stamp. If not supplied, the chart will 
             automatically generate a time stamp using current time. 
-         */
-         plot_info.time_ep.SetDResource( null, data_point.time_stamp );
-      }
+            */
+            plot_info.time_ep.SetDResource( null, data_point.time_stamp );
+        }
 
-      if( !data_point.value_valid )
-      {
-         /* If the data point is not valid, set ValidEntryPoint resource to 
+        if (!data_point.value_valid)
+        {
+            /* If the data point is not valid, set ValidEntryPoint resource to 
             display holes for invalid data points. If the point is valid,
             it is automatically set to 1. by the chart.
-         */
-         plot_info.valid_ep.SetDResource( null, 0.0 );
-      }
-   }
+            */
+            plot_info.valid_ep.SetDResource( null, 0.0 );
+        }
+    }
 
-   ///////////////////////////////////////////////////////////////////////
-   // Use low level API methods to push data into the plot's data buffer.
-   ///////////////////////////////////////////////////////////////////////
-   public void PushPlotPointDirect( PlotInfo plot_info,
-                                    PlotDataPoint data_point,
-                                    bool quick_mode )
-   {
-      if( plot_info == null || data_point == null )
-        return;
+    ///////////////////////////////////////////////////////////////////////
+    // Use low level API methods to push data into the plot's data buffer.
+    ///////////////////////////////////////////////////////////////////////
+    public void PushPlotPointDirect( PlotInfo plot_info, PlotDataPoint data_point, bool quick_mode)
+    {
+        if (plot_info == null || data_point == null)
+            return;
       
-      GlgObject plot = plot_info.plot;
+        GlgObject plot = plot_info.plot;
       
-      // Get a datasample from a cache, if available, or create a new one.
-      GlgDataSampleNode node = GlgObject.CreateDataSampleNode( plot, false );
-      GlgDataSample datasample = node.GetNodeDataSample();
-      datasample.value = data_point.value;
-      datasample.time = data_point.time_stamp;
-      datasample.valid = data_point.value_valid;
+        // Get a datasample from a cache, if available, or create a new one.
+        GlgDataSampleNode node = GlgObject.CreateDataSampleNode( plot, false );
+        GlgDataSample datasample = node.GetNodeDataSample();
+        datasample.value = data_point.value;
+        datasample.time = data_point.time_stamp;
+        datasample.valid = data_point.value_valid;
       
-      /* Display markers for plots that contain markers 
-         (PlotType = MARKERS or LINE_AND_MARKERS).
-      */
-      datasample.marker_vis = 1.0f;
+        /* Display markers for plots that contain markers 
+            (PlotType = MARKERS or LINE_AND_MARKERS).
+        */
+        datasample.marker_vis = 1.0f;
      
-      plot.AddDataSampleNode( node, quick_mode );
-   }
+        plot.AddDataSampleNode( node, quick_mode );
+    }
    
    /////////////////////////////////////////////////////////////////////// 
    // Pre-fill the history buffer of an individual chart with data. 

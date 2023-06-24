@@ -25,36 +25,36 @@ public class ChartDemoDataFeed : ChartDataFeedInterface
    /////////////////////////////////////////////////////////////////////// 
    // Constructor.
    /////////////////////////////////////////////////////////////////////// 
-   public ChartDemoDataFeed( GlgComboChart chart ) 
+   public ChartDemoDataFeed(GlgComboChart chart) 
    {
-      glg_chart = chart;
+        glg_chart = chart;
 
-      // Initialize data feed. Generate an error on failure and quit.
-      if( !Initialize() )
-        GlgComboChart.AppError( "DataFeed initialization failed.", true );
+        // Initialize data feed. Generate an error on failure and quit.
+        if (!Initialize())
+            GlgComboChart.AppError( "DataFeed initialization failed.", true );
 
-      packet_size = 1;
-      if( BATCH_DATA_PROCESSING )
-      {
-         if( glg_chart.SUPPLY_TIME_STAMP )
-           packet_size = PACKET_SIZE;
-         else
-           GlgComboChart.AppInfo( "Resetting BATCH_DATA_PROCESSING due to SUPPLY_TIME_STAMP=false" );
-      }
+        packet_size = 1;
+        if (BATCH_DATA_PROCESSING )
+        {
+            if( glg_chart.SUPPLY_TIME_STAMP )
+            packet_size = PACKET_SIZE;
+            else
+            GlgComboChart.AppInfo( "Resetting BATCH_DATA_PROCESSING due to SUPPLY_TIME_STAMP=false" );
+        }
    }
    
    /////////////////////////////////////////////////////////////////////// 
    // Initiaze DataFeed. Application will provide custom code for 
    // data feed initialization.
    /////////////////////////////////////////////////////////////////////// 
-   public bool Initialize()
-   {
-      if( IsInitialized )
-        return true;    // Data feed has been already initialized.
+    public bool Initialize()
+    {
+        if (IsInitialized)
+            return true;    // Data feed has been already initialized.
 
-      ChartDemoDataFeed.IsInitialized = true;
-      return true;
-   }
+        ChartDemoDataFeed.IsInitialized = true;
+        return true;
+    }
 
    ///////////////////////////////////////////////////////////////////////
    // Perform necessary cleanup. This method is invoked when the chart
@@ -96,33 +96,35 @@ public class ChartDemoDataFeed : ChartDataFeedInterface
    // If use_tag_source=true, generate data for the specified tag_source;
    // otherwise, generate data for the specified tag_index.
    ///////////////////////////////////////////////////////////////////////
-   public List<PlotDataPoint>
-     GetDemoPlotData( string tag_source, int tag_index, bool use_tag_source )
+   public List<PlotDataPoint> GetDemoPlotData(string tag_source, int tag_index, bool use_tag_source)
    {
-      List<PlotDataPoint> data_array = new List<PlotDataPoint>();
-      for( int i=0; i<packet_size; ++i )
-      {
-         /* Generate demo data for each data sample. */
-         PlotDataPoint data_point = new PlotDataPoint();
-         data_point.value = GetDemoValue( tag_source, tag_index, use_tag_source,
-                                          /*realtime mode*/ false );
-         data_point.value_valid = true;
+        List<PlotDataPoint> data_array = new List<PlotDataPoint>();
+        for (int i = 0; i < packet_size; ++i )
+        {
+            /* Generate demo data for each data sample. */
+            PlotDataPoint data_point = new PlotDataPoint();
+            data_point.value = GetDemoValue( tag_source, tag_index, use_tag_source, /*realtime mode*/ false);
+            data_point.value_valid = true;
       
-         if( glg_chart.SUPPLY_TIME_STAMP )
-           // Supply time stamp explicitly.
-           data_point.time_stamp = GetTimeStamp( i );
-         else
-           // Chart will automatically supply time stamp using current time.
-           data_point.time_stamp = 0.0;
-
-         data_array.Add( data_point );
-      }
+            if (glg_chart.SUPPLY_TIME_STAMP )
+            {
+                // Supply time stamp explicitly.
+                data_point.time_stamp = GetTimeStamp(i);
+            }       
+            else
+            {
+                // Chart will automatically supply time stamp using current time.
+                data_point.time_stamp = 0.0;
+            }
+                
+            data_array.Add( data_point );
+        }
       
-      ++chart_index;
-      if( chart_index >= glg_chart.NumCharts )
-        chart_index = 0;
+        ++chart_index;
+        if (chart_index >= glg_chart.NumCharts)
+            chart_index = 0;
 
-      return data_array;
+        return data_array;
    }
    
    ///////////////////////////////////////////////////////////////////////
