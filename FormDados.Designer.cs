@@ -43,9 +43,9 @@
             this.labelControlData.ForeColor = System.Drawing.Color.Coral;
             this.labelControlData.Location = new System.Drawing.Point(52, 365);
             this.labelControlData.Name = "labelControlData";
-            this.labelControlData.Size = new System.Drawing.Size(63, 20);
+            this.labelControlData.Size = new System.Drawing.Size(179, 20);
             this.labelControlData.TabIndex = 15;
-            this.labelControlData.Text = "Dados";
+            this.labelControlData.Text = "Aguardando dados...";
             // 
             // labelControlTitle
             // 
@@ -65,9 +65,9 @@
             this.labelInstrumentationData.ForeColor = System.Drawing.Color.Coral;
             this.labelInstrumentationData.Location = new System.Drawing.Point(52, 114);
             this.labelInstrumentationData.Name = "labelInstrumentationData";
-            this.labelInstrumentationData.Size = new System.Drawing.Size(63, 20);
+            this.labelInstrumentationData.Size = new System.Drawing.Size(179, 20);
             this.labelInstrumentationData.TabIndex = 13;
-            this.labelInstrumentationData.Text = "Dados";
+            this.labelInstrumentationData.Text = "Aguardando dados...";
             // 
             // labelInstrumentationTitle
             // 
@@ -98,9 +98,9 @@
             this.labelTemperaturaDados.ForeColor = System.Drawing.Color.Coral;
             this.labelTemperaturaDados.Location = new System.Drawing.Point(465, 114);
             this.labelTemperaturaDados.Name = "labelTemperaturaDados";
-            this.labelTemperaturaDados.Size = new System.Drawing.Size(63, 20);
+            this.labelTemperaturaDados.Size = new System.Drawing.Size(179, 20);
             this.labelTemperaturaDados.TabIndex = 18;
-            this.labelTemperaturaDados.Text = "Dados";
+            this.labelTemperaturaDados.Text = "Aguardando dados...";
             // 
             // FormDados
             // 

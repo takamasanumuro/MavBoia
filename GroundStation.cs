@@ -368,13 +368,6 @@ namespace SimpleExample
             SetFormLoaderSmall();
             panelFormLoader.Controls.Add(formDados);
             formDados.Show();
-            formDados.labelInstrumentationData.Text = 
-                $"Corrente do motor: 5A\n" +
-                $"Corrente do MPPT: 10A\n" +
-                $"Corrente auxiliar: 2A\n" +
-                $"Tensão do sistema: 48V\n" +
-                $"Temperatura do MPPT: 40°C\n" +
-                $"Temperatura do Motor: 50°C";
             labelTitleSelection.Text = "Dados";
                     
         }
@@ -386,7 +379,6 @@ namespace SimpleExample
             panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Controls.Add(formMapa);
             formMapa.Show();
-           
             labelTitleSelection.Text = "Mapa";
 
         }
