@@ -29,7 +29,7 @@
         */
         public static ChartConfigRecord[] ConfigTable1 = new ChartConfigRecord[] {
           
-            new ChartConfigRecord( "Tensao da Bateria", "V", "Tensao", -1,
+            new ChartConfigRecord( "Tensao da Bateria", "V", "TensaoBateria", -1,
                             45, 60, new GlgPoint( 0.5, 0.0, 0.65 ), false ),
             new ChartConfigRecord( "Corrente do Motor", "Amp", "CorrenteMotor", -1,
                             0, 70, new GlgPoint( 0.65, 0.0, 0.35 ), true ),
@@ -43,10 +43,12 @@
       
         public static ChartConfigRecord[] ConfigTable2 = new ChartConfigRecord[] {
 
-            new ChartConfigRecord( "RPM", "RPM", "RPM", -1,
-                            0, 3000, new GlgPoint( 0.0, 0.4, 0.8 ), true ),  
-            new ChartConfigRecord( "Fuel", "%", "Fuel", -1,
-                            0, 100, new GlgPoint( 0.4, 0.8, 0.0 ), true )
+            new ChartConfigRecord( "Potência de Geração", "W", "PotenciaGeracao", -1,
+                            0, 2000, new GlgPoint( 0.0, 0.4, 0.8 ), true ),  
+            new ChartConfigRecord( "Potência de Consumo", "W", "PotenciaConsumo", -1,
+                            0, 3000, new GlgPoint( 0.4, 0.8, 0.0 ), true ),
+            new ChartConfigRecord("Potência Resultante", "W", "PotenciaResultante", -1,
+                            -2000, 2000, new GlgPoint( 0.4, 0.8, 0.0 ), true )
 
         };
       

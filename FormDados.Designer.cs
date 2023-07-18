@@ -39,66 +39,66 @@
             // labelControlData
             // 
             this.labelControlData.AutoSize = true;
-            this.labelControlData.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControlData.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelControlData.ForeColor = System.Drawing.Color.Coral;
             this.labelControlData.Location = new System.Drawing.Point(52, 365);
             this.labelControlData.Name = "labelControlData";
-            this.labelControlData.Size = new System.Drawing.Size(79, 25);
+            this.labelControlData.Size = new System.Drawing.Size(63, 20);
             this.labelControlData.TabIndex = 15;
             this.labelControlData.Text = "Dados";
             // 
             // labelControlTitle
             // 
             this.labelControlTitle.AutoSize = true;
-            this.labelControlTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControlTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelControlTitle.ForeColor = System.Drawing.Color.Coral;
             this.labelControlTitle.Location = new System.Drawing.Point(51, 311);
             this.labelControlTitle.Name = "labelControlTitle";
-            this.labelControlTitle.Size = new System.Drawing.Size(130, 32);
+            this.labelControlTitle.Size = new System.Drawing.Size(146, 37);
             this.labelControlTitle.TabIndex = 16;
             this.labelControlTitle.Text = "Controle";
             // 
             // labelInstrumentationData
             // 
             this.labelInstrumentationData.AutoSize = true;
-            this.labelInstrumentationData.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelInstrumentationData.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInstrumentationData.ForeColor = System.Drawing.Color.Coral;
             this.labelInstrumentationData.Location = new System.Drawing.Point(52, 114);
             this.labelInstrumentationData.Name = "labelInstrumentationData";
-            this.labelInstrumentationData.Size = new System.Drawing.Size(79, 25);
+            this.labelInstrumentationData.Size = new System.Drawing.Size(63, 20);
             this.labelInstrumentationData.TabIndex = 13;
             this.labelInstrumentationData.Text = "Dados";
             // 
             // labelInstrumentationTitle
             // 
             this.labelInstrumentationTitle.AutoSize = true;
-            this.labelInstrumentationTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelInstrumentationTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInstrumentationTitle.ForeColor = System.Drawing.Color.Coral;
             this.labelInstrumentationTitle.Location = new System.Drawing.Point(51, 60);
             this.labelInstrumentationTitle.Name = "labelInstrumentationTitle";
-            this.labelInstrumentationTitle.Size = new System.Drawing.Size(223, 32);
+            this.labelInstrumentationTitle.Size = new System.Drawing.Size(252, 37);
             this.labelInstrumentationTitle.TabIndex = 14;
             this.labelInstrumentationTitle.Text = "Instrumentação";
             // 
             // labelTemperatura
             // 
             this.labelTemperatura.AutoSize = true;
-            this.labelTemperatura.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTemperatura.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTemperatura.ForeColor = System.Drawing.Color.Coral;
             this.labelTemperatura.Location = new System.Drawing.Point(464, 60);
             this.labelTemperatura.Name = "labelTemperatura";
-            this.labelTemperatura.Size = new System.Drawing.Size(187, 32);
+            this.labelTemperatura.Size = new System.Drawing.Size(212, 37);
             this.labelTemperatura.TabIndex = 17;
             this.labelTemperatura.Text = "Temperatura";
             // 
             // labelTemperaturaDados
             // 
             this.labelTemperaturaDados.AutoSize = true;
-            this.labelTemperaturaDados.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTemperaturaDados.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTemperaturaDados.ForeColor = System.Drawing.Color.Coral;
             this.labelTemperaturaDados.Location = new System.Drawing.Point(465, 114);
             this.labelTemperaturaDados.Name = "labelTemperaturaDados";
-            this.labelTemperaturaDados.Size = new System.Drawing.Size(79, 25);
+            this.labelTemperaturaDados.Size = new System.Drawing.Size(63, 20);
             this.labelTemperaturaDados.TabIndex = 18;
             this.labelTemperaturaDados.Text = "Dados";
             // 

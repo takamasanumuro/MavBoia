@@ -13,10 +13,14 @@ namespace SimpleExample
     public partial class FormDados : Form
     {
         public static Form instance;
-        public static float currentMotor { get; set; } = 0.0f;
+        public static float currentMotor = 0.0f;
         public static float currentMPPT = 0.0f;
         public static float currentBattery = 0.0f;
-        public static float batteryVoltage = 0.0f;
+        public static float mainBatteryVoltage = 0.0f;
+        public static float auxBatteryVoltage = 0.0f;
+        public static float generationPower = 0.0f;
+        public static float consumptionPower = 0.0f;
+        public static float resultantPower = 0.0f;
         public static float latitude = 0.000000f;
         public static float longitude = 0.000000f;
         public static float temperatureMotor = 0.0f;

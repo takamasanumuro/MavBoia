@@ -100,6 +100,7 @@ public class ChartLiveDataFeed : ChartDataFeedInterface
         PlotDataPoint data_point = new PlotDataPoint();
         tag_source = tag_source.ToLower();
         data_point.value = 0;
+
         if (tag_source.Contains("corrente") && tag_source.Contains("motor"))
         {
             data_point.value = FormDados.currentMotor;
@@ -112,9 +113,25 @@ public class ChartLiveDataFeed : ChartDataFeedInterface
         {
             data_point.value = FormDados.currentBattery;
         }
-        else if (tag_source.Contains("tensao"))
+        else if (tag_source.Contains("tensao") && tag_source.Contains("principal"))
         {
-            data_point.value = FormDados.batteryVoltage;
+            data_point.value = FormDados.mainBatteryVoltage;
+        }
+        else if (tag_source.Contains("tensao") && tag_source.Contains("auxiliar"))
+        {
+            data_point.value = FormDados.auxBatteryVoltage;
+        }
+        else if (tag_source.Contains("potencia") && tag_source.Contains("geracao"))
+        {
+            data_point.value = FormDados.generationPower;
+        }
+        else if (tag_source.Contains("potencia") && tag_source.Contains("consumo"))
+        {
+            data_point.value = FormDados.consumptionPower;
+        }
+        else if (tag_source.Contains("potencia") && tag_source.Contains("resultante"))
+        {
+            data_point.value = FormDados.resultantPower;
         }
 
         data_point.value_valid = true;

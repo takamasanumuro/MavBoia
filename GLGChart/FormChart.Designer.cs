@@ -40,7 +40,7 @@ namespace SimpleExample
             this.Configuration1Btn.Name = "Configuration1Btn";
             this.Configuration1Btn.Size = new System.Drawing.Size(113, 27);
             this.Configuration1Btn.TabIndex = 0;
-            this.Configuration1Btn.Text = "Configuration1";
+            this.Configuration1Btn.Text = "Configuração 1";
             this.Configuration1Btn.UseVisualStyleBackColor = true;
             this.Configuration1Btn.Click += new System.EventHandler(this.Configuration1Btn_Click);
             // 
@@ -50,7 +50,7 @@ namespace SimpleExample
             this.Configuration2Btn.Name = "Configuration2Btn";
             this.Configuration2Btn.Size = new System.Drawing.Size(113, 27);
             this.Configuration2Btn.TabIndex = 1;
-            this.Configuration2Btn.Text = "Configuration2";
+            this.Configuration2Btn.Text = "Configuração 2";
             this.Configuration2Btn.UseVisualStyleBackColor = true;
             this.Configuration2Btn.Click += new System.EventHandler(this.Configuration2Btn_Click);
             // 
@@ -62,6 +62,7 @@ namespace SimpleExample
             this.StatusLabel.Size = new System.Drawing.Size(37, 13);
             this.StatusLabel.TabIndex = 2;
             this.StatusLabel.Text = "Status";
+            this.StatusLabel.Visible = false;
             // 
             // GlgRTChartForm
             // 

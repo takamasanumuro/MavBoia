@@ -91,7 +91,7 @@ namespace SimpleExample
         private void GroundStation_Load(object sender, EventArgs e)
         {
            
-                SetSerialPortDefaults("COM3", 9600);
+                SetSerialPortDefaults("COM3", 115200);
                 LoadForms();
 
         }
@@ -121,9 +121,12 @@ namespace SimpleExample
             foreach (var item in SerialPort.GetPortNames())
             {
                 // Sets default value
-                if (item == portName) comboBoxSerialPort.SelectedItem = item;
-            }
-            buttonConnect.PerformClick();
+                if (item == portName)
+                {
+                    comboBoxSerialPort.SelectedItem = item;
+                    buttonConnect.PerformClick();
+                }             
+            }        
         }
 
         #endregion
@@ -180,8 +183,9 @@ namespace SimpleExample
              
                     // Check the the message is addressed to us
                     if (VehicleSysID != message.SysID || VehicleCompID != message.CompID)
+                    {
                         // Not implemented for now;
-                    
+                    }
                     ProcessMessage(message);
                 }
                 catch (Exception serialException)
@@ -223,25 +227,49 @@ namespace SimpleExample
                         float currentBattery = payload.current_one;
                         float currentMPPT = payload.current_two;
                         float battery_voltage = payload.voltage_battery;
+                        float generationPower = battery_voltage * currentMPPT;
+                        float consumptionPower = battery_voltage * currentMotor;
+                        float resultantPower = generationPower - consumptionPower;
 
                         FormDados.currentMotor = currentMotor;
                         FormDados.currentBattery = currentBattery;
                         FormDados.currentMPPT = currentMPPT;
-                        FormDados.batteryVoltage = battery_voltage;
+                        FormDados.mainBatteryVoltage = battery_voltage;
+                        FormDados.generationPower = generationPower;
+                        FormDados.consumptionPower = consumptionPower;
+                        FormDados.resultantPower = resultantPower;
 
                         formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
+                            $"Tensão da bateria: {battery_voltage:F2}V\n" +
                             $"Corrente do motor: {currentMotor:F2}A\n" +
                             $"Corrente da bateria: {currentBattery:F2}A\n" +
                             $"Corrente do MPPT: {currentMPPT:F2}A\n" +
-                            $"Tensão do sistema: {battery_voltage:F2}V\n"));                 
+                            $"Potência de geração: {generationPower}W\n" +
+                            $"Potência de consumo: {consumptionPower}W\n" +
+                            $"Potência resultante: {resultantPower}W\n"));                 
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.TEMPERATURES:
                     {
                         var payload = (Mavlink.mavlink_temperatures_t)message.Payload;
+
+                        FormDados.temperatureMotor = payload.temperature_motor;
+                        FormDados.temperatureMPPT = payload.temperature_mppt;
+
+                        String temperatureMotor = $"{payload.temperature_motor.ToString()}°C";
+                        String temperatureMPPT = $"{payload.temperature_mppt.ToString()}°C";
+                        const float probe_disconnected = -127.0f;
+                        if (payload.temperature_motor == probe_disconnected)
+                        {
+                            temperatureMotor = "Sonda não conectada";
+                        }
+                        if (payload.temperature_mppt == probe_disconnected)
+                        {
+                            temperatureMPPT = "Sonda não conectada";
+                        }
                         formDados.labelTemperaturaDados.BeginInvoke(new Action(() => formDados.labelTemperaturaDados.Text = 
-                            $"Temperatura do motor: {payload.temperature_motor:F2}°C\n" +
-                            $"Temperatura do MPPT: {payload.temperature_mppt:F2}°C\n"));
+                            $"Temperatura do motor: {temperatureMotor}\n" +
+                            $"Temperatura do MPPT: {temperatureMPPT}\n"));
                         break;
                     }
 
@@ -263,14 +291,6 @@ namespace SimpleExample
                         Console.WriteLine($"GPS received: Lat:{latitude}/Long:{longitude}/Course:{course}/Speed:{speed}/Satellites:{satellites}");                    
                         break;
                     }
-      
-                case (byte)Mavlink.MAVLINK_MSG_ID.NAMED_VALUE_INT:
-                    {
-                        //var payload = (Mavlink.mavlink_named_value_int_t)message.Payload;
-                        //Insert some UI logic here to use this message for testing new variables quickly. Otherwise leave empty.
-                        break;
-                    }
-
                 default:
                     break;
             }
