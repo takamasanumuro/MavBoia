@@ -6,6 +6,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using static GMap.NET.MapProviders.StrucRoads.SnappedPoint;
+using System.Runtime.InteropServices;
 
 namespace SimpleExample
 {
@@ -14,10 +15,31 @@ namespace SimpleExample
         bool UseTimer = false;
         public PointLatLng boatLocation = new PointLatLng(-22.8570241, -43.0955684);
         Bitmap boatIcon = new Bitmap("Resources/boaticon1.bmp");
+        
         public FormMapa()
         {
             InitializeComponent();
-            
+            MouseDown += Form_MouseDown_Drag;
+            MouseMove += Form_MouseMove_Drag;
+            mapControl.MouseDown += Form_MouseDown_Drag;
+            mapControl.MouseMove += Form_MouseMove_Drag;
+
+        }
+
+        private void Form_MouseDown_Drag(object sender, MouseEventArgs e)
+        {
+            // Store the current mouse position
+            GroundStation.instance.previousMousePosition = new Point(e.X, e.Y);
+        }
+
+        private void Form_MouseMove_Drag(object sender, MouseEventArgs e)
+        {
+            // Move the form when dragging
+            if (e.Button == MouseButtons.Left)
+            {
+                GroundStation.instance.Left += e.X - GroundStation.instance.previousMousePosition.X;
+                GroundStation.instance.Top += e.Y - GroundStation.instance.previousMousePosition.Y;
+            }
         }
 
         private void mapControl_Load(object sender, EventArgs e)

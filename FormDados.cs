@@ -29,7 +29,24 @@ namespace SimpleExample
         {
             InitializeComponent();
             instance = this;
-            
+            MouseDown += Form_MouseDown_Drag;
+            MouseMove += Form_MouseMove_Drag;
+        }
+
+        private void Form_MouseDown_Drag(object sender, MouseEventArgs e)
+        {
+            // Store the current mouse position
+            GroundStation.instance.previousMousePosition = new Point(e.X, e.Y);
+        }
+
+        private void Form_MouseMove_Drag(object sender, MouseEventArgs e)
+        {
+            // Move the form when dragging
+            if (e.Button == MouseButtons.Left)
+            {
+                GroundStation.instance.Left += e.X - GroundStation.instance.previousMousePosition.X;
+                GroundStation.instance.Top += e.Y - GroundStation.instance.previousMousePosition.Y;
+            }
         }
     }
 }

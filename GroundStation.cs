@@ -13,6 +13,7 @@ namespace SimpleExample
 {
     public partial class GroundStation : Form
     {
+        public static GroundStation instance;
         //Mavlink parser responsible for parsing and deparsing mavlink packets
         private Mavlink.MavlinkParser mavlinkParser = new Mavlink.MavlinkParser();
         
@@ -27,11 +28,12 @@ namespace SimpleExample
         FormMapa formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         FormConfigurações formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
 
-        private Point previousMousePosition; // Store the previous mouse position for dragging the form around
+        public Point previousMousePosition; // Store the previous mouse position for dragging the form around
 
         public GroundStation()
         {
             InitializeComponent();
+            instance = this;
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;

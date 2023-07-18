@@ -81,8 +81,7 @@
         }
 
         #endregion
-
-        private GMap.NET.WindowsForms.GMapControl mapControl;
         private System.Windows.Forms.Timer timerMap;
+        public GMap.NET.WindowsForms.GMapControl mapControl;
     }
 }
