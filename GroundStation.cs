@@ -8,6 +8,9 @@ using System.IO.Ports;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Net.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace SimpleExample
 {
@@ -37,22 +40,21 @@ namespace SimpleExample
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
-            
-        
+               
         }
         #region Form Rounding and Dragging
         // This is the function that will allow the form to be rounded
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
-         (
-              int nLeftRect,
-              int nTopRect,
-              int nRightRect,
-              int nBottomRect,
-              int nWidthEllipse,
-             int nHeightEllipse
+        (
+            int nLeftRect,
+            int nTopRect,
+            int nRightRect,
+            int nBottomRect,
+            int nWidthEllipse,
+            int nHeightEllipse
 
-          );
+        );
 
         // Allows form to be dragged.
         protected override void WndProc(ref Message m)
@@ -78,7 +80,7 @@ namespace SimpleExample
         }
 
         private void Form_MouseMove_Drag(object sender, MouseEventArgs e)
-        {
+        {{}
             // Move the form when dragging
             if (e.Button == MouseButtons.Left)
             {
@@ -164,6 +166,49 @@ namespace SimpleExample
             }    
         }
 
+        private void buttonHTTPConnect_Click(object sender, EventArgs e)
+        {
+            // Take the hostname from the textbox and start making HTTP requests periodically to the server.
+            // The routes are the same as the Mavlink message names.
+            // The server will respond with the latest data present in the vehicle.
+
+            if (textBoxHostname.Texts == String.Empty)
+            {
+                MessageBox.Show("Insira um endereço válido.");
+                return;
+            }
+            else if (textBoxHostname.Texts == "localhost")
+            {
+                MessageBox.Show("Não é possível conectar ao localhost.");
+                return;
+            }
+
+            if (buttonHTTPConnect.Text == "Conectar")
+            {
+                // Check if hostname exists on the network
+                // If it does, start making HTTP requests to the server
+                
+
+
+                buttonHTTPConnect.Text = "Desconectar";
+                textBoxHostname.Enabled = false;
+                // Gray out text box
+                textBoxHostname.BackColor = Color.FromArgb(46, 51, 73);
+            } 
+            else if (buttonHTTPConnect.Text == "Desconectar")
+            {
+                buttonHTTPConnect.Text = "Conectar";
+                textBoxHostname.Enabled = true;
+                // Restore text box color
+                textBoxHostname.BackColor = Color.FromArgb(255, 255, 255);
+                return;
+            }
+
+            BackgroundWorker workerHTTPConnection = new BackgroundWorker();
+            workerHTTPConnection.DoWork += workerHTTPConnection_FetchData;
+            workerHTTPConnection.RunWorkerAsync();
+        }
+
         /// <summary>
         /// Reads data from the serial port and processes it.
         /// </summary>
@@ -196,6 +241,85 @@ namespace SimpleExample
                 }
 
                 System.Threading.Thread.Sleep(1);
+            }
+        }
+
+        private void workerHTTPConnection_FetchData(object sender, DoWorkEventArgs e)
+        {
+            while (buttonHTTPConnect.Text == "Desconectar")
+            {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri($"http://{textBoxHostname.Texts}:80/");
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                // Hashmap of routes and intervals
+                Dictionary<string, int> routes = new Dictionary<string, int>()
+                {
+                    { "instrumentation", 5000 },
+                    { "control_system", 5000 },
+                    { "temperatures", 5000 },
+                    { "gps_info", 5000 }
+                };
+                
+                try
+                {
+
+                    // Fetch instrumentation data
+                    HttpResponseMessage response = client.GetAsync("instrumentation").Result;
+                    string jsonContent = response.Content.ReadAsStringAsync().Result;
+
+                    // Parse "current_motor", "current_battery", "current_mppt" and "voltage_battery" from json
+                    JObject jsonObject = JObject.Parse(jsonContent);
+                    float currentMotor = (float)jsonObject["current_motor"];
+                    float currentBattery = (float)jsonObject["current_battery"];
+                    float currentMppt = (float)jsonObject["current_mppt"];
+                    float voltageBattery = (float)jsonObject["voltage_battery"];
+
+                    FormDados.currentMotor = currentMotor;
+                    FormDados.currentBattery = currentBattery;
+                    FormDados.currentMPPT = currentMppt;
+                    FormDados.mainBatteryVoltage = voltageBattery;
+                    FormDados.generationPower = currentMppt * voltageBattery;
+                    FormDados.consumptionPower = currentBattery * voltageBattery;
+                    
+                    FormDados.resultantPower = FormDados.generationPower + FormDados.consumptionPower;
+
+                    // Do something with the parsed values
+                    Console.WriteLine($"Current Motor: {currentMotor}");
+                    Console.WriteLine($"Current Battery: {currentBattery}");
+                    Console.WriteLine($"Current MPPT: {currentMppt}");
+                    Console.WriteLine($"Voltage Battery: {voltageBattery}");
+
+                    formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
+                        $"Tensão da bateria: {voltageBattery:F2}V\n" +
+                        $"Corrente do motor: {currentMotor:F2}A\n" +
+                        $"Corrente da bateria: {currentBattery:F2}A\n" +
+                        $"Corrente do MPPT: {currentMppt:F2}A\n" +
+                        $"Potência de geração: {FormDados.generationPower:F0}W\n" +
+                        $"Potência de consumo: {FormDados.consumptionPower:F0}W\n" +
+                        $"Potência resultante: {FormDados.resultantPower:F0}W\n"));
+
+                    // Fetch temperatures
+                    response = client.GetAsync("temperatures").Result;
+                    jsonContent = response.Content.ReadAsStringAsync().Result;
+
+                    // Parse "temperature_motor" and "temperature_mppt" from json
+                    jsonObject = JObject.Parse(jsonContent);
+                    float temperatureMotor = (float)jsonObject["temperature_motor"];
+                    float temperatureMppt = (float)jsonObject["temperature_mppt"];
+
+                    FormDados.temperatureMotor = temperatureMotor;
+                    FormDados.temperatureMPPT = temperatureMppt;
+
+                    // Do something with the parsed values
+                    Console.WriteLine($"Temperature Motor: {temperatureMotor}");
+                    Console.WriteLine($"Temperature MPPT: {temperatureMppt}");
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine(exc.Message);
+                }
+                System.Threading.Thread.Sleep(5000);
             }
         }
 
@@ -455,6 +579,7 @@ namespace SimpleExample
         {
 
         }
+
 
     }
 }

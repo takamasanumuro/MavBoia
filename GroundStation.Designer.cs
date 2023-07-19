@@ -45,6 +45,8 @@
             this.labelTitleSelection = new System.Windows.Forms.Label();
             this.buttonExit = new System.Windows.Forms.Button();
             this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.buttonHTTPConnect = new CustomControls.RJControls.RJButton();
+            this.textBoxHostname = new CustomControls.RJControls.RJTextBox();
             this.comboBoxSerialPort = new CustomControls.FancyComboBox();
             this.comboBoxBaudRate = new CustomControls.FancyComboBox();
             this.panelLateral.SuspendLayout();
@@ -242,6 +244,48 @@
             // 
             this.mavlinkheartbeattBindingSource.DataSource = typeof(Mavlink.mavlink_heartbeat_t);
             // 
+            // buttonHTTPConnect
+            // 
+            this.buttonHTTPConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.buttonHTTPConnect.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.buttonHTTPConnect.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.buttonHTTPConnect.BorderRadius = 10;
+            this.buttonHTTPConnect.BorderSize = 0;
+            this.buttonHTTPConnect.FlatAppearance.BorderSize = 0;
+            this.buttonHTTPConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonHTTPConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonHTTPConnect.ForeColor = System.Drawing.Color.Coral;
+            this.buttonHTTPConnect.Location = new System.Drawing.Point(721, 12);
+            this.buttonHTTPConnect.Name = "buttonHTTPConnect";
+            this.buttonHTTPConnect.Size = new System.Drawing.Size(107, 31);
+            this.buttonHTTPConnect.TabIndex = 18;
+            this.buttonHTTPConnect.Text = "Conectar";
+            this.buttonHTTPConnect.TextColor = System.Drawing.Color.Coral;
+            this.buttonHTTPConnect.UseVisualStyleBackColor = false;
+            this.buttonHTTPConnect.Click += new System.EventHandler(this.buttonHTTPConnect_Click);
+            // 
+            // textBoxHostname
+            // 
+            this.textBoxHostname.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxHostname.BorderColor = System.Drawing.Color.MediumSlateBlue;
+            this.textBoxHostname.BorderFocusColor = System.Drawing.Color.HotPink;
+            this.textBoxHostname.BorderRadius = 0;
+            this.textBoxHostname.BorderSize = 2;
+            this.textBoxHostname.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxHostname.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.textBoxHostname.Location = new System.Drawing.Point(528, 12);
+            this.textBoxHostname.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxHostname.Multiline = false;
+            this.textBoxHostname.Name = "textBoxHostname";
+            this.textBoxHostname.Padding = new System.Windows.Forms.Padding(10, 7, 10, 7);
+            this.textBoxHostname.PasswordChar = false;
+            this.textBoxHostname.PlaceholderColor = System.Drawing.Color.DarkGray;
+            this.textBoxHostname.PlaceholderText = "";
+            this.textBoxHostname.Size = new System.Drawing.Size(168, 31);
+            this.textBoxHostname.TabIndex = 19;
+            this.textBoxHostname.Texts = "";
+            this.textBoxHostname.UnderlinedStyle = false;
+            // 
             // comboBoxSerialPort
             // 
             this.comboBoxSerialPort.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -273,6 +317,7 @@
             this.comboBoxBaudRate.ForeColor = System.Drawing.Color.DimGray;
             this.comboBoxBaudRate.IconColor = System.Drawing.Color.MediumSlateBlue;
             this.comboBoxBaudRate.Items.AddRange(new object[] {
+            "4800",
             "9600",
             "19200",
             "57600",
@@ -289,7 +334,6 @@
             this.comboBoxBaudRate.Texts = "";
             this.comboBoxBaudRate.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxBaudRate_OnSelectedIndexChanged);
             // 
-            // 
             // GroundStation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -303,6 +347,8 @@
             this.Controls.Add(this.comboBoxSerialPort);
             this.Controls.Add(this.comboBoxBaudRate);
             this.Controls.Add(this.buttonConnect);
+            this.Controls.Add(this.buttonHTTPConnect);
+            this.Controls.Add(this.textBoxHostname);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "GroundStation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -335,7 +381,8 @@
         private CustomControls.RJControls.RJButton buttonConnect;
         private System.Windows.Forms.Label labelTitleSelection;
         private System.Windows.Forms.Button buttonGraficos;
-        
+        private CustomControls.RJControls.RJButton buttonHTTPConnect;
+        private CustomControls.RJControls.RJTextBox textBoxHostname;
     }
 }
 
