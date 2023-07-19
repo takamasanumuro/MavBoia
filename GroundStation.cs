@@ -40,6 +40,7 @@ namespace SimpleExample
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
+            
                
         }
         #region Form Rounding and Dragging
@@ -73,19 +74,19 @@ namespace SimpleExample
             base.WndProc(ref m);
         }
 
-        private void Form_MouseDown_Drag(object sender, MouseEventArgs e)
+        public void Form_MouseDown_Drag(object sender, MouseEventArgs e)
         {
             // Store the current mouse position
-            previousMousePosition = new Point(e.X, e.Y);
+            GroundStation.instance.previousMousePosition = new Point(e.X, e.Y);
         }
 
-        private void Form_MouseMove_Drag(object sender, MouseEventArgs e)
-        {{}
+        public void Form_MouseMove_Drag(object sender, MouseEventArgs e)
+        {
             // Move the form when dragging
             if (e.Button == MouseButtons.Left)
             {
-                Left += e.X - previousMousePosition.X;
-                Top += e.Y - previousMousePosition.Y;
+                GroundStation.instance.Left += e.X - GroundStation.instance.previousMousePosition.X;
+                GroundStation.instance.Top += e.Y - GroundStation.instance.previousMousePosition.Y;
             }
         }
         #endregion

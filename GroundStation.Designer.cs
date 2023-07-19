@@ -69,6 +69,8 @@
             this.panelLateral.Name = "panelLateral";
             this.panelLateral.Size = new System.Drawing.Size(228, 597);
             this.panelLateral.TabIndex = 9;
+            this.panelLateral.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown_Drag);
+            this.panelLateral.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove_Drag);
             // 
             // buttonGraficos
             // 
@@ -182,6 +184,8 @@
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 0;
             this.pictureBox2.TabStop = false;
+            this.pictureBox2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown_Drag);
+            this.pictureBox2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove_Drag);
             // 
             // panelFormLoader
             // 
