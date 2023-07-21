@@ -103,15 +103,15 @@ public class ChartLiveDataFeed : ChartDataFeedInterface
 
         if (tag_source.Contains("corrente") && tag_source.Contains("motor"))
         {
-            data_point.value = FormDados.currentMotor;
+            data_point.value = FormDados.motorCurrent;
         }
         else if (tag_source.Contains("corrente") && tag_source.Contains("mppt"))
         {
-            data_point.value = FormDados.currentMPPT;
+            data_point.value = FormDados.mpptCurrent;
         }
         else if (tag_source.Contains("corrente") && tag_source.Contains("bateria"))
         {
-            data_point.value = FormDados.currentBattery;
+            data_point.value = FormDados.batteryCurrent;
         }
         else if (tag_source.Contains("tensao") && tag_source.Contains("principal"))
         {

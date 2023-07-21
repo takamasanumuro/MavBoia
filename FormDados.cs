@@ -13,18 +13,27 @@ namespace SimpleExample
     public partial class FormDados : Form
     {
         public static Form instance;
-        public static float currentMotor = 0.0f;
-        public static float currentMPPT = 0.0f;
-        public static float currentBattery = 0.0f;
+        public static float dacVoltage = 0.0f;
+        public static float potVoltage = 0.0f;
+        public static float motorCurrent = 0.0f;
+        public static float mpptCurrent = 0.0f;
+        public static float batteryCurrent = 0.0f;
         public static float mainBatteryVoltage = 0.0f;
-        public static float auxBatteryVoltage = 0.0f;
         public static float generationPower = 0.0f;
         public static float consumptionPower = 0.0f;
         public static float resultantPower = 0.0f;
         public static float latitude = 0.000000f;
         public static float longitude = 0.000000f;
+        public static float course = 0.000000f;
+        public static float speed = 0.000000f;
+        public static int satellites = 0;
         public static float temperatureMotor = 0.0f;
+        public static float temperatureBattery = 0.0f;
         public static float temperatureMPPT = 0.0f;
+        public static float auxBatteryCurrent = 0.0f;
+        public static float auxBatteryVoltage = 0.0f;
+        public static byte pumpMask = 0x00; 
+
         public FormDados()
         {
             InitializeComponent();
@@ -47,6 +56,16 @@ namespace SimpleExample
                 GroundStation.instance.Left += e.X - GroundStation.instance.previousMousePosition.X;
                 GroundStation.instance.Top += e.Y - GroundStation.instance.previousMousePosition.Y;
             }
+        }
+
+        private void labelControlTitle_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

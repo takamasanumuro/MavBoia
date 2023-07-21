@@ -34,6 +34,8 @@
             this.labelInstrumentationTitle = new System.Windows.Forms.Label();
             this.labelTemperatura = new System.Windows.Forms.Label();
             this.labelTemperaturaDados = new System.Windows.Forms.Label();
+            this.labelAuxiliaryTitle = new System.Windows.Forms.Label();
+            this.labelAuxiliaryData = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelControlData
@@ -52,11 +54,12 @@
             this.labelControlTitle.AutoSize = true;
             this.labelControlTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelControlTitle.ForeColor = System.Drawing.Color.Coral;
-            this.labelControlTitle.Location = new System.Drawing.Point(51, 311);
+            this.labelControlTitle.Location = new System.Drawing.Point(34, 311);
             this.labelControlTitle.Name = "labelControlTitle";
             this.labelControlTitle.Size = new System.Drawing.Size(146, 37);
             this.labelControlTitle.TabIndex = 16;
             this.labelControlTitle.Text = "Controle";
+            this.labelControlTitle.Click += new System.EventHandler(this.labelControlTitle_Click);
             // 
             // labelInstrumentationData
             // 
@@ -74,7 +77,7 @@
             this.labelInstrumentationTitle.AutoSize = true;
             this.labelInstrumentationTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInstrumentationTitle.ForeColor = System.Drawing.Color.Coral;
-            this.labelInstrumentationTitle.Location = new System.Drawing.Point(51, 60);
+            this.labelInstrumentationTitle.Location = new System.Drawing.Point(34, 60);
             this.labelInstrumentationTitle.Name = "labelInstrumentationTitle";
             this.labelInstrumentationTitle.Size = new System.Drawing.Size(252, 37);
             this.labelInstrumentationTitle.TabIndex = 14;
@@ -85,7 +88,7 @@
             this.labelTemperatura.AutoSize = true;
             this.labelTemperatura.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTemperatura.ForeColor = System.Drawing.Color.Coral;
-            this.labelTemperatura.Location = new System.Drawing.Point(464, 60);
+            this.labelTemperatura.Location = new System.Drawing.Point(455, 60);
             this.labelTemperatura.Name = "labelTemperatura";
             this.labelTemperatura.Size = new System.Drawing.Size(212, 37);
             this.labelTemperatura.TabIndex = 17;
@@ -96,11 +99,34 @@
             this.labelTemperaturaDados.AutoSize = true;
             this.labelTemperaturaDados.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTemperaturaDados.ForeColor = System.Drawing.Color.Coral;
-            this.labelTemperaturaDados.Location = new System.Drawing.Point(465, 114);
+            this.labelTemperaturaDados.Location = new System.Drawing.Point(488, 114);
             this.labelTemperaturaDados.Name = "labelTemperaturaDados";
             this.labelTemperaturaDados.Size = new System.Drawing.Size(179, 20);
             this.labelTemperaturaDados.TabIndex = 18;
             this.labelTemperaturaDados.Text = "Aguardando dados...";
+            // 
+            // labelAuxiliaryTitle
+            // 
+            this.labelAuxiliaryTitle.AutoSize = true;
+            this.labelAuxiliaryTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAuxiliaryTitle.ForeColor = System.Drawing.Color.Coral;
+            this.labelAuxiliaryTitle.Location = new System.Drawing.Point(455, 311);
+            this.labelAuxiliaryTitle.Name = "labelAuxiliaryTitle";
+            this.labelAuxiliaryTitle.Size = new System.Drawing.Size(130, 37);
+            this.labelAuxiliaryTitle.TabIndex = 19;
+            this.labelAuxiliaryTitle.Text = "Auxiliar";
+            // 
+            // labelAuxiliaryData
+            // 
+            this.labelAuxiliaryData.AutoSize = true;
+            this.labelAuxiliaryData.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAuxiliaryData.ForeColor = System.Drawing.Color.Coral;
+            this.labelAuxiliaryData.Location = new System.Drawing.Point(488, 365);
+            this.labelAuxiliaryData.Name = "labelAuxiliaryData";
+            this.labelAuxiliaryData.Size = new System.Drawing.Size(179, 20);
+            this.labelAuxiliaryData.TabIndex = 20;
+            this.labelAuxiliaryData.Text = "Aguardando dados...";
+            this.labelAuxiliaryData.Click += new System.EventHandler(this.label1_Click);
             // 
             // FormDados
             // 
@@ -108,6 +134,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(910, 480);
+            this.Controls.Add(this.labelAuxiliaryData);
+            this.Controls.Add(this.labelAuxiliaryTitle);
             this.Controls.Add(this.labelTemperaturaDados);
             this.Controls.Add(this.labelTemperatura);
             this.Controls.Add(this.labelControlData);
@@ -130,5 +158,7 @@
         public System.Windows.Forms.Label labelInstrumentationTitle;
         public System.Windows.Forms.Label labelTemperatura;
         public System.Windows.Forms.Label labelTemperaturaDados;
+        public System.Windows.Forms.Label labelAuxiliaryTitle;
+        public System.Windows.Forms.Label labelAuxiliaryData;
     }
 }

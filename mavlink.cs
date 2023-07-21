@@ -169,11 +169,11 @@ public partial class Mavlink
         new MessageInfo(148, "AUTOPILOT_VERSION", 178, 60, 60, typeof( mavlink_autopilot_version_t )), // none 24 bit
         new MessageInfo(149, "LANDING_TARGET", 200, 30, 30, typeof( mavlink_landing_target_t )), // none 24 bit
         new MessageInfo(162, "FENCE_STATUS", 189, 8, 8, typeof( mavlink_fence_status_t )), // none 24 bit
-        new MessageInfo(170, "CONTROL_SYSTEM", 202, 9, 9, typeof( mavlink_control_system_t )), // none 24 bit
-        new MessageInfo(171, "INSTRUMENTATION", 143, 16, 16, typeof( mavlink_instrumentation_t )), // none 24 bit
-        new MessageInfo(172, "TEMPERATURES", 159, 8, 8, typeof( mavlink_temperatures_t )), // none 24 bit
+        new MessageInfo(170, "CONTROL_SYSTEM", 67, 8, 8, typeof( mavlink_control_system_t )), // none 24 bit
+        new MessageInfo(171, "INSTRUMENTATION", 250, 16, 16, typeof( mavlink_instrumentation_t )), // none 24 bit
+        new MessageInfo(172, "TEMPERATURES", 192, 12, 12, typeof( mavlink_temperatures_t )), // none 24 bit
         new MessageInfo(173, "GPS_INFO", 182, 17, 17, typeof( mavlink_gps_info_t )), // none 24 bit
-        new MessageInfo(174, "GPS_INFO_POS", 85, 8, 8, typeof( mavlink_gps_info_pos_t )), // none 24 bit
+        new MessageInfo(174, "AUX_SYSTEM", 28, 12, 12, typeof( mavlink_aux_system_t )), // none 24 bit
         new MessageInfo(192, "MAG_CAL_REPORT", 36, 44, 44, typeof( mavlink_mag_cal_report_t )), // none 24 bit
         new MessageInfo(225, "EFI_STATUS", 208, 65, 65, typeof( mavlink_efi_status_t )), // none 24 bit
         new MessageInfo(230, "ESTIMATOR_STATUS", 163, 42, 42, typeof( mavlink_estimator_status_t )), // none 24 bit
@@ -349,12 +349,12 @@ public partial class Mavlink
         LANDING_TARGET = 149,
         FENCE_STATUS = 162,
         //////////////////// USER DEFINED MAVLINK MESSAGES HERE
-       
+
         CONTROL_SYSTEM = 170,
         INSTRUMENTATION = 171,
         TEMPERATURES = 172,
         GPS_INFO = 173,
-        GPS_INFO_POS = 174,
+        AUX_SYSTEM = 174,
 
         //////////////////// USER DEFINED MAVLINK MESSAGES HERE
         MAG_CAL_REPORT = 192,
@@ -12956,73 +12956,69 @@ public partial class Mavlink
     
     };
 
-    
+
     /// extensions_start 0
-    [StructLayout(LayoutKind.Sequential,Pack=1,Size=9)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 9)]
     ///<summary> The heartbeat message shows that a system or component is present and responding. The type and autopilot fields (along with the message component id), allow the receiving system to treat further messages from this system appropriately (e.g. by laying out the user interface based on the autopilot). This microservice is documented at https://mavlink.io/en/services/heartbeat.html </summary>
     public struct mavlink_heartbeat_t
     {
-        public mavlink_heartbeat_t(uint custom_mode,/*MAV_TYPE*/byte type,/*MAV_AUTOPILOT*/byte autopilot,/*MAV_MODE_FLAG*/byte base_mode,/*MAV_STATE*/byte system_status,byte mavlink_version) 
+        public mavlink_heartbeat_t(uint custom_mode,/*MAV_TYPE*/byte type,/*MAV_AUTOPILOT*/byte autopilot,/*MAV_MODE_FLAG*/byte base_mode,/*MAV_STATE*/byte system_status, byte mavlink_version)
         {
-              this.custom_mode = custom_mode;
-              this.type = type;
-              this.autopilot = autopilot;
-              this.base_mode = base_mode;
-              this.system_status = system_status;
-              this.mavlink_version = mavlink_version;
-            
+            this.custom_mode = custom_mode;
+            this.type = type;
+            this.autopilot = autopilot;
+            this.base_mode = base_mode;
+            this.system_status = system_status;
+            this.mavlink_version = mavlink_version;
+
         }
         /// <summary>A bitfield for use for autopilot-specific flags   </summary>
         [Units("")]
         [Description("A bitfield for use for autopilot-specific flags")]
-        public  uint custom_mode;
-            /// <summary>Vehicle or component type. For a flight controller component the vehicle type (quadrotor, helicopter, etc.). For other components the component type (e.g. camera, gimbal, etc.). This should be used in preference to component id for identifying the component type. MAV_TYPE  </summary>
+        public uint custom_mode;
+        /// <summary>Vehicle or component type. For a flight controller component the vehicle type (quadrotor, helicopter, etc.). For other components the component type (e.g. camera, gimbal, etc.). This should be used in preference to component id for identifying the component type. MAV_TYPE  </summary>
         [Units("")]
         [Description("Vehicle or component type. For a flight controller component the vehicle type (quadrotor, helicopter, etc.). For other components the component type (e.g. camera, gimbal, etc.). This should be used in preference to component id for identifying the component type.")]
         public  /*MAV_TYPE*/byte type;
-            /// <summary>Autopilot type / class. Use MAV_AUTOPILOT_INVALID for components that are not flight controllers. MAV_AUTOPILOT  </summary>
+        /// <summary>Autopilot type / class. Use MAV_AUTOPILOT_INVALID for components that are not flight controllers. MAV_AUTOPILOT  </summary>
         [Units("")]
         [Description("Autopilot type / class. Use MAV_AUTOPILOT_INVALID for components that are not flight controllers.")]
         public  /*MAV_AUTOPILOT*/byte autopilot;
-            /// <summary>System mode bitmap. MAV_MODE_FLAG  bitmask</summary>
+        /// <summary>System mode bitmap. MAV_MODE_FLAG  bitmask</summary>
         [Units("")]
         [Description("System mode bitmap.")]
         public  /*MAV_MODE_FLAG*/byte base_mode;
-            /// <summary>System status flag. MAV_STATE  </summary>
+        /// <summary>System status flag. MAV_STATE  </summary>
         [Units("")]
         [Description("System status flag.")]
         public  /*MAV_STATE*/byte system_status;
-            /// <summary>MAVLink version, not writable by user, gets added by protocol because of magic data type: uint8_t_mavlink_version   </summary>
+        /// <summary>MAVLink version, not writable by user, gets added by protocol because of magic data type: uint8_t_mavlink_version   </summary>
         [Units("")]
         [Description("MAVLink version, not writable by user, gets added by protocol because of magic data type: uint8_t_mavlink_version")]
-        public  byte mavlink_version;
-    
+        public byte mavlink_version;
+
     };
 
+
     /// extensions_start 0
-    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 9)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 8)]
     ///<summary>  Bitfield that encodes whether the pumps are active or not. </summary>
     public struct mavlink_control_system_t
     {
-        public mavlink_control_system_t(float dac_output, float potentiometer_signal, byte pump_mask)
+        public mavlink_control_system_t(float dac_output, float potentiometer_signal)
         {
             this.dac_output = dac_output;
             this.potentiometer_signal = potentiometer_signal;
-            this.pump_mask = pump_mask;
 
         }
-        /// <summary>Digital-Analog converter output to control the motor.  [mV] </summary>
-        [Units("[mV]")]
+        /// <summary>Digital-Analog converter output to control the motor.  [V] </summary>
+        [Units("[V]")]
         [Description("Digital-Analog converter output to control the motor.")]
         public float dac_output;
-        /// <summary>Potentiometer output to control the motor.  [mV] </summary>
-        [Units("[mV]")]
+        /// <summary>Potentiometer output to control the motor.  [V] </summary>
+        [Units("[V]")]
         [Description("Potentiometer output to control the motor.")]
         public float potentiometer_signal;
-        /// <summary>Bitfield that encodes whether the pumps are active or not.   </summary>
-        [Units("")]
-        [Description("Bitfield that encodes whether the pumps are active or not.")]
-        public byte pump_mask;
 
     };
 
@@ -13032,42 +13028,43 @@ public partial class Mavlink
     ///<summary>  Instrumentation data for 3 current sensors and 1 voltage sensor. </summary>
     public struct mavlink_instrumentation_t
     {
-        public mavlink_instrumentation_t(float current_zero, float current_one, float current_two, float voltage_battery)
+        public mavlink_instrumentation_t(float battery_voltage, float motor_current, float battery_current, float mppt_current)
         {
-            this.current_zero = current_zero;
-            this.current_one = current_one;
-            this.current_two = current_two;
-            this.voltage_battery = voltage_battery;
+            this.battery_voltage = battery_voltage;
+            this.motor_current = motor_current;
+            this.battery_current = battery_current;
+            this.mppt_current = mppt_current;
 
         }
-        /// <summary>Current Sensor 0  [mA] </summary>
-        [Units("[mA]")]
-        [Description("Current Sensor 0")]
-        public float current_zero;
-        /// <summary>Current sensor 1.  [mA] </summary>
-        [Units("[mA]")]
-        [Description("Current sensor 1.")]
-        public float current_one;
-        /// <summary>Current sensor 2.  [mA] </summary>
-        [Units("[mA]")]
-        [Description("Current sensor 2.")]
-        public float current_two;
-        /// <summary>Voltage sensor.  [mA] </summary>
-        [Units("[mA]")]
-        [Description("Voltage sensor.")]
-        public float voltage_battery;
+        /// <summary>Voltage sensor connected to A0 pin of ADS1115.  [V] </summary>
+        [Units("[V]")]
+        [Description("Voltage sensor connected to A0 pin of ADS1115.")]
+        public float battery_voltage;
+        /// <summary>Current sensor connected to A1 pin of ADS1115  [A] </summary>
+        [Units("[A]")]
+        [Description("Current sensor connected to A1 pin of ADS1115")]
+        public float motor_current;
+        /// <summary>Current sensor connected to A2 pin of ADS1115.  [A] </summary>
+        [Units("[A]")]
+        [Description("Current sensor connected to A2 pin of ADS1115.")]
+        public float battery_current;
+        /// <summary>Current sensor connected to A3 pin of ADS1115.  [A] </summary>
+        [Units("[A]")]
+        [Description("Current sensor connected to A3 pin of ADS1115.")]
+        public float mppt_current;
 
     };
 
 
     /// extensions_start 0
-    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 8)]
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 12)]
     ///<summary>  Temperature data for motor and MPPT. </summary>
     public struct mavlink_temperatures_t
     {
-        public mavlink_temperatures_t(float temperature_motor, float temperature_mppt)
+        public mavlink_temperatures_t(float temperature_motor, float temperature_battery, float temperature_mppt)
         {
             this.temperature_motor = temperature_motor;
+            this.temperature_battery = temperature_battery;
             this.temperature_mppt = temperature_mppt;
 
         }
@@ -13075,6 +13072,10 @@ public partial class Mavlink
         [Units("[degC]")]
         [Description("Motor temperature.")]
         public float temperature_motor;
+        /// <summary>MPPT temperature.  [degC] </summary>
+        [Units("[degC]")]
+        [Description("MPPT temperature.")]
+        public float temperature_battery;
         /// <summary>MPPT temperature.  [degC] </summary>
         [Units("[degC]")]
         [Description("MPPT temperature.")]
@@ -13122,24 +13123,29 @@ public partial class Mavlink
 
 
     /// extensions_start 0
-    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 8)]
-    ///<summary>  GPS latitude and longitude data from NEO-6M module.  </summary>
-    public struct mavlink_gps_info_pos_t
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 12)]
+    ///<summary>  Data related to auxiliary battery and pumps.  </summary>
+    public struct mavlink_aux_system_t
     {
-        public mavlink_gps_info_pos_t(float latitude, float longitude)
+        public mavlink_aux_system_t(float voltage, float current, float pumps)
         {
-            this.latitude = latitude;
-            this.longitude = longitude;
+            this.voltage = voltage;
+            this.current = current;
+            this.pumps = pumps;
 
         }
-        /// <summary>Latitude info. Sixth decimal digit represents 11cm resolution   </summary>
+        /// <summary>Voltage of auxiliary battery   </summary>
         [Units("")]
-        [Description("Latitude info. Sixth decimal digit represents 11cm resolution")]
-        public float latitude;
-        /// <summary>Longitude info. Sixth decimal digit represents 11cm resolution   </summary>
+        [Description("Voltage of auxiliary battery")]
+        public float voltage;
+        /// <summary>Current of auxiliary battery   </summary>
         [Units("")]
-        [Description("Longitude info. Sixth decimal digit represents 11cm resolution")]
-        public float longitude;
+        [Description("Current of auxiliary battery")]
+        public float current;
+        /// <summary>Bitfield that represents the logical state of the pumps   </summary>
+        [Units("")]
+        [Description("Bitfield that represents the logical state of the pumps")]
+        public float pumps;
 
     };
 

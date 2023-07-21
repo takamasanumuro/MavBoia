@@ -252,50 +252,57 @@ namespace SimpleExample
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri($"http://{textBoxHostname.Texts}:80/");
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-                // Hashmap of routes and intervals
-                Dictionary<string, int> routes = new Dictionary<string, int>()
-                {
-                    { "instrumentation", 5000 },
-                    { "control_system", 5000 },
-                    { "temperatures", 5000 },
-                    { "gps_info", 5000 }
-                };
                 
                 try
                 {
 
-                    // Fetch instrumentation data
-                    HttpResponseMessage response = client.GetAsync("instrumentation").Result;
+                    // Fetch control system data
+
+                    HttpResponseMessage response = client.GetAsync("control-system").Result;
                     string jsonContent = response.Content.ReadAsStringAsync().Result;
 
-                    // Parse "current_motor", "current_battery", "current_mppt" and "voltage_battery" from json
                     JObject jsonObject = JObject.Parse(jsonContent);
-                    float currentMotor = (float)jsonObject["current_motor"];
-                    float currentBattery = (float)jsonObject["current_battery"];
-                    float currentMppt = (float)jsonObject["current_mppt"];
-                    float voltageBattery = (float)jsonObject["voltage_battery"];
+                    float dac_voltage = (float)jsonObject["dac_output"];
+                    float pot_voltage = (float)jsonObject["pot_voltage"];
 
-                    FormDados.currentMotor = currentMotor;
-                    FormDados.currentBattery = currentBattery;
-                    FormDados.currentMPPT = currentMppt;
-                    FormDados.mainBatteryVoltage = voltageBattery;
-                    FormDados.generationPower = currentMppt * voltageBattery;
-                    FormDados.consumptionPower = currentBattery * voltageBattery;
+                    FormDados.dacVoltage = dac_voltage;
+                    FormDados.potVoltage = pot_voltage;
+
+                    formDados.labelControlData.BeginInvoke(new Action(() => formDados.labelControlData.Text =
+                                $"Tensão do DAC: {dac_voltage:F2}V\n" +
+                                $"Tensão do potenciômetro: {pot_voltage:F2}V\n"));
+
+                    // Fetch instrumentation data
+                    response = client.GetAsync("instrumentation").Result;
+                    jsonContent = response.Content.ReadAsStringAsync().Result;
+
+                    // Parse "current_motor", "current_battery", "current_mppt" and "voltage_battery" from json
+                    jsonObject = JObject.Parse(jsonContent);
+                    float battery_voltage = (float)jsonObject["battery_voltage"];
+                    float motor_current = (float)jsonObject["motor_current"];
+                    float battery_current = (float)jsonObject["battery_current"];
+                    float mppt_current = (float)jsonObject["mppt_current"];
+                    
+                    FormDados.motorCurrent = motor_current;
+                    FormDados.batteryCurrent = battery_current;
+                    FormDados.mpptCurrent = mppt_current;
+                    FormDados.mainBatteryVoltage = battery_voltage;
+                    FormDados.generationPower = mppt_current * battery_voltage;
+                    FormDados.consumptionPower = battery_current * battery_voltage;
                     
                     FormDados.resultantPower = FormDados.generationPower + FormDados.consumptionPower;
 
                     // Do something with the parsed values
-                    Console.WriteLine($"Current Motor: {currentMotor}");
-                    Console.WriteLine($"Current Battery: {currentBattery}");
-                    Console.WriteLine($"Current MPPT: {currentMppt}");
-                    Console.WriteLine($"Voltage Battery: {voltageBattery}");
+                    Console.WriteLine($"Current Motor: {motor_current}");
+                    Console.WriteLine($"Current Battery: {battery_current}");
+                    Console.WriteLine($"Current MPPT: {mppt_current}");
+                    Console.WriteLine($"Voltage Battery: {battery_voltage}");
 
                     formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
-                        $"Tensão da bateria: {voltageBattery:F2}V\n" +
-                        $"Corrente do motor: {currentMotor:F2}A\n" +
-                        $"Corrente da bateria: {currentBattery:F2}A\n" +
-                        $"Corrente do MPPT: {currentMppt:F2}A\n" +
+                        $"Tensão da bateria: {battery_voltage:F2}V\n" +
+                        $"Corrente do motor: {motor_current:F2}A\n" +
+                        $"Corrente da bateria: {battery_current:F2}A\n" +
+                        $"Corrente do MPPT: {mppt_current:F2}A\n" +
                         $"Potência de geração: {FormDados.generationPower:F0}W\n" +
                         $"Potência de consumo: {FormDados.consumptionPower:F0}W\n" +
                         $"Potência resultante: {FormDados.resultantPower:F0}W\n"));
@@ -306,15 +313,86 @@ namespace SimpleExample
 
                     // Parse "temperature_motor" and "temperature_mppt" from json
                     jsonObject = JObject.Parse(jsonContent);
-                    float temperatureMotor = (float)jsonObject["temperature_motor"];
-                    float temperatureMppt = (float)jsonObject["temperature_mppt"];
+                    float temperature_motor = (float)jsonObject["temperature_motor"];
+                    float temperature_battery = (float)jsonObject["temperature_battery"];
+                    float temperature_mppt = (float)jsonObject["temperature_mppt"];
 
-                    FormDados.temperatureMotor = temperatureMotor;
-                    FormDados.temperatureMPPT = temperatureMppt;
+                    FormDados.temperatureMotor = temperature_motor;
+                    FormDados.temperatureBattery = temperature_battery;
+                    FormDados.temperatureMPPT = temperature_mppt;
 
-                    // Do something with the parsed values
-                    Console.WriteLine($"Temperature Motor: {temperatureMotor}");
-                    Console.WriteLine($"Temperature MPPT: {temperatureMppt}");
+                    String temperature_motor_string = $"{temperature_motor.ToString()}°C";
+                    String temperature_battery_string = $"{temperature_battery.ToString()}°C";
+                    String temperature_mppt_string = $"{temperature_mppt.ToString()}°C";
+                    const float probe_disconnected = -127.0f;
+                    if (temperature_motor == probe_disconnected)
+                    {
+                        temperature_motor_string = "Sonda não conectada";
+                    }
+                    if (temperature_battery == probe_disconnected)
+                    {
+                        temperature_battery_string = "Sonda não conectada";
+                    }
+                    if (temperature_mppt == probe_disconnected)
+                    {
+                        temperature_mppt_string = "Sonda não conectada";
+                    }
+                    formDados.labelTemperaturaDados.BeginInvoke(new Action(() => formDados.labelTemperaturaDados.Text =
+                        $"Temperatura do motor: {temperature_motor}\n" +
+                        $"Temperatura da bateria: {temperature_battery}\n" +
+                        $"Temperatura do MPPT: {temperature_mppt}\n"));
+
+                    // Fetch GPS data
+                    response = client.GetAsync("gps").Result;
+                    jsonContent = response.Content.ReadAsStringAsync().Result;
+
+                    // Parse "latitude", "longitude", "course", "speed" and "satellites" from JSON
+                    jsonObject = JObject.Parse(jsonContent);
+                    float latitude = (float)jsonObject["latitude"];
+                    float longitude = (float)jsonObject["longitude"];
+                    float course = (float)jsonObject["course"];
+                    float speed = (float)jsonObject["speed"];
+                    int satellites = (int)jsonObject["satellites"];
+
+                    FormDados.latitude = latitude;
+                    FormDados.longitude = longitude;
+                    FormDados.course = course;
+                    FormDados.speed = speed;
+                    FormDados.satellites = satellites;
+
+                    //formDados.labelGPSData.BeginInvoke(new Action(() => formDados.labelGPSData.Text =
+                    //             $"Latitude: {latitude}\n" +
+                    //             $"Longitude: {longitude}\n" +
+                    //             $"Curso: {course}\n" +
+                    //             $"Velocidade: {speed}\n" +
+                    //             $"Satélites: {satellites}\n"));
+                    //             
+
+                    // Get auxiliary data
+
+                    // Fetch "auxiliary" from JSON
+                    response = client.GetAsync("auxiliary-system").Result;
+                    jsonContent = response.Content.ReadAsStringAsync().Result;
+
+                    // Parse "auxiliary" from JSON
+                    jsonObject = JObject.Parse(jsonContent);
+                    float aux_current = (float)jsonObject["aux_current"];
+                    float aux_voltage = (float)jsonObject["aux_voltage"];
+                    byte pumps = (byte)jsonObject["pumps"];
+                    String leftPumpState = DecodePumpMask(pumps, 1);
+                    String rightPumpState = DecodePumpMask(pumps, 0);
+
+                    FormDados.auxBatteryCurrent = aux_current;
+                    FormDados.auxBatteryVoltage = aux_voltage;
+                    FormDados.pumpMask = pumps;
+
+                    formDados.labelAuxiliaryData.BeginInvoke(new Action(() => formDados.labelAuxiliaryTitle.Text =
+                        $"Tensão da bateria auxiliar: {aux_voltage:F2}V\n" +
+                        $"Corrente da bateria auxiliar: {aux_current:F2}A\n" +
+                        $"Bomba de bombordo: {leftPumpState}\n" +
+                        $"Bomba de boreste: {rightPumpState}\n"));
+
+
                 }
                 catch (Exception exc)
                 {
@@ -338,42 +416,40 @@ namespace SimpleExample
                 case (byte)Mavlink.MAVLINK_MSG_ID.CONTROL_SYSTEM:
                     {
                         var payload = (Mavlink.mavlink_control_system_t)message.Payload;
-                        String leftPumpState = DecodePumpMask(payload.pump_mask, 1);
-                        String rightPumpState = DecodePumpMask(payload.pump_mask, 0);
+                        //String leftPumpState = DecodePumpMask((byte)payload.pumps, 1);
+                        //String rightPumpState = DecodePumpMask((byte)(int)payload.pumps, 0);
                         formDados.labelControlData.BeginInvoke( new Action(() => formDados.labelControlData.Text = 
                             $"Sinal Pot:{payload.potentiometer_signal:F2}V\n" +
-                            $"Sinal Encoder:{payload.dac_output:F2}V\n" +
-                            $"Bomba Esquerda:{leftPumpState}\n" +
-                            $"Bomba direita: {rightPumpState}"));
+                            $"Sinal Encoder:{payload.dac_output:F2}V\n"));
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.INSTRUMENTATION:
                     {
                         var payload = (Mavlink.mavlink_instrumentation_t)message.Payload;
-                        float currentMotor = payload.current_zero;
-                        float currentBattery = payload.current_one;
-                        float currentMPPT = payload.current_two;
-                        float battery_voltage = payload.voltage_battery;
-                        float generationPower = battery_voltage * currentMPPT;
-                        float consumptionPower = battery_voltage * currentMotor;
-                        float resultantPower = generationPower - consumptionPower;
+                        float motor_current = payload.motor_current;
+                        float battery_current = payload.battery_current;
+                        float mppt_current = payload.mppt_current;
+                        float battery_voltage = payload.battery_voltage;
+                        float generation_power = battery_voltage * mppt_current;
+                        float consumption_power = battery_voltage * motor_current;
+                        float resultant_power = generation_power - consumption_power;
 
-                        FormDados.currentMotor = currentMotor;
-                        FormDados.currentBattery = currentBattery;
-                        FormDados.currentMPPT = currentMPPT;
+                        FormDados.motorCurrent = motor_current;
+                        FormDados.batteryCurrent = battery_current;
+                        FormDados.mpptCurrent = mppt_current;
                         FormDados.mainBatteryVoltage = battery_voltage;
-                        FormDados.generationPower = generationPower;
-                        FormDados.consumptionPower = consumptionPower;
-                        FormDados.resultantPower = resultantPower;
+                        FormDados.generationPower = generation_power;
+                        FormDados.consumptionPower = consumption_power;
+                        FormDados.resultantPower = resultant_power;
 
                         formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
                             $"Tensão da bateria: {battery_voltage:F2}V\n" +
-                            $"Corrente do motor: {currentMotor:F2}A\n" +
-                            $"Corrente da bateria: {currentBattery:F2}A\n" +
-                            $"Corrente do MPPT: {currentMPPT:F2}A\n" +
-                            $"Potência de geração: {generationPower}W\n" +
-                            $"Potência de consumo: {consumptionPower}W\n" +
-                            $"Potência resultante: {resultantPower}W\n"));                 
+                            $"Corrente do motor: {motor_current:F2}A\n" +
+                            $"Corrente da bateria: {battery_current:F2}A\n" +
+                            $"Corrente do MPPT: {mppt_current:F2}A\n" +
+                            $"Potência de geração: {generation_power}W\n" +
+                            $"Potência de consumo: {consumption_power}W\n" +
+                            $"Potência resultante: {resultant_power}W\n"));                 
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.TEMPERATURES:
@@ -381,22 +457,29 @@ namespace SimpleExample
                         var payload = (Mavlink.mavlink_temperatures_t)message.Payload;
 
                         FormDados.temperatureMotor = payload.temperature_motor;
+                        FormDados.temperatureBattery = payload.temperature_battery;
                         FormDados.temperatureMPPT = payload.temperature_mppt;
 
-                        String temperatureMotor = $"{payload.temperature_motor.ToString()}°C";
-                        String temperatureMPPT = $"{payload.temperature_mppt.ToString()}°C";
+                        String temperature_motor = $"{payload.temperature_motor.ToString()}°C";
+                        String temperature_battery = $"{payload.temperature_battery.ToString()}°C";
+                        String temperature_mppt = $"{payload.temperature_mppt.ToString()}°C";
                         const float probe_disconnected = -127.0f;
                         if (payload.temperature_motor == probe_disconnected)
                         {
-                            temperatureMotor = "Sonda não conectada";
+                            temperature_motor = "Sonda não conectada";
+                        }
+                        if (payload.temperature_battery == probe_disconnected)
+                        {
+                            temperature_battery = "Sonda não conectada";
                         }
                         if (payload.temperature_mppt == probe_disconnected)
                         {
-                            temperatureMPPT = "Sonda não conectada";
+                            temperature_mppt = "Sonda não conectada";
                         }
                         formDados.labelTemperaturaDados.BeginInvoke(new Action(() => formDados.labelTemperaturaDados.Text = 
-                            $"Temperatura do motor: {temperatureMotor}\n" +
-                            $"Temperatura do MPPT: {temperatureMPPT}\n"));
+                            $"Temperatura do motor: {temperature_motor}\n" +
+                            $"Temperatura da bateria: {temperature_battery}\n" +
+                            $"Temperatura do MPPT: {temperature_mppt}\n"));
                         break;
                     }
 
@@ -416,6 +499,26 @@ namespace SimpleExample
                         }
 
                         Console.WriteLine($"GPS received: Lat:{latitude}/Long:{longitude}/Course:{course}/Speed:{speed}/Satellites:{satellites}");                    
+                        break;
+                    }
+                case (byte)Mavlink.MAVLINK_MSG_ID.AUX_SYSTEM:
+                    {
+                        var payload = (Mavlink.mavlink_aux_system_t)message.Payload;
+                        float aux_current = payload.current;
+                        float aux_voltage = payload.voltage;
+                        byte pumps = (byte)payload.pumps;
+                        String leftPumpState = DecodePumpMask((byte)payload.pumps, 1);
+                        String rightPumpState = DecodePumpMask((byte)(int)payload.pumps, 0);
+
+                        FormDados.auxBatteryCurrent = aux_current;
+                        FormDados.auxBatteryVoltage = aux_voltage;
+                        FormDados.pumpMask = pumps;
+
+                        formDados.labelAuxiliaryTitle.BeginInvoke(new Action(() => formDados.labelAuxiliaryTitle.Text =
+                            $"Tensão da bateria: {aux_voltage:F2}V\n" +
+                            $"Corrente da bateria: {aux_current:F2}A\n" +
+                            $"Bomba esquerda: {leftPumpState}\n" +
+                            $"Bomba direita: {rightPumpState}\n"));
                         break;
                     }
                 default:
