@@ -263,7 +263,7 @@ namespace SimpleExample
 
                     JObject jsonObject = JObject.Parse(jsonContent);
                     float dac_voltage = (float)jsonObject["dac_output"];
-                    float pot_voltage = (float)jsonObject["pot_voltage"];
+                    float pot_voltage = (float)jsonObject["potentiometer_signal"];
 
                     FormDados.dacVoltage = dac_voltage;
                     FormDados.potVoltage = pot_voltage;
@@ -273,7 +273,7 @@ namespace SimpleExample
                                 $"Tensão do potenciômetro: {pot_voltage:F2}V\n"));
 
                     // Fetch instrumentation data
-                    response = client.GetAsync("instrumentation").Result;
+                    response = client.GetAsync("instrumentation-system").Result;
                     jsonContent = response.Content.ReadAsStringAsync().Result;
 
                     // Parse "current_motor", "current_battery", "current_mppt" and "voltage_battery" from json
@@ -308,7 +308,7 @@ namespace SimpleExample
                         $"Potência resultante: {FormDados.resultantPower:F0}W\n"));
 
                     // Fetch temperatures
-                    response = client.GetAsync("temperatures").Result;
+                    response = client.GetAsync("temperature-system").Result;
                     jsonContent = response.Content.ReadAsStringAsync().Result;
 
                     // Parse "temperature_motor" and "temperature_mppt" from json
@@ -338,12 +338,12 @@ namespace SimpleExample
                         temperature_mppt_string = "Sonda não conectada";
                     }
                     formDados.labelTemperaturaDados.BeginInvoke(new Action(() => formDados.labelTemperaturaDados.Text =
-                        $"Temperatura do motor: {temperature_motor}\n" +
-                        $"Temperatura da bateria: {temperature_battery}\n" +
-                        $"Temperatura do MPPT: {temperature_mppt}\n"));
+                        $"Temperatura do motor: {temperature_motor_string}\n" +
+                        $"Temperatura da bateria: {temperature_battery_string}\n" +
+                        $"Temperatura do MPPT: {temperature_mppt_string}\n"));
 
                     // Fetch GPS data
-                    response = client.GetAsync("gps").Result;
+                    response = client.GetAsync("gps-system").Result;
                     jsonContent = response.Content.ReadAsStringAsync().Result;
 
                     // Parse "latitude", "longitude", "course", "speed" and "satellites" from JSON
@@ -386,7 +386,7 @@ namespace SimpleExample
                     FormDados.auxBatteryVoltage = aux_voltage;
                     FormDados.pumpMask = pumps;
 
-                    formDados.labelAuxiliaryData.BeginInvoke(new Action(() => formDados.labelAuxiliaryTitle.Text =
+                    formDados.labelAuxiliaryData.BeginInvoke(new Action(() => formDados.labelAuxiliaryData.Text =
                         $"Tensão da bateria auxiliar: {aux_voltage:F2}V\n" +
                         $"Corrente da bateria auxiliar: {aux_current:F2}A\n" +
                         $"Bomba de bombordo: {leftPumpState}\n" +
