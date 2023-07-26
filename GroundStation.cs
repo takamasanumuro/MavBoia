@@ -8,6 +8,7 @@ using System.IO.Ports;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using CefSharp.MinimalExample.WinForms;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -30,6 +31,7 @@ namespace SimpleExample
         FormDados formDados = new FormDados() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         FormMapa formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         FormConfigurações formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+        BrowserForm formBrowser = new BrowserForm() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
 
         public Point previousMousePosition; // Store the previous mouse position for dragging the form around
 
@@ -104,7 +106,7 @@ namespace SimpleExample
         // Ensure all forms are loaded and ready to receive data.
         private void LoadForms()
         {
-            List<Form> forms = new List<Form>() { formConfigurações, formDados, formMapa };
+            List<Form> forms = new List<Form>() { formConfigurações, formDados, formMapa, formBrowser };
             foreach (var form in forms)
             {
                 panelFormLoader.Controls.Add(form);
@@ -622,6 +624,16 @@ namespace SimpleExample
             labelTitleSelection.Text = "Configurações";
             formConfigurações.Show();
 
+        }
+
+        private void buttonCamera_Click(object sender, EventArgs e)
+        {
+            ButtonGenericClickCallback(sender, e);
+            panelFormLoader.Controls.Clear();
+            panelFormLoader.Dock = DockStyle.Fill;
+            panelFormLoader.Controls.Add(formBrowser);
+            formBrowser.Show();
+            
         }
 
         /// <summary>
