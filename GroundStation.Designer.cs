@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GroundStation));
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.panelLateral = new System.Windows.Forms.Panel();
+            this.buttonCamera = new System.Windows.Forms.Button();
             this.buttonGraficos = new System.Windows.Forms.Button();
             this.buttonDados = new System.Windows.Forms.Button();
             this.buttonMapa = new System.Windows.Forms.Button();
@@ -56,6 +57,7 @@
             // panelLateral
             // 
             this.panelLateral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.panelLateral.Controls.Add(this.buttonCamera);
             this.panelLateral.Controls.Add(this.buttonGraficos);
             this.panelLateral.Controls.Add(this.buttonDados);
             this.panelLateral.Controls.Add(this.buttonMapa);
@@ -67,6 +69,24 @@
             this.panelLateral.Name = "panelLateral";
             this.panelLateral.Size = new System.Drawing.Size(228, 597);
             this.panelLateral.TabIndex = 9;
+            // 
+            // buttonCamera
+            // 
+            this.buttonCamera.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonCamera.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonCamera.FlatAppearance.BorderSize = 0;
+            this.buttonCamera.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonCamera.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonCamera.ForeColor = System.Drawing.Color.Coral;
+            this.buttonCamera.Image = global::SimpleExample.Properties.Resources.charts;
+            this.buttonCamera.Location = new System.Drawing.Point(0, 322);
+            this.buttonCamera.Name = "buttonCamera";
+            this.buttonCamera.Size = new System.Drawing.Size(228, 55);
+            this.buttonCamera.TabIndex = 13;
+            this.buttonCamera.Text = "          Camera  ";
+            this.buttonCamera.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonCamera.UseVisualStyleBackColor = true;
+            this.buttonCamera.Click += new System.EventHandler(this.buttonCamera_Click);
             // 
             // buttonGraficos
             // 
@@ -289,7 +309,6 @@
             this.comboBoxBaudRate.Texts = "";
             this.comboBoxBaudRate.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxBaudRate_OnSelectedIndexChanged);
             // 
-            // 
             // GroundStation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -306,7 +325,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "GroundStation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "BoatStation";
+            this.Text = "6";
             this.Load += new System.EventHandler(this.GroundStation_Load);
             this.panelLateral.ResumeLayout(false);
             this.panelTopLeft.ResumeLayout(false);
@@ -335,7 +354,7 @@
         private CustomControls.RJControls.RJButton buttonConnect;
         private System.Windows.Forms.Label labelTitleSelection;
         private System.Windows.Forms.Button buttonGraficos;
-        
+        private System.Windows.Forms.Button buttonCamera;
     }
 }
 

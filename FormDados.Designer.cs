@@ -41,7 +41,7 @@
             this.labelControlData.AutoSize = true;
             this.labelControlData.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelControlData.ForeColor = System.Drawing.Color.Coral;
-            this.labelControlData.Location = new System.Drawing.Point(52, 365);
+            this.labelControlData.Location = new System.Drawing.Point(70, 341);
             this.labelControlData.Name = "labelControlData";
             this.labelControlData.Size = new System.Drawing.Size(79, 25);
             this.labelControlData.TabIndex = 15;
@@ -52,7 +52,7 @@
             this.labelControlTitle.AutoSize = true;
             this.labelControlTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelControlTitle.ForeColor = System.Drawing.Color.Coral;
-            this.labelControlTitle.Location = new System.Drawing.Point(51, 311);
+            this.labelControlTitle.Location = new System.Drawing.Point(51, 278);
             this.labelControlTitle.Name = "labelControlTitle";
             this.labelControlTitle.Size = new System.Drawing.Size(130, 32);
             this.labelControlTitle.TabIndex = 16;
@@ -63,7 +63,7 @@
             this.labelInstrumentationData.AutoSize = true;
             this.labelInstrumentationData.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInstrumentationData.ForeColor = System.Drawing.Color.Coral;
-            this.labelInstrumentationData.Location = new System.Drawing.Point(52, 114);
+            this.labelInstrumentationData.Location = new System.Drawing.Point(70, 86);
             this.labelInstrumentationData.Name = "labelInstrumentationData";
             this.labelInstrumentationData.Size = new System.Drawing.Size(79, 25);
             this.labelInstrumentationData.TabIndex = 13;
@@ -74,7 +74,7 @@
             this.labelInstrumentationTitle.AutoSize = true;
             this.labelInstrumentationTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInstrumentationTitle.ForeColor = System.Drawing.Color.Coral;
-            this.labelInstrumentationTitle.Location = new System.Drawing.Point(51, 60);
+            this.labelInstrumentationTitle.Location = new System.Drawing.Point(51, 32);
             this.labelInstrumentationTitle.Name = "labelInstrumentationTitle";
             this.labelInstrumentationTitle.Size = new System.Drawing.Size(223, 32);
             this.labelInstrumentationTitle.TabIndex = 14;
@@ -85,7 +85,7 @@
             this.labelTemperatura.AutoSize = true;
             this.labelTemperatura.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTemperatura.ForeColor = System.Drawing.Color.Coral;
-            this.labelTemperatura.Location = new System.Drawing.Point(464, 60);
+            this.labelTemperatura.Location = new System.Drawing.Point(464, 32);
             this.labelTemperatura.Name = "labelTemperatura";
             this.labelTemperatura.Size = new System.Drawing.Size(187, 32);
             this.labelTemperatura.TabIndex = 17;
@@ -96,7 +96,7 @@
             this.labelTemperaturaDados.AutoSize = true;
             this.labelTemperaturaDados.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTemperaturaDados.ForeColor = System.Drawing.Color.Coral;
-            this.labelTemperaturaDados.Location = new System.Drawing.Point(465, 114);
+            this.labelTemperaturaDados.Location = new System.Drawing.Point(482, 86);
             this.labelTemperaturaDados.Name = "labelTemperaturaDados";
             this.labelTemperaturaDados.Size = new System.Drawing.Size(79, 25);
             this.labelTemperaturaDados.TabIndex = 18;
