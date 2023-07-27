@@ -43,7 +43,7 @@
             this.labelControlData.AutoSize = true;
             this.labelControlData.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelControlData.ForeColor = System.Drawing.Color.Coral;
-            this.labelControlData.Location = new System.Drawing.Point(70, 341);
+            this.labelControlData.Location = new System.Drawing.Point(70, 365);
             this.labelControlData.Name = "labelControlData";
             this.labelControlData.Size = new System.Drawing.Size(179, 20);
             this.labelControlData.TabIndex = 15;
@@ -66,7 +66,7 @@
             this.labelInstrumentationData.AutoSize = true;
             this.labelInstrumentationData.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInstrumentationData.ForeColor = System.Drawing.Color.Coral;
-            this.labelInstrumentationData.Location = new System.Drawing.Point(70, 86);
+            this.labelInstrumentationData.Location = new System.Drawing.Point(70, 114);
             this.labelInstrumentationData.Name = "labelInstrumentationData";
             this.labelInstrumentationData.Size = new System.Drawing.Size(179, 20);
             this.labelInstrumentationData.TabIndex = 13;

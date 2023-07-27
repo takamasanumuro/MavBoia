@@ -43,6 +43,7 @@ namespace SimpleExample
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
             
+            
                
         }
         #region Form Rounding and Dragging

@@ -94,7 +94,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLLs\OpcNetApi.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
+    <Reference Include="System">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -226,7 +228,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GLGChart\FormChart.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -266,6 +268,7 @@
     <None Include="Resources\Close.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\mapicon1.png" />
     <None Include="Resources\diagram1.png" />
     <Content Include="DLLs\AdvancedHMIControls.dll" />
     <Content Include="DLLs\CustomControls.dll" />

@@ -82,7 +82,7 @@
             this.buttonCamera.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonCamera.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCamera.ForeColor = System.Drawing.Color.Coral;
-            this.buttonCamera.Image = global::SimpleExample.Properties.Resources.charts;
+            this.buttonCamera.Image = ((System.Drawing.Image)(resources.GetObject("buttonCamera.Image")));
             this.buttonCamera.Location = new System.Drawing.Point(0, 322);
             this.buttonCamera.Name = "buttonCamera";
             this.buttonCamera.Size = new System.Drawing.Size(228, 55);
@@ -100,7 +100,7 @@
             this.buttonGraficos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonGraficos.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonGraficos.ForeColor = System.Drawing.Color.Coral;
-            this.buttonGraficos.Image = global::SimpleExample.Properties.Resources.charts;
+            this.buttonGraficos.Image = ((System.Drawing.Image)(resources.GetObject("buttonGraficos.Image")));
             this.buttonGraficos.Location = new System.Drawing.Point(0, 377);
             this.buttonGraficos.Name = "buttonGraficos";
             this.buttonGraficos.Size = new System.Drawing.Size(228, 55);
@@ -119,7 +119,7 @@
             this.buttonDados.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonDados.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDados.ForeColor = System.Drawing.Color.Coral;
-            this.buttonDados.Image = global::SimpleExample.Properties.Resources.diagram;
+            this.buttonDados.Image = ((System.Drawing.Image)(resources.GetObject("buttonDados.Image")));
             this.buttonDados.Location = new System.Drawing.Point(0, 432);
             this.buttonDados.Name = "buttonDados";
             this.buttonDados.Size = new System.Drawing.Size(228, 55);
@@ -138,7 +138,7 @@
             this.buttonMapa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonMapa.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonMapa.ForeColor = System.Drawing.Color.Coral;
-            this.buttonMapa.Image = global::SimpleExample.Properties.Resources.mapicon;
+            this.buttonMapa.Image = ((System.Drawing.Image)(resources.GetObject("buttonMapa.Image")));
             this.buttonMapa.Location = new System.Drawing.Point(0, 487);
             this.buttonMapa.Name = "buttonMapa";
             this.buttonMapa.Size = new System.Drawing.Size(228, 55);
@@ -165,7 +165,7 @@
             this.buttonConfigurações.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonConfigurações.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonConfigurações.ForeColor = System.Drawing.Color.Coral;
-            this.buttonConfigurações.Image = global::SimpleExample.Properties.Resources.settings;
+            this.buttonConfigurações.Image = ((System.Drawing.Image)(resources.GetObject("buttonConfigurações.Image")));
             this.buttonConfigurações.Location = new System.Drawing.Point(0, 542);
             this.buttonConfigurações.Name = "buttonConfigurações";
             this.buttonConfigurações.Size = new System.Drawing.Size(228, 55);
@@ -250,7 +250,6 @@
             // buttonExit
             // 
             this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExit.BackgroundImage = global::SimpleExample.Properties.Resources.Close;
             this.buttonExit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.buttonExit.FlatAppearance.BorderSize = 0;
             this.buttonExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
