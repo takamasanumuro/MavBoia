@@ -419,8 +419,8 @@ namespace SimpleExample
                 case (byte)Mavlink.MAVLINK_MSG_ID.CONTROL_SYSTEM:
                     {
                         var payload = (Mavlink.mavlink_control_system_t)message.Payload;
-                        //String leftPumpState = DecodePumpMask((byte)payload.pumps, 1);
-                        //String rightPumpState = DecodePumpMask((byte)(int)payload.pumps, 0);
+                        FormDados.potVoltage = payload.potentiometer_signal;
+                        FormDados.dacVoltage = payload.dac_output;
                         formDados.labelControlData.BeginInvoke( new Action(() => formDados.labelControlData.Text = 
                             $"Sinal Pot:{payload.potentiometer_signal:F2}V\n" +
                             $"Sinal Encoder:{payload.dac_output:F2}V\n"));
@@ -495,6 +495,12 @@ namespace SimpleExample
                         float course = payload.course;
                         float speed = payload.speed;
                         byte satellites = payload.satellites_visible;
+
+                        FormDados.latitude = latitude;
+                        FormDados.longitude = longitude;
+                        FormDados.course = course;
+                        FormDados.speed = speed;
+                        FormDados.satellites = satellites;
 
                         if ((latitude != -1.0f) && (longitude != -1.0f))
                         {
