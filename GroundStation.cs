@@ -450,9 +450,9 @@ namespace SimpleExample
                             $"Corrente do motor: {motor_current:F2}A\n" +
                             $"Corrente da bateria: {battery_current:F2}A\n" +
                             $"Corrente do MPPT: {mppt_current:F2}A\n" +
-                            $"Potência de geração: {generation_power}W\n" +
-                            $"Potência de consumo: {consumption_power}W\n" +
-                            $"Potência resultante: {resultant_power}W\n"));                 
+                            $"Potência de geração: {generation_power:F2}W\n" +
+                            $"Potência de consumo: {consumption_power:F2}W\n" +
+                            $"Potência resultante: {resultant_power:F2}W\n"));                 
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.TEMPERATURES:
@@ -517,7 +517,7 @@ namespace SimpleExample
                         FormDados.auxBatteryVoltage = aux_voltage;
                         FormDados.pumpMask = pumps;
 
-                        formDados.labelAuxiliaryTitle.BeginInvoke(new Action(() => formDados.labelAuxiliaryTitle.Text =
+                        formDados.labelAuxiliaryData.BeginInvoke(new Action(() => formDados.labelAuxiliaryData.Text =
                             $"Tensão da bateria: {aux_voltage:F2}V\n" +
                             $"Corrente da bateria: {aux_current:F2}A\n" +
                             $"Bomba esquerda: {leftPumpState}\n" +
