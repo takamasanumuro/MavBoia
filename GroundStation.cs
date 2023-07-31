@@ -42,9 +42,7 @@ namespace SimpleExample
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
-            
-            
-               
+                           
         }
         #region Form Rounding and Dragging
         // This is the function that will allow the form to be rounded
@@ -99,7 +97,7 @@ namespace SimpleExample
         private void GroundStation_Load(object sender, EventArgs e)
         {
            
-                SetSerialPortDefaults("COM3", 115200);
+                SetSerialPortDefaults("COM3", 4800);
                 LoadForms();
 
         }
