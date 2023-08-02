@@ -87,7 +87,7 @@
             this.buttonCamera.Name = "buttonCamera";
             this.buttonCamera.Size = new System.Drawing.Size(228, 55);
             this.buttonCamera.TabIndex = 13;
-            this.buttonCamera.Text = "          Camera  ";
+            this.buttonCamera.Text = "          Rastreio  ";
             this.buttonCamera.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.buttonCamera.UseVisualStyleBackColor = true;
             this.buttonCamera.Click += new System.EventHandler(this.buttonCamera_Click);

@@ -107,6 +107,7 @@
             this.toolStrip1.Size = new System.Drawing.Size(973, 25);
             this.toolStrip1.Stretch = true;
             this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.Visible = false;
             this.toolStrip1.Layout += new System.Windows.Forms.LayoutEventHandler(this.HandleToolStripLayout);
             // 
             // backButton
@@ -116,6 +117,7 @@
             this.backButton.Name = "backButton";
             this.backButton.Size = new System.Drawing.Size(36, 22);
             this.backButton.Text = "Back";
+            this.backButton.Visible = false;
             this.backButton.Click += new System.EventHandler(this.BackButtonClick);
             // 
             // forwardButton
@@ -125,6 +127,7 @@
             this.forwardButton.Name = "forwardButton";
             this.forwardButton.Size = new System.Drawing.Size(54, 22);
             this.forwardButton.Text = "Forward";
+            this.forwardButton.Visible = false;
             this.forwardButton.Click += new System.EventHandler(this.ForwardButtonClick);
             // 
             // urlTextBox
@@ -133,6 +136,7 @@
             this.urlTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.urlTextBox.Name = "urlTextBox";
             this.urlTextBox.Size = new System.Drawing.Size(500, 25);
+            this.urlTextBox.Visible = false;
             this.urlTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.UrlTextBoxKeyUp);
             // 
             // goButton
@@ -153,6 +157,7 @@
             this.menuStrip1.Size = new System.Drawing.Size(973, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.Visible = false;
             // 
             // fileToolStripMenuItem
             // 

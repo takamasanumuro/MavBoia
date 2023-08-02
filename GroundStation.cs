@@ -12,6 +12,7 @@ using CefSharp.MinimalExample.WinForms;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace SimpleExample
 {
@@ -97,7 +98,7 @@ namespace SimpleExample
         private void GroundStation_Load(object sender, EventArgs e)
         {
            
-                SetSerialPortDefaults("COM3", 4800);
+                SetSerialPortDefaults("COM5", 4800);
                 LoadForms();
 
         }
@@ -223,7 +224,8 @@ namespace SimpleExample
                 try
                 {
                     Mavlink.MavlinkMessage message;
-                    lock (serialLock)
+
+                    lock (serialLock);
                     {
                         message = mavlinkParser.ReadPacket(serialPort1.BaseStream);
                         if (message == null || message.Payload == null)
@@ -257,47 +259,27 @@ namespace SimpleExample
                 try
                 {
 
-                    // Fetch control system data
-
-                    HttpResponseMessage response = client.GetAsync("control-system").Result;
+                    // Fetch instrumentation data
+                    HttpResponseMessage response = client.GetAsync("instrumentation-system").Result;
                     string jsonContent = response.Content.ReadAsStringAsync().Result;
 
-                    JObject jsonObject = JObject.Parse(jsonContent);
-                    float dac_voltage = (float)jsonObject["dac_output"];
-                    float pot_voltage = (float)jsonObject["potentiometer_signal"];
-
-                    FormDados.dacVoltage = dac_voltage;
-                    FormDados.potVoltage = pot_voltage;
-
-                    formDados.labelControlData.BeginInvoke(new Action(() => formDados.labelControlData.Text =
-                                $"Tensão do DAC: {dac_voltage:F2}V\n" +
-                                $"Tensão do potenciômetro: {pot_voltage:F2}V\n"));
-
-                    // Fetch instrumentation data
-                    response = client.GetAsync("instrumentation-system").Result;
-                    jsonContent = response.Content.ReadAsStringAsync().Result;
 
                     // Parse "current_motor", "current_battery", "current_mppt" and "voltage_battery" from json
-                    jsonObject = JObject.Parse(jsonContent);
+                    JObject jsonObject = JObject.Parse(jsonContent);
                     float battery_voltage = (float)jsonObject["battery_voltage"];
                     float motor_current = (float)jsonObject["motor_current"];
                     float battery_current = (float)jsonObject["battery_current"];
-                    float mppt_current = (float)jsonObject["mppt_current"];
-                    
+                    float mppt_current = (float)jsonObject["mppt_current"] * 10;
+
                     FormDados.motorCurrent = motor_current;
                     FormDados.batteryCurrent = battery_current;
                     FormDados.mpptCurrent = mppt_current;
                     FormDados.mainBatteryVoltage = battery_voltage;
                     FormDados.generationPower = mppt_current * battery_voltage;
-                    FormDados.consumptionPower = battery_current * battery_voltage;
-                    
+                    FormDados.consumptionPower = battery_current * battery_voltage;       
                     FormDados.resultantPower = FormDados.generationPower + FormDados.consumptionPower;
 
-                    // Do something with the parsed values
-                    Console.WriteLine($"Current Motor: {motor_current}");
-                    Console.WriteLine($"Current Battery: {battery_current}");
-                    Console.WriteLine($"Current MPPT: {mppt_current}");
-                    Console.WriteLine($"Voltage Battery: {battery_voltage}");
+                    Console.WriteLine("VPN-instrumentation=system");
 
                     formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
                         $"Tensão da bateria: {battery_voltage:F2}V\n" +
@@ -343,6 +325,8 @@ namespace SimpleExample
                         $"Temperatura da bateria: {temperature_battery_string}\n" +
                         $"Temperatura do MPPT: {temperature_mppt_string}\n"));
 
+                    Console.WriteLine("VPN-temperature-system");
+
                     // Fetch GPS data
                     response = client.GetAsync("gps-system").Result;
                     jsonContent = response.Content.ReadAsStringAsync().Result;
@@ -361,6 +345,13 @@ namespace SimpleExample
                     FormDados.speed = speed;
                     FormDados.satellites = satellites;
 
+                    if ((latitude != -1.0f) && (longitude != -1.0f))
+                    {
+                        formMapa.UpdateLocation(latitude, longitude);
+                    }
+
+                    Console.WriteLine("VPN-gps-system");
+
                     //formDados.labelGPSData.BeginInvoke(new Action(() => formDados.labelGPSData.Text =
                     //             $"Latitude: {latitude}\n" +
                     //             $"Longitude: {longitude}\n" +
@@ -369,37 +360,12 @@ namespace SimpleExample
                     //             $"Satélites: {satellites}\n"));
                     //             
 
-                    // Get auxiliary data
-
-                    // Fetch "auxiliary" from JSON
-                    response = client.GetAsync("auxiliary-system").Result;
-                    jsonContent = response.Content.ReadAsStringAsync().Result;
-
-                    // Parse "auxiliary" from JSON
-                    jsonObject = JObject.Parse(jsonContent);
-                    float aux_current = (float)jsonObject["aux_current"];
-                    float aux_voltage = (float)jsonObject["aux_voltage"];
-                    byte pumps = (byte)jsonObject["pumps"];
-                    String leftPumpState = DecodePumpMask(pumps, 1);
-                    String rightPumpState = DecodePumpMask(pumps, 0);
-
-                    FormDados.auxBatteryCurrent = aux_current;
-                    FormDados.auxBatteryVoltage = aux_voltage;
-                    FormDados.pumpMask = pumps;
-
-                    formDados.labelAuxiliaryData.BeginInvoke(new Action(() => formDados.labelAuxiliaryData.Text =
-                        $"Tensão da bateria auxiliar: {aux_voltage:F2}V\n" +
-                        $"Corrente da bateria auxiliar: {aux_current:F2}A\n" +
-                        $"Bomba de bombordo: {leftPumpState}\n" +
-                        $"Bomba de boreste: {rightPumpState}\n"));
-
-
                 }
                 catch (Exception exc)
                 {
                     Console.WriteLine(exc.Message);
                 }
-                System.Threading.Thread.Sleep(5000);
+                System.Threading.Thread.Sleep(2000);
             }
         }
 
@@ -422,6 +388,17 @@ namespace SimpleExample
                         formDados.labelControlData.BeginInvoke( new Action(() => formDados.labelControlData.Text = 
                             $"Sinal Pot:{payload.potentiometer_signal:F2}V\n" +
                             $"Sinal Encoder:{payload.dac_output:F2}V\n"));
+
+                        string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                        string fileName = "control-system.csv";
+                        string path = Path.Combine(fileName, currentDirectory);
+                        using (StreamWriter dataLogger = new StreamWriter(path, true))
+                        {
+                            string timestamp = DateTime.Now.ToString("HH:mm:ss");
+                            string csvData = $"{timestamp}, {payload.potentiometer_signal}, {payload.dac_output}";
+                            dataLogger.WriteLine(csvData);
+                            dataLogger.Flush();
+                        }
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.INSTRUMENTATION:
@@ -429,10 +406,10 @@ namespace SimpleExample
                         var payload = (Mavlink.mavlink_instrumentation_t)message.Payload;
                         float motor_current = payload.motor_current;
                         float battery_current = payload.battery_current;
-                        float mppt_current = payload.mppt_current;
+                        float mppt_current = payload.mppt_current * 10;
                         float battery_voltage = payload.battery_voltage;
                         float generation_power = battery_voltage * mppt_current;
-                        float consumption_power = battery_voltage * motor_current;
+                        float consumption_power = battery_voltage * battery_current;
                         float resultant_power = generation_power - consumption_power;
 
                         FormDados.motorCurrent = motor_current;
@@ -450,7 +427,18 @@ namespace SimpleExample
                             $"Corrente do MPPT: {mppt_current:F2}A\n" +
                             $"Potência de geração: {generation_power:F2}W\n" +
                             $"Potência de consumo: {consumption_power:F2}W\n" +
-                            $"Potência resultante: {resultant_power:F2}W\n"));                 
+                            $"Potência resultante: {resultant_power:F2}W\n"));
+
+                        string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                        string fileName = "instrumentation-system.csv";
+                        string path = Path.Combine(fileName, currentDirectory);
+                        using (StreamWriter dataLogger = new StreamWriter(path, true))
+                        {
+                            string timestamp = DateTime.Now.ToString("HH:mm:ss");
+                            string csvData = $"{timestamp}, {battery_voltage}, {motor_current}, {battery_current}, {mppt_current}";
+                            dataLogger.WriteLine(csvData);
+                            dataLogger.Flush();
+                        }
                         break;
                     }
                 case (byte)Mavlink.MAVLINK_MSG_ID.TEMPERATURES:
@@ -481,6 +469,17 @@ namespace SimpleExample
                             $"Temperatura do motor: {temperature_motor}\n" +
                             $"Temperatura da bateria: {temperature_battery}\n" +
                             $"Temperatura do MPPT: {temperature_mppt}\n"));
+
+                        string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                        string fileName = "temperature-system.csv";
+                        string path = Path.Combine(fileName, currentDirectory);
+                        using (StreamWriter dataLogger = new StreamWriter(path, true))
+                        {
+                            string timestamp = DateTime.Now.ToString("HH:mm:ss");
+                            string csvData = $"{timestamp}, {temperature_motor}, {temperature_battery}, {temperature_mppt}";
+                            dataLogger.WriteLine(csvData);
+                            dataLogger.Flush();
+                        }
                         break;
                     }
 
@@ -505,6 +504,17 @@ namespace SimpleExample
                             formMapa.UpdateLocation(latitude, longitude);
                         }
 
+                        string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                        string fileName = "gps-system.csv";
+                        string path = Path.Combine(fileName, currentDirectory);
+                        using (StreamWriter dataLogger = new StreamWriter(path, true))
+                        {
+                            string timestamp = DateTime.Now.ToString("HH:mm:ss");
+                            string csvData = $"{timestamp}, {latitude}, {longitude}, {course}, {speed}, {satellites}";
+                            dataLogger.WriteLine(csvData);
+                            dataLogger.Flush();
+                        }
+
                         Console.WriteLine($"GPS received: Lat:{latitude}/Long:{longitude}/Course:{course}/Speed:{speed}/Satellites:{satellites}");                    
                         break;
                     }
@@ -526,6 +536,17 @@ namespace SimpleExample
                             $"Corrente da bateria: {aux_current:F2}A\n" +
                             $"Bomba esquerda: {leftPumpState}\n" +
                             $"Bomba direita: {rightPumpState}\n"));
+
+                        string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                        string fileName = "auxiliary-system.csv";
+                        string path = Path.Combine(fileName, currentDirectory);
+                        using (StreamWriter dataLogger = new StreamWriter(path, true))
+                        {
+                            string timestamp = DateTime.Now.ToString("HH:mm:ss");
+                            string csvData = $"{timestamp}, {aux_current}, {aux_voltage}, {pumps}";
+                            dataLogger.WriteLine(csvData);
+                            dataLogger.Flush();
+                        }
                         break;
                     }
                 default:
