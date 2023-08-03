@@ -13,6 +13,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using CefSharp;
 
 namespace SimpleExample
 {
@@ -98,8 +99,12 @@ namespace SimpleExample
         private void GroundStation_Load(object sender, EventArgs e)
         {
            
-                SetSerialPortDefaults("COM5", 4800);
-                LoadForms();
+            //SetSerialPortDefaults("COM5", 4800);
+            LoadForms();
+            panelTopLeft.Enabled = false;
+            panelTopLeft.Visible = false;
+            pictureBoxArariboia.Enabled = false;
+            pictureBoxArariboia.Visible = false;
 
         }
 
@@ -113,8 +118,7 @@ namespace SimpleExample
                 form.Show();
             }
             panelFormLoader.Controls.Clear();
-            panelFormLoader.Controls.Add(formMapa);
-            panelFormLoader.Dock = DockStyle.Fill;
+            panelFormLoader.Controls.Add(formDados);
             panelFormLoader.Show();
 
             formBrowser.Scale(new SizeF(0.5f, 0.5f));
@@ -125,26 +129,7 @@ namespace SimpleExample
             
         }
 
-        private void SetSerialPortDefaults(string portName, int baudRate)
-        {
-           
-            comboBoxBaudRate.SelectedItem = baudRate.ToString();
-            String[] portNames = SerialPort.GetPortNames();   
-            comboBoxSerialPort.DataSource = portNames;
-            if (portNames.Length == 0) return;
-            foreach (var item in SerialPort.GetPortNames())
-            {
-                // Sets default value
-                if (item == portName)
-                {
-                    comboBoxSerialPort.SelectedItem = item;
-                    buttonConnect.PerformClick();
-                }             
-            }        
-        }
-
         #endregion
-
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
@@ -154,16 +139,16 @@ namespace SimpleExample
                 if (serialPort1.IsOpen)
                 {
                     serialPort1.Close();
-                    buttonConnect.Text = "Abrir";
+                    buttonConnect.Text = "Ligar rádio";
                     return;
                 }
 
                 // Configure the port based on selected options and opens it.
-                serialPort1.PortName = comboBoxSerialPort.SelectedItem.ToString();
-                serialPort1.BaudRate = int.Parse(comboBoxBaudRate.SelectedItem.ToString());
+                serialPort1.PortName = FormConfigurações.instance.comboBoxSerialPort.SelectedItem.ToString();
+                serialPort1.BaudRate = int.Parse(FormConfigurações.instance.comboBoxBaudRate.SelectedItem.ToString());
                 serialPort1.ReadTimeout = 2000;
                 serialPort1.Open();
-                buttonConnect.Text = "Fechar";
+                buttonConnect.Text = "Desligar rádio";
 
                 // Read data from serial port on a background thread in order to not block the UI thread.        
                 BackgroundWorker workerSerialPort = new BackgroundWorker();
@@ -178,39 +163,20 @@ namespace SimpleExample
 
         private void buttonHTTPConnect_Click(object sender, EventArgs e)
         {
-            // Take the hostname from the textbox and start making HTTP requests periodically to the server.
+            // Take the hostname from the configurations and start making HTTP requests periodically to the server.
             // The routes are the same as the Mavlink message names.
             // The server will respond with the latest data present in the vehicle.
 
-            if (textBoxHostname.Texts == String.Empty)
-            {
-                MessageBox.Show("Insira um endereço válido.");
-                return;
-            }
-            else if (textBoxHostname.Texts == "localhost")
-            {
-                MessageBox.Show("Não é possível conectar ao localhost.");
-                return;
-            }
-
-            if (buttonHTTPConnect.Text == "Conectar")
+            if (buttonHTTPConnect.Text == "Ligar rede")
             {
                 // Check if hostname exists on the network
                 // If it does, start making HTTP requests to the server
                 
-
-
-                buttonHTTPConnect.Text = "Desconectar";
-                textBoxHostname.Enabled = false;
-                // Gray out text box
-                textBoxHostname.BackColor = Color.FromArgb(46, 51, 73);
+                buttonHTTPConnect.Text = "Desligar rede";
             } 
-            else if (buttonHTTPConnect.Text == "Desconectar")
+            else if (buttonHTTPConnect.Text == "Desligar rede")
             {
-                buttonHTTPConnect.Text = "Conectar";
-                textBoxHostname.Enabled = true;
-                // Restore text box color
-                textBoxHostname.BackColor = Color.FromArgb(255, 255, 255);
+                buttonHTTPConnect.Text = "Ligar rede";
                 return;
             }
 
@@ -259,8 +225,30 @@ namespace SimpleExample
         {
             while (buttonHTTPConnect.Text == "Desconectar")
             {
+                string hostname = String.Empty;
+                string connectionType = String.Empty;
+                this.Invoke((MethodInvoker)delegate
+                {
+                    connectionType = formConfigurações.fancyComboBoxNetConnectionType.SelectedItem.ToString();
+                    
+                    if (connectionType == "Local")
+                    {
+                        hostname = formConfigurações.rjTextBoxLocalHostname.Texts;
+                    }
+                    else if (connectionType == "VPN")
+                    {
+                        hostname = formConfigurações.rjTextBoxVPNHostname.Texts;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro ao selecionar nome de host. Verifique as configurações.");
+                        return;
+                    }
+
+                });
+
                 HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri($"http://{textBoxHostname.Texts}:80/");
+                client.BaseAddress = new Uri($"http://{hostname}:80/");
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 
                 try
@@ -597,16 +585,6 @@ namespace SimpleExample
         }
    
         /// <summary>
-        /// Updates the serial port list when the user clicks on the combo box.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void comboBoxSerialPort_Click(object sender, EventArgs e)
-        {
-            comboBoxSerialPort.DataSource = SerialPort.GetPortNames();      
-        }
-
-        /// <summary>
         /// Sets the form loader panel back to small size.
         /// </summary>
         private void SetFormLoaderSmall()
@@ -665,8 +643,13 @@ namespace SimpleExample
             panelFormLoader.Controls.Clear();
             panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Controls.Add(formBrowser);
-            formBrowser.Show();
-            
+            panelFormLoader.Show();
+
+            panelTopLeft.Enabled = true;
+            panelTopLeft.Visible = true;
+            pictureBoxArariboia.Enabled = true;
+            pictureBoxArariboia.Visible = true;
+
         }
 
         /// <summary>
@@ -682,6 +665,14 @@ namespace SimpleExample
             panelNav.Left = button.Left;
             panelNav.BringToFront();
             button.BackColor = Color.FromArgb(46, 51, 73);
+            panelSecondaryFormLoader.Controls.Clear();
+            panelSecondaryFormLoader.Controls.Add(formBrowser);
+            panelSecondaryFormLoader.Show();
+
+            panelTopLeft.Enabled = false;
+            panelTopLeft.Visible = false;
+            pictureBoxArariboia.Enabled = false;
+            pictureBoxArariboia.Visible = false;
         }
     
         private void button_Leave(object sender, EventArgs e)
@@ -729,6 +720,27 @@ namespace SimpleExample
 
         }
 
+        private void panelSecondaryFormLoader_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
 
+        }
+
+        private void pictureBoxArariboia_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            panelTopLeft.Enabled = false;
+            panelTopLeft.Visible = false;
+            pictureBoxArariboia.Enabled = false;
+            pictureBoxArariboia.Visible = false;
+        }
+
+        private void pictureBoxArariboia_DoubleClick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonRastreio_DragDrop(object sender, DragEventArgs e)
+        {
+
+        }
     }
 }

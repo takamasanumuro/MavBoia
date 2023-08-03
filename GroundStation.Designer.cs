@@ -39,22 +39,19 @@
             this.buttonMapa = new System.Windows.Forms.Button();
             this.panelNav = new System.Windows.Forms.Panel();
             this.buttonConfigurações = new System.Windows.Forms.Button();
-            this.panelTopLeft = new System.Windows.Forms.Panel();
-            this.panelTopRight = new System.Windows.Forms.Panel();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panelFormLoader = new System.Windows.Forms.Panel();
             this.buttonConnect = new CustomControls.RJControls.RJButton();
             this.labelTitleSelection = new System.Windows.Forms.Label();
             this.buttonExit = new System.Windows.Forms.Button();
             this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.buttonHTTPConnect = new CustomControls.RJControls.RJButton();
-            this.textBoxHostname = new CustomControls.RJControls.RJTextBox();
-            this.comboBoxSerialPort = new CustomControls.FancyComboBox();
-            this.comboBoxBaudRate = new CustomControls.FancyComboBox();
+            this.panelTopRight = new System.Windows.Forms.Panel();
+            this.panelTopLeft = new System.Windows.Forms.Panel();
+            this.pictureBoxArariboia = new System.Windows.Forms.PictureBox();
             this.panelLateral.SuspendLayout();
-            this.panelTopLeft.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mavlinkheartbeattBindingSource)).BeginInit();
+            this.panelTopLeft.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxArariboia)).BeginInit();
             this.SuspendLayout();
             // 
             // panelLateral
@@ -83,6 +80,7 @@
             this.panelSecondaryFormLoader.Name = "panelSecondaryFormLoader";
             this.panelSecondaryFormLoader.Size = new System.Drawing.Size(228, 203);
             this.panelSecondaryFormLoader.TabIndex = 14;
+            this.panelSecondaryFormLoader.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.panelSecondaryFormLoader_MouseDoubleClick);
             // 
             // buttonRastreio
             // 
@@ -101,6 +99,7 @@
             this.buttonRastreio.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.buttonRastreio.UseVisualStyleBackColor = true;
             this.buttonRastreio.Click += new System.EventHandler(this.buttonRastreio_Click);
+            this.buttonRastreio.DragDrop += new System.Windows.Forms.DragEventHandler(this.buttonRastreio_DragDrop);
             // 
             // buttonGraficos
             // 
@@ -187,36 +186,6 @@
             this.buttonConfigurações.Click += new System.EventHandler(this.buttonConfigurações_Click);
             this.buttonConfigurações.Leave += new System.EventHandler(this.button_Leave);
             // 
-            // panelTopLeft
-            // 
-            this.panelTopLeft.Controls.Add(this.panelTopRight);
-            this.panelTopLeft.Controls.Add(this.pictureBox2);
-            this.panelTopLeft.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTopLeft.Location = new System.Drawing.Point(0, 0);
-            this.panelTopLeft.Name = "panelTopLeft";
-            this.panelTopLeft.Size = new System.Drawing.Size(228, 119);
-            this.panelTopLeft.TabIndex = 7;
-            // 
-            // panelTopRight
-            // 
-            this.panelTopRight.Location = new System.Drawing.Point(255, 3);
-            this.panelTopRight.Name = "panelTopRight";
-            this.panelTopRight.Size = new System.Drawing.Size(910, 113);
-            this.panelTopRight.TabIndex = 17;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(228, 119);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown_Drag);
-            this.pictureBox2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove_Drag);
-            // 
             // panelFormLoader
             // 
             this.panelFormLoader.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -236,11 +205,11 @@
             this.buttonConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonConnect.ForeColor = System.Drawing.Color.Coral;
-            this.buttonConnect.Location = new System.Drawing.Point(437, 12);
+            this.buttonConnect.Location = new System.Drawing.Point(446, 6);
             this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(81, 31);
+            this.buttonConnect.Size = new System.Drawing.Size(137, 31);
             this.buttonConnect.TabIndex = 17;
-            this.buttonConnect.Text = "Abrir";
+            this.buttonConnect.Text = "Ligar rádio";
             this.buttonConnect.TextColor = System.Drawing.Color.Coral;
             this.buttonConnect.UseVisualStyleBackColor = false;
             this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
@@ -288,84 +257,46 @@
             this.buttonHTTPConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonHTTPConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonHTTPConnect.ForeColor = System.Drawing.Color.Coral;
-            this.buttonHTTPConnect.Location = new System.Drawing.Point(777, 12);
+            this.buttonHTTPConnect.Location = new System.Drawing.Point(607, 6);
             this.buttonHTTPConnect.Name = "buttonHTTPConnect";
-            this.buttonHTTPConnect.Size = new System.Drawing.Size(107, 31);
+            this.buttonHTTPConnect.Size = new System.Drawing.Size(155, 31);
             this.buttonHTTPConnect.TabIndex = 18;
-            this.buttonHTTPConnect.Text = "Conectar";
+            this.buttonHTTPConnect.Text = "Ligar rede";
             this.buttonHTTPConnect.TextColor = System.Drawing.Color.Coral;
             this.buttonHTTPConnect.UseVisualStyleBackColor = false;
             this.buttonHTTPConnect.Click += new System.EventHandler(this.buttonHTTPConnect_Click);
             // 
-            // textBoxHostname
+            // panelTopRight
             // 
-            this.textBoxHostname.BackColor = System.Drawing.SystemColors.Window;
-            this.textBoxHostname.BorderColor = System.Drawing.Color.MediumSlateBlue;
-            this.textBoxHostname.BorderFocusColor = System.Drawing.Color.HotPink;
-            this.textBoxHostname.BorderRadius = 0;
-            this.textBoxHostname.BorderSize = 2;
-            this.textBoxHostname.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxHostname.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textBoxHostname.Location = new System.Drawing.Point(584, 12);
-            this.textBoxHostname.Margin = new System.Windows.Forms.Padding(4);
-            this.textBoxHostname.Multiline = false;
-            this.textBoxHostname.Name = "textBoxHostname";
-            this.textBoxHostname.Padding = new System.Windows.Forms.Padding(10, 7, 10, 7);
-            this.textBoxHostname.PasswordChar = false;
-            this.textBoxHostname.PlaceholderColor = System.Drawing.Color.DarkGray;
-            this.textBoxHostname.PlaceholderText = "";
-            this.textBoxHostname.Size = new System.Drawing.Size(168, 31);
-            this.textBoxHostname.TabIndex = 19;
-            this.textBoxHostname.Texts = "";
-            this.textBoxHostname.UnderlinedStyle = false;
+            this.panelTopRight.Location = new System.Drawing.Point(255, 3);
+            this.panelTopRight.Name = "panelTopRight";
+            this.panelTopRight.Size = new System.Drawing.Size(910, 113);
+            this.panelTopRight.TabIndex = 17;
             // 
-            // comboBoxSerialPort
+            // panelTopLeft
             // 
-            this.comboBoxSerialPort.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.comboBoxSerialPort.BorderColor = System.Drawing.Color.MediumSlateBlue;
-            this.comboBoxSerialPort.BorderSize = 1;
-            this.comboBoxSerialPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
-            this.comboBoxSerialPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.comboBoxSerialPort.ForeColor = System.Drawing.Color.DimGray;
-            this.comboBoxSerialPort.IconColor = System.Drawing.Color.MediumSlateBlue;
-            this.comboBoxSerialPort.ListBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
-            this.comboBoxSerialPort.ListTextColor = System.Drawing.Color.DimGray;
-            this.comboBoxSerialPort.Location = new System.Drawing.Point(234, 12);
-            this.comboBoxSerialPort.MinimumSize = new System.Drawing.Size(30, 10);
-            this.comboBoxSerialPort.Name = "comboBoxSerialPort";
-            this.comboBoxSerialPort.Padding = new System.Windows.Forms.Padding(1);
-            this.comboBoxSerialPort.Size = new System.Drawing.Size(92, 31);
-            this.comboBoxSerialPort.TabIndex = 12;
-            this.comboBoxSerialPort.Texts = "";
-            this.comboBoxSerialPort.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxSerialPort_OnSelectedIndexChanged);
-            this.comboBoxSerialPort.Click += new System.EventHandler(this.comboBoxSerialPort_Click);
+            this.panelTopLeft.Controls.Add(this.panelTopRight);
+            this.panelTopLeft.Controls.Add(this.pictureBoxArariboia);
+            this.panelTopLeft.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTopLeft.Location = new System.Drawing.Point(0, 0);
+            this.panelTopLeft.Name = "panelTopLeft";
+            this.panelTopLeft.Size = new System.Drawing.Size(228, 119);
+            this.panelTopLeft.TabIndex = 7;
             // 
-            // comboBoxBaudRate
+            // pictureBoxArariboia
             // 
-            this.comboBoxBaudRate.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.comboBoxBaudRate.BorderColor = System.Drawing.Color.MediumSlateBlue;
-            this.comboBoxBaudRate.BorderSize = 1;
-            this.comboBoxBaudRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
-            this.comboBoxBaudRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.comboBoxBaudRate.ForeColor = System.Drawing.Color.DimGray;
-            this.comboBoxBaudRate.IconColor = System.Drawing.Color.MediumSlateBlue;
-            this.comboBoxBaudRate.Items.AddRange(new object[] {
-            "4800",
-            "9600",
-            "19200",
-            "57600",
-            "115200",
-            "915200"});
-            this.comboBoxBaudRate.ListBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
-            this.comboBoxBaudRate.ListTextColor = System.Drawing.Color.DimGray;
-            this.comboBoxBaudRate.Location = new System.Drawing.Point(332, 12);
-            this.comboBoxBaudRate.MinimumSize = new System.Drawing.Size(30, 10);
-            this.comboBoxBaudRate.Name = "comboBoxBaudRate";
-            this.comboBoxBaudRate.Padding = new System.Windows.Forms.Padding(1);
-            this.comboBoxBaudRate.Size = new System.Drawing.Size(99, 31);
-            this.comboBoxBaudRate.TabIndex = 16;
-            this.comboBoxBaudRate.Texts = "";
-            this.comboBoxBaudRate.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxBaudRate_OnSelectedIndexChanged);
+            this.pictureBoxArariboia.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBoxArariboia.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxArariboia.Image")));
+            this.pictureBoxArariboia.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxArariboia.Name = "pictureBoxArariboia";
+            this.pictureBoxArariboia.Size = new System.Drawing.Size(228, 119);
+            this.pictureBoxArariboia.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxArariboia.TabIndex = 0;
+            this.pictureBoxArariboia.TabStop = false;
+            this.pictureBoxArariboia.DoubleClick += new System.EventHandler(this.pictureBoxArariboia_DoubleClick);
+            this.pictureBoxArariboia.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pictureBoxArariboia_MouseDoubleClick);
+            this.pictureBoxArariboia.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown_Drag);
+            this.pictureBoxArariboia.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove_Drag);
             // 
             // GroundStation
             // 
@@ -377,20 +308,17 @@
             this.Controls.Add(this.labelTitleSelection);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.panelLateral);
-            this.Controls.Add(this.comboBoxSerialPort);
-            this.Controls.Add(this.comboBoxBaudRate);
             this.Controls.Add(this.buttonConnect);
             this.Controls.Add(this.buttonHTTPConnect);
-            this.Controls.Add(this.textBoxHostname);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "GroundStation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "6";
             this.Load += new System.EventHandler(this.GroundStation_Load);
             this.panelLateral.ResumeLayout(false);
-            this.panelTopLeft.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mavlinkheartbeattBindingSource)).EndInit();
+            this.panelTopLeft.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxArariboia)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -400,24 +328,21 @@
         private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.BindingSource mavlinkheartbeattBindingSource;
         private System.Windows.Forms.Panel panelLateral;
-        private System.Windows.Forms.Panel panelTopLeft;
-        private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button buttonConfigurações;
         private System.Windows.Forms.Panel panelNav;
         private System.Windows.Forms.Button buttonExit;
         private System.Windows.Forms.Button buttonDados;
         private System.Windows.Forms.Panel panelFormLoader;
         private System.Windows.Forms.Button buttonMapa;
-        private System.Windows.Forms.Panel panelTopRight;
-        private CustomControls.FancyComboBox comboBoxBaudRate;
-        private CustomControls.FancyComboBox comboBoxSerialPort;
-        private CustomControls.RJControls.RJButton buttonConnect;
         private System.Windows.Forms.Label labelTitleSelection;
         private System.Windows.Forms.Button buttonGraficos;
         private System.Windows.Forms.Button buttonRastreio;
         private CustomControls.RJControls.RJButton buttonHTTPConnect;
-        private CustomControls.RJControls.RJTextBox textBoxHostname;
         private System.Windows.Forms.Panel panelSecondaryFormLoader;
+        internal CustomControls.RJControls.RJButton buttonConnect;
+        private System.Windows.Forms.Panel panelTopLeft;
+        private System.Windows.Forms.Panel panelTopRight;
+        private System.Windows.Forms.PictureBox pictureBoxArariboia;
     }
 }
 
