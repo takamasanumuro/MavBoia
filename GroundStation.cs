@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using CefSharp;
+using CefSharp.DevTools.Network;
 
 namespace SimpleExample
 {
@@ -197,6 +198,17 @@ namespace SimpleExample
                 try
                 {
                     Mavlink.MavlinkMessage message;
+                    //Mavlink.MavlinkMessage message = new Mavlink.MavlinkMessage(mavlinkParser.GenerateMAVLinkPacket10(Mavlink.MAVLINK_MSG_ID.INSTRUMENTATION,
+                    //    new Mavlink.mavlink_instrumentation_t()
+                    //    {
+                    //        battery_current = 1,
+                    //        battery_voltage = 2,
+                    //        motor_current = 3,
+                    //        mppt_current = 4
+                    //    }));
+                    //ProcessMessage(message);
+                    //System.Threading.Thread.Sleep(2000);
+                    //continue;
 
                     lock (serialLock);
                     {
@@ -223,7 +235,7 @@ namespace SimpleExample
 
         private void workerHTTPConnection_FetchData(object sender, DoWorkEventArgs e)
         {
-            while (buttonHTTPConnect.Text == "Desconectar")
+            while (buttonHTTPConnect.Text == "Desligar rede")
             {
                 string hostname = String.Empty;
                 string connectionType = String.Empty;
@@ -258,7 +270,6 @@ namespace SimpleExample
                     HttpResponseMessage response = client.GetAsync("instrumentation-system").Result;
                     string jsonContent = response.Content.ReadAsStringAsync().Result;
 
-
                     // Parse "current_motor", "current_battery", "current_mppt" and "voltage_battery" from json
                     JObject jsonObject = JObject.Parse(jsonContent);
                     float battery_voltage = (float)jsonObject["battery_voltage"];
@@ -284,6 +295,26 @@ namespace SimpleExample
                         $"Potência de geração: {FormDados.generationPower:F0}W\n" +
                         $"Potência de consumo: {FormDados.consumptionPower:F0}W\n" +
                         $"Potência resultante: {FormDados.resultantPower:F0}W\n"));
+
+                    string directory = String.Empty;
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        directory = formConfigurações.rjTextBoxLogDirectory.Texts;
+                        if (directory == String.Empty)
+                        {
+                            MessageBox.Show("Invalid directory!");
+                        }
+                    });
+
+                    string fileName = "instrumentation-system.csv";
+                    string path = Path.Combine(directory, fileName);
+                    using (StreamWriter dataLogger = new StreamWriter(path, true))
+                    {
+                        string timestamp = DateTime.Now.ToString("HH:mm:ss");
+                        string csvData = $"{timestamp}, {battery_voltage}, {motor_current}, {battery_current}, {mppt_current}";
+                        dataLogger.WriteLine(csvData);
+                        dataLogger.Flush();
+                    }
 
                     // Fetch temperatures
                     response = client.GetAsync("temperature-system").Result;
@@ -322,6 +353,26 @@ namespace SimpleExample
 
                     Console.WriteLine("VPN-temperature-system");
 
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        directory = formConfigurações.rjTextBoxLogDirectory.Texts;
+                        if (directory == String.Empty)
+                        {
+                            MessageBox.Show("Invalid directory!");
+                        }
+                    });
+
+                    fileName = "temperature-system.csv";
+                    path = Path.Combine(directory, fileName);
+
+                    using (StreamWriter dataLogger = new StreamWriter(path, true))
+                    {
+                        string timestamp = DateTime.Now.ToString("HH:mm:ss");
+                        string csvData = $"{timestamp}, {temperature_motor}, {temperature_battery}, {temperature_mppt}";
+                        dataLogger.WriteLine(csvData);
+                        dataLogger.Flush();
+                    }
+
                     // Fetch GPS data
                     response = client.GetAsync("gps-system").Result;
                     jsonContent = response.Content.ReadAsStringAsync().Result;
@@ -346,6 +397,26 @@ namespace SimpleExample
                     }
 
                     Console.WriteLine("VPN-gps-system");
+
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        directory = formConfigurações.rjTextBoxLogDirectory.Texts;
+                        if (directory == String.Empty)
+                        {
+                            MessageBox.Show("Invalid directory!");
+                        }
+                    });
+
+                    fileName = "gps-system.csv";
+                    path = Path.Combine(directory, fileName);
+
+                    using (StreamWriter dataLogger = new StreamWriter(path, true))
+                    {
+                        string timestamp = DateTime.Now.ToString("HH:mm:ss");
+                        string csvData = $"{timestamp}, {latitude}, {longitude}, {course}, {speed}, {satellites}";
+                        dataLogger.WriteLine(csvData);
+                        dataLogger.Flush();
+                    }
 
                     //formDados.labelGPSData.BeginInvoke(new Action(() => formDados.labelGPSData.Text =
                     //             $"Latitude: {latitude}\n" +
@@ -384,9 +455,18 @@ namespace SimpleExample
                             $"Sinal Pot:{payload.potentiometer_signal:F2}V\n" +
                             $"Sinal Encoder:{payload.dac_output:F2}V\n"));
 
-                        string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                        string directory = String.Empty;
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            directory = formConfigurações.rjTextBoxLogDirectory.Texts;
+                            if (directory == String.Empty)
+                            {
+                                MessageBox.Show("Invalid directory!");
+                            }
+                        });
+
                         string fileName = "control-system.csv";
-                        string path = Path.Combine(fileName, currentDirectory);
+                        string path = Path.Combine(directory, fileName);
                         using (StreamWriter dataLogger = new StreamWriter(path, true))
                         {
                             string timestamp = DateTime.Now.ToString("HH:mm:ss");
@@ -424,9 +504,18 @@ namespace SimpleExample
                             $"Potência de consumo: {consumption_power:F2}W\n" +
                             $"Potência resultante: {resultant_power:F2}W\n"));
 
-                        string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                        string directory = String.Empty;
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            directory = formConfigurações.rjTextBoxLogDirectory.Texts;
+                            if (directory == String.Empty)
+                            {
+                                MessageBox.Show("Invalid directory!");
+                            }
+                        });
+
                         string fileName = "instrumentation-system.csv";
-                        string path = Path.Combine(fileName, currentDirectory);
+                        string path = Path.Combine(directory, fileName);
                         using (StreamWriter dataLogger = new StreamWriter(path, true))
                         {
                             string timestamp = DateTime.Now.ToString("HH:mm:ss");
@@ -465,9 +554,19 @@ namespace SimpleExample
                             $"Temperatura da bateria: {temperature_battery}\n" +
                             $"Temperatura do MPPT: {temperature_mppt}\n"));
 
-                        string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                        string directory = String.Empty;
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            directory = formConfigurações.rjTextBoxLogDirectory.Texts;
+                            if (directory == String.Empty)
+                            {
+                                MessageBox.Show("Invalid directory!");
+                            }
+                        });
+
                         string fileName = "temperature-system.csv";
-                        string path = Path.Combine(fileName, currentDirectory);
+                        string path = Path.Combine(directory, fileName);
+
                         using (StreamWriter dataLogger = new StreamWriter(path, true))
                         {
                             string timestamp = DateTime.Now.ToString("HH:mm:ss");
@@ -499,9 +598,19 @@ namespace SimpleExample
                             formMapa.UpdateLocation(latitude, longitude);
                         }
 
-                        string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                        string directory = String.Empty;
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            directory = formConfigurações.rjTextBoxLogDirectory.Texts;
+                            if (directory == String.Empty)
+                            {
+                                MessageBox.Show("Invalid directory!");
+                            }
+                        });
+
                         string fileName = "gps-system.csv";
-                        string path = Path.Combine(fileName, currentDirectory);
+                        string path = Path.Combine(directory, fileName);
+
                         using (StreamWriter dataLogger = new StreamWriter(path, true))
                         {
                             string timestamp = DateTime.Now.ToString("HH:mm:ss");
@@ -532,9 +641,19 @@ namespace SimpleExample
                             $"Bomba esquerda: {leftPumpState}\n" +
                             $"Bomba direita: {rightPumpState}\n"));
 
-                        string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                        string fileName = "auxiliary-system.csv";
-                        string path = Path.Combine(fileName, currentDirectory);
+                        string directory = String.Empty;
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            directory = formConfigurações.rjTextBoxLogDirectory.Texts;
+                            if (directory == String.Empty)
+                            {
+                                MessageBox.Show("Invalid directory!");
+                            }
+                        });
+
+                        string fileName = "aux-system.csv";
+                        string path = Path.Combine(directory, fileName);
+
                         using (StreamWriter dataLogger = new StreamWriter(path, true))
                         {
                             string timestamp = DateTime.Now.ToString("HH:mm:ss");

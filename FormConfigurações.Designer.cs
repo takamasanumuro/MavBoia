@@ -42,7 +42,7 @@
             this.comboBoxSerialPort = new CustomControls.FancyComboBox();
             this.comboBoxBaudRate = new CustomControls.FancyComboBox();
             this.labelLogDirectory = new System.Windows.Forms.Label();
-            this.rjTextBox1 = new CustomControls.RJControls.RJTextBox();
+            this.rjTextBoxLogDirectory = new CustomControls.RJControls.RJTextBox();
             this.SuspendLayout();
             // 
             // rjTextBoxLocalHostname
@@ -269,27 +269,28 @@
             this.labelLogDirectory.TabIndex = 31;
             this.labelLogDirectory.Text = "Diretório para logger";
             // 
-            // rjTextBox1
+            // rjTextBoxLogDirectory
             // 
-            this.rjTextBox1.BackColor = System.Drawing.SystemColors.Window;
-            this.rjTextBox1.BorderColor = System.Drawing.Color.MediumSlateBlue;
-            this.rjTextBox1.BorderFocusColor = System.Drawing.Color.HotPink;
-            this.rjTextBox1.BorderRadius = 0;
-            this.rjTextBox1.BorderSize = 2;
-            this.rjTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rjTextBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.rjTextBox1.Location = new System.Drawing.Point(232, 424);
-            this.rjTextBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.rjTextBox1.Multiline = false;
-            this.rjTextBox1.Name = "rjTextBox1";
-            this.rjTextBox1.Padding = new System.Windows.Forms.Padding(10, 7, 10, 7);
-            this.rjTextBox1.PasswordChar = false;
-            this.rjTextBox1.PlaceholderColor = System.Drawing.Color.DarkGray;
-            this.rjTextBox1.PlaceholderText = "";
-            this.rjTextBox1.Size = new System.Drawing.Size(116, 30);
-            this.rjTextBox1.TabIndex = 30;
-            this.rjTextBox1.Texts = "C://logs";
-            this.rjTextBox1.UnderlinedStyle = false;
+            this.rjTextBoxLogDirectory.BackColor = System.Drawing.SystemColors.Window;
+            this.rjTextBoxLogDirectory.BorderColor = System.Drawing.Color.MediumSlateBlue;
+            this.rjTextBoxLogDirectory.BorderFocusColor = System.Drawing.Color.HotPink;
+            this.rjTextBoxLogDirectory.BorderRadius = 0;
+            this.rjTextBoxLogDirectory.BorderSize = 2;
+            this.rjTextBoxLogDirectory.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rjTextBoxLogDirectory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.rjTextBoxLogDirectory.Location = new System.Drawing.Point(232, 424);
+            this.rjTextBoxLogDirectory.Margin = new System.Windows.Forms.Padding(4);
+            this.rjTextBoxLogDirectory.Multiline = false;
+            this.rjTextBoxLogDirectory.Name = "rjTextBoxLogDirectory";
+            this.rjTextBoxLogDirectory.Padding = new System.Windows.Forms.Padding(10, 7, 10, 7);
+            this.rjTextBoxLogDirectory.PasswordChar = false;
+            this.rjTextBoxLogDirectory.PlaceholderColor = System.Drawing.Color.DarkGray;
+            this.rjTextBoxLogDirectory.PlaceholderText = "";
+            this.rjTextBoxLogDirectory.Size = new System.Drawing.Size(116, 30);
+            this.rjTextBoxLogDirectory.TabIndex = 30;
+            this.rjTextBoxLogDirectory.Texts = "C://logs";
+            this.rjTextBoxLogDirectory.UnderlinedStyle = false;
+            this.rjTextBoxLogDirectory._TextChanged += new System.EventHandler(this.rjTextBoxLogDirectory__TextChanged);
             // 
             // FormConfigurações
             // 
@@ -298,7 +299,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(910, 480);
             this.Controls.Add(this.labelLogDirectory);
-            this.Controls.Add(this.rjTextBox1);
+            this.Controls.Add(this.rjTextBoxLogDirectory);
             this.Controls.Add(this.labelNetConnectionType);
             this.Controls.Add(this.fancyComboBoxNetConnectionType);
             this.Controls.Add(this.label2);
@@ -335,6 +336,6 @@
         public System.Windows.Forms.Label labelNetConnectionType;
         internal CustomControls.FancyComboBox fancyComboBoxNetConnectionType;
         public System.Windows.Forms.Label labelLogDirectory;
-        internal CustomControls.RJControls.RJTextBox rjTextBox1;
+        internal CustomControls.RJControls.RJTextBox rjTextBoxLogDirectory;
     }
 }

@@ -71,11 +71,15 @@ namespace SimpleExample
                 if (item == portName)
                 {
                     comboBoxSerialPort.SelectedItem = item;
-                    GroundStation.instance.buttonConnect.PerformClick();
                     return;
                 }
             }
             MessageBox.Show("Serial port number not found!");
+        }
+
+        private void rjTextBoxLogDirectory__TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
