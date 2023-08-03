@@ -116,6 +116,13 @@ namespace SimpleExample
             panelFormLoader.Controls.Add(formMapa);
             panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Show();
+
+            formBrowser.Scale(new SizeF(0.5f, 0.5f));
+            panelSecondaryFormLoader.Controls.Clear();
+            panelSecondaryFormLoader.Controls.Add(formBrowser);
+            panelSecondaryFormLoader.Dock = DockStyle.Fill;
+            panelSecondaryFormLoader.Show();
+            
         }
 
         private void SetSerialPortDefaults(string portName, int baudRate)
@@ -645,14 +652,14 @@ namespace SimpleExample
         {
             ButtonGenericClickCallback(sender, e);
             panelFormLoader.Controls.Clear();
-            SetFormLoaderSmall();
+            panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Controls.Add(formConfigurações);
             labelTitleSelection.Text = "Configurações";
             formConfigurações.Show();
 
         }
 
-        private void buttonCamera_Click(object sender, EventArgs e)
+        private void buttonRastreio_Click(object sender, EventArgs e)
         {
             ButtonGenericClickCallback(sender, e);
             panelFormLoader.Controls.Clear();

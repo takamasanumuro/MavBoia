@@ -32,7 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GroundStation));
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.panelLateral = new System.Windows.Forms.Panel();
-            this.buttonCamera = new System.Windows.Forms.Button();
+            this.panelSecondaryFormLoader = new System.Windows.Forms.Panel();
+            this.buttonRastreio = new System.Windows.Forms.Button();
             this.buttonGraficos = new System.Windows.Forms.Button();
             this.buttonDados = new System.Windows.Forms.Button();
             this.buttonMapa = new System.Windows.Forms.Button();
@@ -59,7 +60,8 @@
             // panelLateral
             // 
             this.panelLateral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
-            this.panelLateral.Controls.Add(this.buttonCamera);
+            this.panelLateral.Controls.Add(this.panelSecondaryFormLoader);
+            this.panelLateral.Controls.Add(this.buttonRastreio);
             this.panelLateral.Controls.Add(this.buttonGraficos);
             this.panelLateral.Controls.Add(this.buttonDados);
             this.panelLateral.Controls.Add(this.buttonMapa);
@@ -74,23 +76,31 @@
             this.panelLateral.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown_Drag);
             this.panelLateral.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove_Drag);
             // 
-            // buttonCamera
+            // panelSecondaryFormLoader
             // 
-            this.buttonCamera.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonCamera.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.buttonCamera.FlatAppearance.BorderSize = 0;
-            this.buttonCamera.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonCamera.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCamera.ForeColor = System.Drawing.Color.Coral;
-            this.buttonCamera.Image = ((System.Drawing.Image)(resources.GetObject("buttonCamera.Image")));
-            this.buttonCamera.Location = new System.Drawing.Point(0, 322);
-            this.buttonCamera.Name = "buttonCamera";
-            this.buttonCamera.Size = new System.Drawing.Size(228, 55);
-            this.buttonCamera.TabIndex = 13;
-            this.buttonCamera.Text = "          Rastreio  ";
-            this.buttonCamera.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.buttonCamera.UseVisualStyleBackColor = true;
-            this.buttonCamera.Click += new System.EventHandler(this.buttonCamera_Click);
+            this.panelSecondaryFormLoader.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelSecondaryFormLoader.Location = new System.Drawing.Point(0, 119);
+            this.panelSecondaryFormLoader.Name = "panelSecondaryFormLoader";
+            this.panelSecondaryFormLoader.Size = new System.Drawing.Size(228, 203);
+            this.panelSecondaryFormLoader.TabIndex = 14;
+            // 
+            // buttonRastreio
+            // 
+            this.buttonRastreio.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonRastreio.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonRastreio.FlatAppearance.BorderSize = 0;
+            this.buttonRastreio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRastreio.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRastreio.ForeColor = System.Drawing.Color.Coral;
+            this.buttonRastreio.Image = ((System.Drawing.Image)(resources.GetObject("buttonRastreio.Image")));
+            this.buttonRastreio.Location = new System.Drawing.Point(0, 322);
+            this.buttonRastreio.Name = "buttonRastreio";
+            this.buttonRastreio.Size = new System.Drawing.Size(228, 55);
+            this.buttonRastreio.TabIndex = 13;
+            this.buttonRastreio.Text = "          Rastreio  ";
+            this.buttonRastreio.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonRastreio.UseVisualStyleBackColor = true;
+            this.buttonRastreio.Click += new System.EventHandler(this.buttonRastreio_Click);
             // 
             // buttonGraficos
             // 
@@ -226,9 +236,9 @@
             this.buttonConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonConnect.ForeColor = System.Drawing.Color.Coral;
-            this.buttonConnect.Location = new System.Drawing.Point(418, 12);
+            this.buttonConnect.Location = new System.Drawing.Point(437, 12);
             this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(74, 25);
+            this.buttonConnect.Size = new System.Drawing.Size(81, 31);
             this.buttonConnect.TabIndex = 17;
             this.buttonConnect.Text = "Abrir";
             this.buttonConnect.TextColor = System.Drawing.Color.Coral;
@@ -278,7 +288,7 @@
             this.buttonHTTPConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonHTTPConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonHTTPConnect.ForeColor = System.Drawing.Color.Coral;
-            this.buttonHTTPConnect.Location = new System.Drawing.Point(721, 12);
+            this.buttonHTTPConnect.Location = new System.Drawing.Point(777, 12);
             this.buttonHTTPConnect.Name = "buttonHTTPConnect";
             this.buttonHTTPConnect.Size = new System.Drawing.Size(107, 31);
             this.buttonHTTPConnect.TabIndex = 18;
@@ -296,7 +306,7 @@
             this.textBoxHostname.BorderSize = 2;
             this.textBoxHostname.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxHostname.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.textBoxHostname.Location = new System.Drawing.Point(528, 12);
+            this.textBoxHostname.Location = new System.Drawing.Point(584, 12);
             this.textBoxHostname.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxHostname.Multiline = false;
             this.textBoxHostname.Name = "textBoxHostname";
@@ -324,7 +334,7 @@
             this.comboBoxSerialPort.MinimumSize = new System.Drawing.Size(30, 10);
             this.comboBoxSerialPort.Name = "comboBoxSerialPort";
             this.comboBoxSerialPort.Padding = new System.Windows.Forms.Padding(1);
-            this.comboBoxSerialPort.Size = new System.Drawing.Size(80, 23);
+            this.comboBoxSerialPort.Size = new System.Drawing.Size(92, 31);
             this.comboBoxSerialPort.TabIndex = 12;
             this.comboBoxSerialPort.Texts = "";
             this.comboBoxSerialPort.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxSerialPort_OnSelectedIndexChanged);
@@ -348,11 +358,11 @@
             "915200"});
             this.comboBoxBaudRate.ListBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
             this.comboBoxBaudRate.ListTextColor = System.Drawing.Color.DimGray;
-            this.comboBoxBaudRate.Location = new System.Drawing.Point(320, 12);
+            this.comboBoxBaudRate.Location = new System.Drawing.Point(332, 12);
             this.comboBoxBaudRate.MinimumSize = new System.Drawing.Size(30, 10);
             this.comboBoxBaudRate.Name = "comboBoxBaudRate";
             this.comboBoxBaudRate.Padding = new System.Windows.Forms.Padding(1);
-            this.comboBoxBaudRate.Size = new System.Drawing.Size(83, 23);
+            this.comboBoxBaudRate.Size = new System.Drawing.Size(99, 31);
             this.comboBoxBaudRate.TabIndex = 16;
             this.comboBoxBaudRate.Texts = "";
             this.comboBoxBaudRate.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxBaudRate_OnSelectedIndexChanged);
@@ -404,9 +414,10 @@
         private CustomControls.RJControls.RJButton buttonConnect;
         private System.Windows.Forms.Label labelTitleSelection;
         private System.Windows.Forms.Button buttonGraficos;
-        private System.Windows.Forms.Button buttonCamera;
+        private System.Windows.Forms.Button buttonRastreio;
         private CustomControls.RJControls.RJButton buttonHTTPConnect;
         private CustomControls.RJControls.RJTextBox textBoxHostname;
+        private System.Windows.Forms.Panel panelSecondaryFormLoader;
     }
 }
 
