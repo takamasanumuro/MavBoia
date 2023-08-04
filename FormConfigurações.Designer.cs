@@ -43,6 +43,8 @@
             this.comboBoxBaudRate = new CustomControls.FancyComboBox();
             this.labelLogDirectory = new System.Windows.Forms.Label();
             this.rjTextBoxLogDirectory = new CustomControls.RJControls.RJTextBox();
+            this.buttonSeneca = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // rjTextBoxLocalHostname
@@ -292,12 +294,42 @@
             this.rjTextBoxLogDirectory.UnderlinedStyle = false;
             this.rjTextBoxLogDirectory._TextChanged += new System.EventHandler(this.rjTextBoxLogDirectory__TextChanged);
             // 
+            // buttonSeneca
+            // 
+            this.buttonSeneca.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonSeneca.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonSeneca.FlatAppearance.BorderSize = 0;
+            this.buttonSeneca.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSeneca.Font = new System.Drawing.Font("Nirmala UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSeneca.ForeColor = System.Drawing.Color.Coral;
+            this.buttonSeneca.Location = new System.Drawing.Point(543, 123);
+            this.buttonSeneca.Name = "buttonSeneca";
+            this.buttonSeneca.Size = new System.Drawing.Size(203, 55);
+            this.buttonSeneca.TabIndex = 32;
+            this.buttonSeneca.Text = "Calculadora do T201";
+            this.buttonSeneca.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonSeneca.UseVisualStyleBackColor = true;
+            this.buttonSeneca.Click += new System.EventHandler(this.buttonSeneca_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.Coral;
+            this.label3.Location = new System.Drawing.Point(537, 41);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(163, 32);
+            this.label3.TabIndex = 33;
+            this.label3.Text = "Acessórios";
+            // 
             // FormConfigurações
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(910, 480);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.buttonSeneca);
             this.Controls.Add(this.labelLogDirectory);
             this.Controls.Add(this.rjTextBoxLogDirectory);
             this.Controls.Add(this.labelNetConnectionType);
@@ -337,5 +369,7 @@
         internal CustomControls.FancyComboBox fancyComboBoxNetConnectionType;
         public System.Windows.Forms.Label labelLogDirectory;
         internal CustomControls.RJControls.RJTextBox rjTextBoxLogDirectory;
+        private System.Windows.Forms.Button buttonSeneca;
+        private System.Windows.Forms.Label label3;
     }
 }

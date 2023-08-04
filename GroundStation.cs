@@ -86,12 +86,7 @@ namespace SimpleExample
 
         public void Form_MouseMove_Drag(object sender, MouseEventArgs e)
         {
-            // Move the form when dragging
-            if (e.Button == MouseButtons.Left)
-            {
-                GroundStation.instance.Left += e.X - GroundStation.instance.previousMousePosition.X;
-                GroundStation.instance.Top += e.Y - GroundStation.instance.previousMousePosition.Y;
-            }
+ 
         }
         #endregion
 
@@ -821,16 +816,6 @@ namespace SimpleExample
                 }, this.SysIDLocal, this.CompIDLocal);
             serialPort1.Write(buffer, 0, buffer.Length);
             WriteBufferConsole(buffer, "", true);
-
-        }
-
-        private void comboBoxSerialPort_OnSelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void comboBoxBaudRate_OnSelectedIndexChanged(object sender, EventArgs e)
-        {
 
         }
 

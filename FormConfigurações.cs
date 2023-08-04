@@ -81,5 +81,11 @@ namespace SimpleExample
         {
 
         }
+
+        private void buttonSeneca_Click(object sender, EventArgs e)
+        {
+            FormSeneca formSeneca = new FormSeneca();
+            formSeneca.ShowDialog();
+        }
     }
 }
