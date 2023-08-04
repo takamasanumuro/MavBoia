@@ -280,7 +280,7 @@ namespace SimpleExample
                     FormDados.consumptionPower = battery_current * battery_voltage;       
                     FormDados.resultantPower = FormDados.generationPower + FormDados.consumptionPower;
 
-                    Console.WriteLine("VPN-instrumentation=system");
+                    Console.WriteLine("VPN-instrumentation-system");
 
                     formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
                         $"Tensão da bateria: {battery_voltage:F2}V\n" +
@@ -306,7 +306,7 @@ namespace SimpleExample
                     using (StreamWriter dataLogger = new StreamWriter(path, true))
                     {
                         string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                        string csvData = $"{timestamp}, {battery_voltage}, {motor_current}, {battery_current}, {mppt_current}";
+                        string csvData = $"{timestamp}; {battery_voltage}; {motor_current}; {battery_current}; {mppt_current}";
                         dataLogger.WriteLine(csvData);
                         dataLogger.Flush();
                     }
@@ -363,7 +363,7 @@ namespace SimpleExample
                     using (StreamWriter dataLogger = new StreamWriter(path, true))
                     {
                         string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                        string csvData = $"{timestamp}, {temperature_motor}, {temperature_battery}, {temperature_mppt}";
+                        string csvData = $"{timestamp}; {temperature_motor}; {temperature_battery}; {temperature_mppt}";
                         dataLogger.WriteLine(csvData);
                         dataLogger.Flush();
                     }
@@ -391,7 +391,8 @@ namespace SimpleExample
                         formMapa.UpdateLocation(latitude, longitude);
                     }
 
-                    Console.WriteLine("VPN-gps-system");
+                    Console.WriteLine($"vpn-gps-system\n" +
+                                      $"Latitude:{latitude}/Longitude:{longitude}/Course:{course}/Speed:{speed}/Satellites:{satellites}");
 
                     this.Invoke((MethodInvoker)delegate
                     {
@@ -408,7 +409,7 @@ namespace SimpleExample
                     using (StreamWriter dataLogger = new StreamWriter(path, true))
                     {
                         string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                        string csvData = $"{timestamp}, {latitude}, {longitude}, {course}, {speed}, {satellites}";
+                        string csvData = $"{timestamp}; {latitude}; {longitude}; {course}; {speed}; {satellites}";
                         dataLogger.WriteLine(csvData);
                         dataLogger.Flush();
                     }
@@ -465,7 +466,7 @@ namespace SimpleExample
                         using (StreamWriter dataLogger = new StreamWriter(path, true))
                         {
                             string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                            string csvData = $"{timestamp}, {payload.potentiometer_signal}, {payload.dac_output}";
+                            string csvData = $"{timestamp}; {payload.potentiometer_signal}; {payload.dac_output}";
                             dataLogger.WriteLine(csvData);
                             dataLogger.Flush();
                         }
@@ -514,7 +515,7 @@ namespace SimpleExample
                         using (StreamWriter dataLogger = new StreamWriter(path, true))
                         {
                             string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                            string csvData = $"{timestamp}, {battery_voltage}, {motor_current}, {battery_current}, {mppt_current}";
+                            string csvData = $"{timestamp}; {battery_voltage}; {motor_current}; {battery_current}; {mppt_current}";
                             dataLogger.WriteLine(csvData);
                             dataLogger.Flush();
                         }
@@ -565,7 +566,7 @@ namespace SimpleExample
                         using (StreamWriter dataLogger = new StreamWriter(path, true))
                         {
                             string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                            string csvData = $"{timestamp}, {temperature_motor}, {temperature_battery}, {temperature_mppt}";
+                            string csvData = $"{timestamp}; {temperature_motor}; {temperature_battery}; {temperature_mppt}";
                             dataLogger.WriteLine(csvData);
                             dataLogger.Flush();
                         }
@@ -609,7 +610,7 @@ namespace SimpleExample
                         using (StreamWriter dataLogger = new StreamWriter(path, true))
                         {
                             string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                            string csvData = $"{timestamp}, {latitude}, {longitude}, {course}, {speed}, {satellites}";
+                            string csvData = $"{timestamp}; {latitude}; {longitude}; {course}; {speed}; {satellites}";
                             dataLogger.WriteLine(csvData);
                             dataLogger.Flush();
                         }
@@ -652,7 +653,7 @@ namespace SimpleExample
                         using (StreamWriter dataLogger = new StreamWriter(path, true))
                         {
                             string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                            string csvData = $"{timestamp}, {aux_current}, {aux_voltage}, {pumps}";
+                            string csvData = $"{timestamp}; {aux_current}; {aux_voltage}; {pumps}";
                             dataLogger.WriteLine(csvData);
                             dataLogger.Flush();
                         }
