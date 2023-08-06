@@ -113,7 +113,7 @@ public class ChartLiveDataFeed : ChartDataFeedInterface
         {
             data_point.value = FormDados.batteryCurrent;
         }
-        else if (tag_source.Contains("tensao") && tag_source.Contains("principal"))
+        else if (tag_source.Contains("tensao") && tag_source.Contains("bateria"))
         {
             data_point.value = FormDados.mainBatteryVoltage;
         }
@@ -127,7 +127,7 @@ public class ChartLiveDataFeed : ChartDataFeedInterface
         }
         else if (tag_source.Contains("potencia") && tag_source.Contains("consumo"))
         {
-            data_point.value = FormDados.consumptionPower;
+            data_point.value = FormDados.batteryPower;
         }
         else if (tag_source.Contains("potencia") && tag_source.Contains("resultante"))
         {

@@ -36,9 +36,9 @@
             new ChartConfigRecord( "Corrente do MPPT", "Amp", "CorrenteMPPT", -1,
                             0, 40, new GlgPoint( 0.65, 0.0, 0.35 ), true ),
             new ChartConfigRecord( "Corrente da Bateria", "Amp", "CorrenteBateria", -1,
-                            0, 70, new GlgPoint( 0.65, 0.0, 0.35 ), true ),
+                            -25, 60, new GlgPoint( 0.65, 0.0, 0.35 ), true ),
             new ChartConfigRecord( "Corrente Auxiliar", "Amp", "CorrenteAuxiliar", -1,
-                            0, 5, new GlgPoint( 0.65, 0.0, 0.35 ), false )
+                            -5, 15, new GlgPoint( 0.65, 0.0, 0.35 ), false )
         };
       
         public static ChartConfigRecord[] ConfigTable2 = new ChartConfigRecord[] {

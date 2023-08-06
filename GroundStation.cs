@@ -270,26 +270,27 @@ namespace SimpleExample
                     float battery_voltage = (float)jsonObject["battery_voltage"];
                     float motor_current = (float)jsonObject["motor_current"];
                     float battery_current = (float)jsonObject["battery_current"];
-                    float mppt_current = (float)jsonObject["mppt_current"] * 10;
+                    float mppt_current = (float)jsonObject["mppt_current"];
 
                     FormDados.motorCurrent = motor_current;
                     FormDados.batteryCurrent = battery_current;
                     FormDados.mpptCurrent = mppt_current;
                     FormDados.mainBatteryVoltage = battery_voltage;
                     FormDados.generationPower = mppt_current * battery_voltage;
-                    FormDados.consumptionPower = battery_current * battery_voltage;       
-                    FormDados.resultantPower = FormDados.generationPower + FormDados.consumptionPower;
+                    FormDados.batteryPower = battery_current * battery_voltage;
+                    FormDados.motorPower = battery_current * motor_current;
+                    FormDados.resultantPower = FormDados.generationPower + FormDados.batteryPower;
 
                     Console.WriteLine("VPN-instrumentation-system");
 
                     formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
-                        $"Tensão da bateria: {battery_voltage:F2}V\n" +
-                        $"Corrente do motor: {motor_current:F2}A\n" +
-                        $"Corrente da bateria: {battery_current:F2}A\n" +
-                        $"Corrente do MPPT: {mppt_current:F2}A\n" +
-                        $"Potência de geração: {FormDados.generationPower:F0}W\n" +
-                        $"Potência de consumo: {FormDados.consumptionPower:F0}W\n" +
-                        $"Potência resultante: {FormDados.resultantPower:F0}W\n"));
+                            $"Tensão da bateria: {battery_voltage:F2}V\n" +
+                            $"Corrente do motor: {motor_current:F2}A\n" +
+                            $"Corrente da bateria: {battery_current:F2}A\n" +
+                            $"Corrente do MPPT: {mppt_current:F2}A\n" +
+                            $"Potência de geração: {FormDados.generationPower:F0}W\n" +
+                            $"Potência do motor: {FormDados.motorPower:F0}W\n" +
+                            $"Potência da bateria: {FormDados.batteryPower:F0}W\n"));
 
                     string directory = String.Empty;
                     this.Invoke((MethodInvoker)delegate
@@ -325,9 +326,9 @@ namespace SimpleExample
                     FormDados.temperatureBattery = temperature_battery;
                     FormDados.temperatureMPPT = temperature_mppt;
 
-                    String temperature_motor_string = $"{temperature_motor.ToString()}°C";
-                    String temperature_battery_string = $"{temperature_battery.ToString()}°C";
-                    String temperature_mppt_string = $"{temperature_mppt.ToString()}°C";
+                    String temperature_motor_string = $"{temperature_motor:F2}°C";
+                    String temperature_battery_string = $"{temperature_battery:F2}°C";
+                    String temperature_mppt_string = $"{temperature_mppt:F2}°C";
                     const float probe_disconnected = -127.0f;
                     if (temperature_motor == probe_disconnected)
                     {
@@ -477,18 +478,20 @@ namespace SimpleExample
                         var payload = (Mavlink.mavlink_instrumentation_t)message.Payload;
                         float motor_current = payload.motor_current;
                         float battery_current = payload.battery_current;
-                        float mppt_current = payload.mppt_current * 10;
+                        float mppt_current = payload.mppt_current;
                         float battery_voltage = payload.battery_voltage;
                         float generation_power = battery_voltage * mppt_current;
-                        float consumption_power = battery_voltage * battery_current;
-                        float resultant_power = generation_power - consumption_power;
+                        float battery_power = battery_voltage * battery_current;
+                        float motor_power = battery_voltage * motor_current;
+                        float resultant_power = motor_power - generation_power;
 
                         FormDados.motorCurrent = motor_current;
                         FormDados.batteryCurrent = battery_current;
                         FormDados.mpptCurrent = mppt_current;
                         FormDados.mainBatteryVoltage = battery_voltage;
                         FormDados.generationPower = generation_power;
-                        FormDados.consumptionPower = consumption_power;
+                        FormDados.batteryPower = battery_power;
+                        FormDados.motorPower = motor_power;
                         FormDados.resultantPower = resultant_power;
 
                         formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
@@ -496,9 +499,9 @@ namespace SimpleExample
                             $"Corrente do motor: {motor_current:F2}A\n" +
                             $"Corrente da bateria: {battery_current:F2}A\n" +
                             $"Corrente do MPPT: {mppt_current:F2}A\n" +
-                            $"Potência de geração: {generation_power:F2}W\n" +
-                            $"Potência de consumo: {consumption_power:F2}W\n" +
-                            $"Potência resultante: {resultant_power:F2}W\n"));
+                            $"Potência de geração: {generation_power:F0}W\n" +
+                            $"Potência do motor: {motor_power:F0}W\n" +
+                            $"Potência da bateria: {battery_power:F0}W\n"));
 
                         string directory = String.Empty;
                         this.Invoke((MethodInvoker)delegate
@@ -529,9 +532,9 @@ namespace SimpleExample
                         FormDados.temperatureBattery = payload.temperature_battery;
                         FormDados.temperatureMPPT = payload.temperature_mppt;
 
-                        String temperature_motor = $"{payload.temperature_motor.ToString()}°C";
-                        String temperature_battery = $"{payload.temperature_battery.ToString()}°C";
-                        String temperature_mppt = $"{payload.temperature_mppt.ToString()}°C";
+                        String temperature_motor = $"{payload.temperature_motor:F2}°C";
+                        String temperature_battery = $"{payload.temperature_battery:F2}°C";
+                        String temperature_mppt = $"{payload.temperature_mppt:F2}°C";
                         const float probe_disconnected = -127.0f;
                         if (payload.temperature_motor == probe_disconnected)
                         {

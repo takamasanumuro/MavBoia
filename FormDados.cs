@@ -20,7 +20,8 @@ namespace SimpleExample
         public static float batteryCurrent = 0.0f;
         public static float mainBatteryVoltage = 0.0f;
         public static float generationPower = 0.0f;
-        public static float consumptionPower = 0.0f;
+        public static float batteryPower = 0.0f;
+        public static float motorPower = 0.0f;
         public static float resultantPower = 0.0f;
         public static float latitude = 0.000000f;
         public static float longitude = 0.000000f;

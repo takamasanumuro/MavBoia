@@ -33,20 +33,20 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.panelLateral = new System.Windows.Forms.Panel();
             this.panelSecondaryFormLoader = new System.Windows.Forms.Panel();
+            this.buttonRastreio = new System.Windows.Forms.Button();
+            this.buttonGraficos = new System.Windows.Forms.Button();
+            this.buttonDados = new System.Windows.Forms.Button();
+            this.buttonMapa = new System.Windows.Forms.Button();
             this.panelNav = new System.Windows.Forms.Panel();
+            this.buttonConfigurações = new System.Windows.Forms.Button();
             this.panelTopLeft = new System.Windows.Forms.Panel();
             this.panelTopRight = new System.Windows.Forms.Panel();
+            this.pictureBoxArariboia = new System.Windows.Forms.PictureBox();
             this.panelFormLoader = new System.Windows.Forms.Panel();
             this.buttonConnect = new CustomControls.RJControls.RJButton();
             this.labelTitleSelection = new System.Windows.Forms.Label();
             this.buttonExit = new System.Windows.Forms.Button();
             this.buttonHTTPConnect = new CustomControls.RJControls.RJButton();
-            this.buttonRastreio = new System.Windows.Forms.Button();
-            this.buttonGraficos = new System.Windows.Forms.Button();
-            this.buttonDados = new System.Windows.Forms.Button();
-            this.buttonMapa = new System.Windows.Forms.Button();
-            this.buttonConfigurações = new System.Windows.Forms.Button();
-            this.pictureBoxArariboia = new System.Windows.Forms.PictureBox();
             this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panelLateral.SuspendLayout();
             this.panelTopLeft.SuspendLayout();
@@ -81,109 +81,8 @@
             this.panelSecondaryFormLoader.Size = new System.Drawing.Size(228, 203);
             this.panelSecondaryFormLoader.TabIndex = 14;
             this.panelSecondaryFormLoader.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.panelSecondaryFormLoader_MouseDoubleClick);
-            // 
-            // panelNav
-            // 
-            this.panelNav.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
-            this.panelNav.Location = new System.Drawing.Point(3, 479);
-            this.panelNav.Name = "panelNav";
-            this.panelNav.Size = new System.Drawing.Size(3, 50);
-            this.panelNav.TabIndex = 9;
-            // 
-            // panelTopLeft
-            // 
-            this.panelTopLeft.Controls.Add(this.panelTopRight);
-            this.panelTopLeft.Controls.Add(this.pictureBoxArariboia);
-            this.panelTopLeft.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTopLeft.Location = new System.Drawing.Point(0, 0);
-            this.panelTopLeft.Name = "panelTopLeft";
-            this.panelTopLeft.Size = new System.Drawing.Size(228, 119);
-            this.panelTopLeft.TabIndex = 7;
-            // 
-            // panelTopRight
-            // 
-            this.panelTopRight.Location = new System.Drawing.Point(255, 3);
-            this.panelTopRight.Name = "panelTopRight";
-            this.panelTopRight.Size = new System.Drawing.Size(910, 113);
-            this.panelTopRight.TabIndex = 17;
-            // 
-            // panelFormLoader
-            // 
-            this.panelFormLoader.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelFormLoader.Location = new System.Drawing.Point(228, 117);
-            this.panelFormLoader.Name = "panelFormLoader";
-            this.panelFormLoader.Size = new System.Drawing.Size(937, 480);
-            this.panelFormLoader.TabIndex = 11;
-            // 
-            // buttonConnect
-            // 
-            this.buttonConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
-            this.buttonConnect.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
-            this.buttonConnect.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.buttonConnect.BorderRadius = 10;
-            this.buttonConnect.BorderSize = 0;
-            this.buttonConnect.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonConnect.FlatAppearance.BorderSize = 0;
-            this.buttonConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonConnect.ForeColor = System.Drawing.Color.Coral;
-            this.buttonConnect.Location = new System.Drawing.Point(446, 6);
-            this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(137, 31);
-            this.buttonConnect.TabIndex = 17;
-            this.buttonConnect.Text = "Ligar rádio";
-            this.buttonConnect.TextColor = System.Drawing.Color.Coral;
-            this.buttonConnect.UseVisualStyleBackColor = false;
-            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
-            // 
-            // labelTitleSelection
-            // 
-            this.labelTitleSelection.AutoSize = true;
-            this.labelTitleSelection.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTitleSelection.ForeColor = System.Drawing.Color.Coral;
-            this.labelTitleSelection.Location = new System.Drawing.Point(271, 73);
-            this.labelTitleSelection.Name = "labelTitleSelection";
-            this.labelTitleSelection.Size = new System.Drawing.Size(101, 32);
-            this.labelTitleSelection.TabIndex = 15;
-            this.labelTitleSelection.Text = "Dados";
-            this.labelTitleSelection.Click += new System.EventHandler(this.labelTitleSelection_Click);
-            // 
-            // buttonExit
-            // 
-            this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.buttonExit.FlatAppearance.BorderSize = 0;
-            this.buttonExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonExit.ForeColor = System.Drawing.Color.MistyRose;
-            this.buttonExit.Location = new System.Drawing.Point(1106, 24);
-            this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(47, 35);
-            this.buttonExit.TabIndex = 10;
-            this.buttonExit.UseVisualStyleBackColor = true;
-            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
-            // 
-            // buttonHTTPConnect
-            // 
-            this.buttonHTTPConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
-            this.buttonHTTPConnect.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
-            this.buttonHTTPConnect.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.buttonHTTPConnect.BorderRadius = 10;
-            this.buttonHTTPConnect.BorderSize = 0;
-            this.buttonHTTPConnect.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonHTTPConnect.FlatAppearance.BorderSize = 0;
-            this.buttonHTTPConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonHTTPConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonHTTPConnect.ForeColor = System.Drawing.Color.Coral;
-            this.buttonHTTPConnect.Location = new System.Drawing.Point(607, 6);
-            this.buttonHTTPConnect.Name = "buttonHTTPConnect";
-            this.buttonHTTPConnect.Size = new System.Drawing.Size(155, 31);
-            this.buttonHTTPConnect.TabIndex = 18;
-            this.buttonHTTPConnect.Text = "Ligar rede";
-            this.buttonHTTPConnect.TextColor = System.Drawing.Color.Coral;
-            this.buttonHTTPConnect.UseVisualStyleBackColor = false;
-            this.buttonHTTPConnect.Click += new System.EventHandler(this.buttonHTTPConnect_Click);
+            this.panelSecondaryFormLoader.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown_Drag);
+            this.panelSecondaryFormLoader.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove_Drag);
             // 
             // buttonRastreio
             // 
@@ -265,6 +164,14 @@
             this.buttonMapa.Click += new System.EventHandler(this.buttonMapa_Click);
             this.buttonMapa.Leave += new System.EventHandler(this.button_Leave);
             // 
+            // panelNav
+            // 
+            this.panelNav.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.panelNav.Location = new System.Drawing.Point(3, 479);
+            this.panelNav.Name = "panelNav";
+            this.panelNav.Size = new System.Drawing.Size(3, 50);
+            this.panelNav.TabIndex = 9;
+            // 
             // buttonConfigurações
             // 
             this.buttonConfigurações.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -286,6 +193,23 @@
             this.buttonConfigurações.Click += new System.EventHandler(this.buttonConfigurações_Click);
             this.buttonConfigurações.Leave += new System.EventHandler(this.button_Leave);
             // 
+            // panelTopLeft
+            // 
+            this.panelTopLeft.Controls.Add(this.panelTopRight);
+            this.panelTopLeft.Controls.Add(this.pictureBoxArariboia);
+            this.panelTopLeft.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTopLeft.Location = new System.Drawing.Point(0, 0);
+            this.panelTopLeft.Name = "panelTopLeft";
+            this.panelTopLeft.Size = new System.Drawing.Size(228, 119);
+            this.panelTopLeft.TabIndex = 7;
+            // 
+            // panelTopRight
+            // 
+            this.panelTopRight.Location = new System.Drawing.Point(255, 3);
+            this.panelTopRight.Name = "panelTopRight";
+            this.panelTopRight.Size = new System.Drawing.Size(910, 113);
+            this.panelTopRight.TabIndex = 17;
+            // 
             // pictureBoxArariboia
             // 
             this.pictureBoxArariboia.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -300,6 +224,84 @@
             this.pictureBoxArariboia.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pictureBoxArariboia_MouseDoubleClick);
             this.pictureBoxArariboia.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown_Drag);
             this.pictureBoxArariboia.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove_Drag);
+            // 
+            // panelFormLoader
+            // 
+            this.panelFormLoader.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelFormLoader.Location = new System.Drawing.Point(228, 117);
+            this.panelFormLoader.Name = "panelFormLoader";
+            this.panelFormLoader.Size = new System.Drawing.Size(937, 480);
+            this.panelFormLoader.TabIndex = 11;
+            // 
+            // buttonConnect
+            // 
+            this.buttonConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.buttonConnect.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.buttonConnect.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.buttonConnect.BorderRadius = 10;
+            this.buttonConnect.BorderSize = 0;
+            this.buttonConnect.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonConnect.FlatAppearance.BorderSize = 0;
+            this.buttonConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonConnect.ForeColor = System.Drawing.Color.Coral;
+            this.buttonConnect.Location = new System.Drawing.Point(446, 6);
+            this.buttonConnect.Name = "buttonConnect";
+            this.buttonConnect.Size = new System.Drawing.Size(137, 31);
+            this.buttonConnect.TabIndex = 17;
+            this.buttonConnect.Text = "Ligar rádio";
+            this.buttonConnect.TextColor = System.Drawing.Color.Coral;
+            this.buttonConnect.UseVisualStyleBackColor = false;
+            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
+            // 
+            // labelTitleSelection
+            // 
+            this.labelTitleSelection.AutoSize = true;
+            this.labelTitleSelection.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTitleSelection.ForeColor = System.Drawing.Color.Coral;
+            this.labelTitleSelection.Location = new System.Drawing.Point(271, 73);
+            this.labelTitleSelection.Name = "labelTitleSelection";
+            this.labelTitleSelection.Size = new System.Drawing.Size(101, 32);
+            this.labelTitleSelection.TabIndex = 15;
+            this.labelTitleSelection.Text = "Dados";
+            this.labelTitleSelection.Click += new System.EventHandler(this.labelTitleSelection_Click);
+            // 
+            // buttonExit
+            // 
+            this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.buttonExit.FlatAppearance.BorderSize = 0;
+            this.buttonExit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonExit.ForeColor = System.Drawing.Color.MistyRose;
+            this.buttonExit.Location = new System.Drawing.Point(1106, 24);
+            this.buttonExit.Name = "buttonExit";
+            this.buttonExit.Size = new System.Drawing.Size(47, 35);
+            this.buttonExit.TabIndex = 10;
+            this.buttonExit.UseVisualStyleBackColor = true;
+            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
+            // 
+            // buttonHTTPConnect
+            // 
+            this.buttonHTTPConnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.buttonHTTPConnect.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.buttonHTTPConnect.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.buttonHTTPConnect.BorderRadius = 10;
+            this.buttonHTTPConnect.BorderSize = 0;
+            this.buttonHTTPConnect.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonHTTPConnect.FlatAppearance.BorderSize = 0;
+            this.buttonHTTPConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonHTTPConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonHTTPConnect.ForeColor = System.Drawing.Color.Coral;
+            this.buttonHTTPConnect.Location = new System.Drawing.Point(607, 6);
+            this.buttonHTTPConnect.Name = "buttonHTTPConnect";
+            this.buttonHTTPConnect.Size = new System.Drawing.Size(155, 31);
+            this.buttonHTTPConnect.TabIndex = 18;
+            this.buttonHTTPConnect.Text = "Ligar rede";
+            this.buttonHTTPConnect.TextColor = System.Drawing.Color.Coral;
+            this.buttonHTTPConnect.UseVisualStyleBackColor = false;
+            this.buttonHTTPConnect.Click += new System.EventHandler(this.buttonHTTPConnect_Click);
             // 
             // mavlinkheartbeattBindingSource
             // 
