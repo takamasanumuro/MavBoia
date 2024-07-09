@@ -234,6 +234,7 @@
     <Compile Include="GroundStation.Designer.cs">
       <DependentUpon>GroundStation.cs</DependentUpon>
     </Compile>
+    <Compile Include="MavlinkUtilities.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="BrowserForm.resx">

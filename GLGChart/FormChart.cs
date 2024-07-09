@@ -30,15 +30,15 @@
         public static ChartConfigRecord[] ConfigTable1 = new ChartConfigRecord[] {
           
             new ChartConfigRecord( "Tensao da Bateria", "V", "TensaoBateria", -1,
-                            45, 60, new GlgPoint( 0.5, 0.0, 0.65 ), true ),
-            new ChartConfigRecord( "Corrente do Motor", "Amp", "CorrenteMotor", -1,
-                            0, 70, new GlgPoint( 0.65, 0.0, 0.35 ), true ),
-            new ChartConfigRecord( "Corrente do MPPT", "Amp", "CorrenteMPPT", -1,
-                            0, 40, new GlgPoint( 0.65, 0.0, 0.35 ), true ),
+                            40, 60, new GlgPoint( 0.5, 0.0, 0.65 ), true ),
+            new ChartConfigRecord( "Corrente do Motor Bombordo", "Amp", "CorrenteMotorBombordo", -1,
+                            -5, 60, new GlgPoint( 0.65, 0.0, 0.35 ), true ),
+            new ChartConfigRecord( "Corrente do Motor Boreste", "Amp", "CorrenteMotorBoreste", -1,
+                            -5, 60, new GlgPoint( 0.65, 0.0, 0.35 ), true ),
+                        new ChartConfigRecord( "Corrente do MPPT", "Amp", "CorrenteMPPT", -1,
+                            -5, 20, new GlgPoint( 0.65, 0.0, 0.35 ), true ),
             new ChartConfigRecord( "Corrente da Bateria", "Amp", "CorrenteBateria", -1,
-                            -25, 60, new GlgPoint( 0.65, 0.0, 0.35 ), true ),
-            new ChartConfigRecord( "Corrente Auxiliar", "Amp", "CorrenteAuxiliar", -1,
-                            -5, 15, new GlgPoint( 0.65, 0.0, 0.35 ), false )
+                            -20, 70, new GlgPoint( 0.65, 0.0, 0.35 ), false )
         };
       
         public static ChartConfigRecord[] ConfigTable2 = new ChartConfigRecord[] {

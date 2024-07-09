@@ -101,25 +101,25 @@ public class ChartLiveDataFeed : ChartDataFeedInterface
         tag_source = tag_source.ToLower();
         data_point.value = 0;
 
-        if (tag_source.Contains("corrente") && tag_source.Contains("motor"))
+        if (tag_source.Contains("corrente") && tag_source.Contains("motorbombordo"))
         {
-            data_point.value = FormDados.motorCurrent;
+            data_point.value = FormDados.motorLeftCurrent;
         }
-        else if (tag_source.Contains("corrente") && tag_source.Contains("mppt"))
+        if (tag_source.Contains("corrente") && tag_source.Contains("motorboreste"))
         {
-            data_point.value = FormDados.mpptCurrent;
+            data_point.value = FormDados.motorRightCurrent;
         }
         else if (tag_source.Contains("corrente") && tag_source.Contains("bateria"))
         {
             data_point.value = FormDados.batteryCurrent;
         }
+        else if (tag_source.Contains("corrente") && tag_source.Contains("mppt"))
+        {
+            data_point.value = FormDados.mpptCurrent;
+        }
         else if (tag_source.Contains("tensao") && tag_source.Contains("bateria"))
         {
-            data_point.value = FormDados.mainBatteryVoltage;
-        }
-        else if (tag_source.Contains("tensao") && tag_source.Contains("auxiliar"))
-        {
-            data_point.value = FormDados.auxBatteryVoltage;
+            data_point.value = FormDados.batteryVoltage;
         }
         else if (tag_source.Contains("potencia") && tag_source.Contains("geracao"))
         {

@@ -14,7 +14,7 @@ namespace SimpleExample
             InitializeComponent();
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
-            SetSerialPortDefaults("COM5", 4800);
+            SetSerialPortDefaults("COM8", 9600);
             fancyComboBoxNetConnectionType.SelectedItem = "Local";
         }
 

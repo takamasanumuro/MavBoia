@@ -15,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using CefSharp;
 using CefSharp.DevTools.Network;
+using MavBoia;
 
 namespace SimpleExample
 {
@@ -193,30 +194,13 @@ namespace SimpleExample
                 try
                 {
                     Mavlink.MavlinkMessage message;
-                    //Mavlink.MavlinkMessage message = new Mavlink.MavlinkMessage(mavlinkParser.GenerateMAVLinkPacket10(Mavlink.MAVLINK_MSG_ID.INSTRUMENTATION,
-                    //    new Mavlink.mavlink_instrumentation_t()
-                    //    {
-                    //        battery_current = 1,
-                    //        battery_voltage = 2,
-                    //        motor_current = 3,
-                    //        mppt_current = 4
-                    //    }));
-                    //ProcessMessage(message);
-                    //System.Threading.Thread.Sleep(2000);
-                    //continue;
-
                     lock (serialLock);
                     {
                         message = mavlinkParser.ReadPacket(serialPort1.BaseStream);
                         if (message == null || message.Payload == null)
                             continue;
                     }
-             
-                    // Check the the message is addressed to us
-                    if (VehicleSysID != message.SysID || VehicleCompID != message.CompID)
-                    {
-                        // Not implemented for now;
-                    }
+         
                     ProcessMessage(message);
                 }
                 catch (Exception serialException)
@@ -272,13 +256,13 @@ namespace SimpleExample
                     float battery_current = (float)jsonObject["battery_current"];
                     float mppt_current = (float)jsonObject["mppt_current"];
 
-                    FormDados.motorCurrent = motor_current;
-                    FormDados.batteryCurrent = battery_current;
+                    FormDados.motorLeftCurrent = motor_current;
+                    FormDados.motorRightCurrent = battery_current;
                     FormDados.mpptCurrent = mppt_current;
-                    FormDados.mainBatteryVoltage = battery_voltage;
+                    FormDados.batteryVoltage = battery_voltage;
                     FormDados.generationPower = mppt_current * battery_voltage;
                     FormDados.batteryPower = battery_current * battery_voltage;
-                    FormDados.motorPower = battery_current * motor_current;
+                    FormDados.motorLeftPower = battery_current * motor_current;
                     FormDados.resultantPower = FormDados.generationPower + FormDados.batteryPower;
 
                     Console.WriteLine("VPN-instrumentation-system");
@@ -289,7 +273,7 @@ namespace SimpleExample
                             $"Corrente da bateria: {battery_current:F2}A\n" +
                             $"Corrente do MPPT: {mppt_current:F2}A\n" +
                             $"Potência de geração: {FormDados.generationPower:F0}W\n" +
-                            $"Potência do motor: {FormDados.motorPower:F0}W\n" +
+                            $"Potência do motor: {FormDados.motorLeftPower:F0}W\n" +
                             $"Potência da bateria: {FormDados.batteryPower:F0}W\n"));
 
                     string directory = String.Empty;
@@ -322,8 +306,8 @@ namespace SimpleExample
                     float temperature_battery = (float)jsonObject["temperature_battery"];
                     float temperature_mppt = (float)jsonObject["temperature_mppt"];
 
-                    FormDados.temperatureMotor = temperature_motor;
-                    FormDados.temperatureBattery = temperature_battery;
+                    FormDados.temperatureBatteryLeft = temperature_motor;
+                    FormDados.temperatureBatteryRight = temperature_battery;
                     FormDados.temperatureMPPT = temperature_mppt;
 
                     String temperature_motor_string = $"{temperature_motor:F2}°C";
@@ -342,7 +326,7 @@ namespace SimpleExample
                     {
                         temperature_mppt_string = "Sonda não conectada";
                     }
-                    formDados.labelTemperaturaDados.BeginInvoke(new Action(() => formDados.labelTemperaturaDados.Text =
+                    formDados.labelTemperatureData.BeginInvoke(new Action(() => formDados.labelTemperatureData.Text =
                         $"Temperatura do motor: {temperature_motor_string}\n" +
                         $"Temperatura da bateria: {temperature_battery_string}\n" +
                         $"Temperatura do MPPT: {temperature_mppt_string}\n"));
@@ -383,9 +367,6 @@ namespace SimpleExample
 
                     FormDados.latitude = latitude;
                     FormDados.longitude = longitude;
-                    FormDados.course = course;
-                    FormDados.speed = speed;
-                    FormDados.satellites = satellites;
 
                     if ((latitude != -1.0f) && (longitude != -1.0f))
                     {
@@ -432,6 +413,53 @@ namespace SimpleExample
             }
         }
 
+        String GetLoggingDirectory()
+        {
+            string directory = String.Empty;
+            this.Invoke((MethodInvoker)delegate
+            {
+                directory = formConfigurações.rjTextBoxLogDirectory.Texts;
+                if (directory == String.Empty)
+                {
+                    MessageBox.Show("Invalid directory!");
+                }
+            });
+            return directory;
+        }
+        
+        void WriteDataCSV(string directory, string fileName, string data)
+        {
+
+            if (directory == String.Empty)
+            {
+                MessageBox.Show("Invalid directory!");
+                return;
+            }
+
+            if (fileName == String.Empty)
+            {
+                MessageBox.Show("Invalid file name!");
+                return;
+            }
+
+            string path = Path.Combine(directory, fileName);
+            using (StreamWriter dataLogger = new StreamWriter(path, true))
+            {
+                string timestamp = DateTime.Now.ToString("HH:mm:ss");
+                string csvData = $"{timestamp}; {data}";
+                dataLogger.WriteLine(csvData);
+                dataLogger.Flush();
+            }
+        }
+
+        void SaveData(Mavlink.MavlinkMessage message)
+        {
+            string directory = GetLoggingDirectory();
+            string fileName = message.MsgTypename + ".csv";
+            string data = MavlinkUtilities.GetMessageDataCSV(message);
+            WriteDataCSV(directory, fileName, data);
+        }
+
         /// <summary>
         /// Process received Mavlink message based on its message ID.
         /// </summary>
@@ -442,243 +470,70 @@ namespace SimpleExample
             switch (message.MsgID)
             {
                 // Delegates and lambda expressions must be used to update the UI from a different thread.
-               
-                case (byte)Mavlink.MAVLINK_MSG_ID.CONTROL_SYSTEM:
+                case (byte)Mavlink.MAVLINK_MSG_ID.ALL_INFO:
                     {
-                        var payload = (Mavlink.mavlink_control_system_t)message.Payload;
-                        FormDados.potVoltage = payload.potentiometer_signal;
-                        FormDados.dacVoltage = payload.dac_output;
-                        formDados.labelControlData.BeginInvoke( new Action(() => formDados.labelControlData.Text = 
-                            $"Sinal Pot:{payload.potentiometer_signal:F2}V\n" +
-                            $"Sinal Encoder:{payload.dac_output:F2}V\n"));
-
-                        string directory = String.Empty;
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            directory = formConfigurações.rjTextBoxLogDirectory.Texts;
-                            if (directory == String.Empty)
-                            {
-                                MessageBox.Show("Invalid directory!");
-                            }
-                        });
-
-                        string fileName = "control-system.csv";
-                        string path = Path.Combine(directory, fileName);
-                        using (StreamWriter dataLogger = new StreamWriter(path, true))
-                        {
-                            string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                            string csvData = $"{timestamp}; {payload.potentiometer_signal}; {payload.dac_output}";
-                            dataLogger.WriteLine(csvData);
-                            dataLogger.Flush();
-                        }
-                        break;
-                    }
-                case (byte)Mavlink.MAVLINK_MSG_ID.INSTRUMENTATION:
-                    {
-                        var payload = (Mavlink.mavlink_instrumentation_t)message.Payload;
-                        float motor_current = payload.motor_current;
-                        float battery_current = payload.battery_current;
-                        float mppt_current = payload.mppt_current;
-                        float battery_voltage = payload.battery_voltage;
-                        float generation_power = battery_voltage * mppt_current;
-                        float battery_power = battery_voltage * battery_current;
-                        float motor_power = battery_voltage * motor_current;
-                        float resultant_power = motor_power - generation_power;
-
-                        FormDados.motorCurrent = motor_current;
-                        FormDados.batteryCurrent = battery_current;
-                        FormDados.mpptCurrent = mppt_current;
-                        FormDados.mainBatteryVoltage = battery_voltage;
-                        FormDados.generationPower = generation_power;
-                        FormDados.batteryPower = battery_power;
-                        FormDados.motorPower = motor_power;
-                        FormDados.resultantPower = resultant_power;
-
-                        formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
-                            $"Tensão da bateria: {battery_voltage:F2}V\n" +
-                            $"Corrente do motor: {motor_current:F2}A\n" +
-                            $"Corrente da bateria: {battery_current:F2}A\n" +
-                            $"Corrente do MPPT: {mppt_current:F2}A\n" +
-                            $"Potência de geração: {generation_power:F0}W\n" +
-                            $"Potência do motor: {motor_power:F0}W\n" +
-                            $"Potência da bateria: {battery_power:F0}W\n"));
-
-                        string directory = String.Empty;
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            directory = formConfigurações.rjTextBoxLogDirectory.Texts;
-                            if (directory == String.Empty)
-                            {
-                                MessageBox.Show("Invalid directory!");
-                            }
-                        });
-
-                        string fileName = "instrumentation-system.csv";
-                        string path = Path.Combine(directory, fileName);
-                        using (StreamWriter dataLogger = new StreamWriter(path, true))
-                        {
-                            string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                            string csvData = $"{timestamp}; {battery_voltage}; {motor_current}; {battery_current}; {mppt_current}";
-                            dataLogger.WriteLine(csvData);
-                            dataLogger.Flush();
-                        }
-                        break;
-                    }
-                case (byte)Mavlink.MAVLINK_MSG_ID.TEMPERATURES:
-                    {
-                        var payload = (Mavlink.mavlink_temperatures_t)message.Payload;
-
-                        FormDados.temperatureMotor = payload.temperature_motor;
-                        FormDados.temperatureBattery = payload.temperature_battery;
-                        FormDados.temperatureMPPT = payload.temperature_mppt;
-
-                        String temperature_motor = $"{payload.temperature_motor:F2}°C";
-                        String temperature_battery = $"{payload.temperature_battery:F2}°C";
-                        String temperature_mppt = $"{payload.temperature_mppt:F2}°C";
-                        const float probe_disconnected = -127.0f;
-                        if (payload.temperature_motor == probe_disconnected)
-                        {
-                            temperature_motor = "Sonda não conectada";
-                        }
-                        if (payload.temperature_battery == probe_disconnected)
-                        {
-                            temperature_battery = "Sonda não conectada";
-                        }
-                        if (payload.temperature_mppt == probe_disconnected)
-                        {
-                            temperature_mppt = "Sonda não conectada";
-                        }
-                        formDados.labelTemperaturaDados.BeginInvoke(new Action(() => formDados.labelTemperaturaDados.Text = 
-                            $"Temperatura do motor: {temperature_motor}\n" +
-                            $"Temperatura da bateria: {temperature_battery}\n" +
-                            $"Temperatura do MPPT: {temperature_mppt}\n"));
-
-                        string directory = String.Empty;
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            directory = formConfigurações.rjTextBoxLogDirectory.Texts;
-                            if (directory == String.Empty)
-                            {
-                                MessageBox.Show("Invalid directory!");
-                            }
-                        });
-
-                        string fileName = "temperature-system.csv";
-                        string path = Path.Combine(directory, fileName);
-
-                        using (StreamWriter dataLogger = new StreamWriter(path, true))
-                        {
-                            string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                            string csvData = $"{timestamp}; {temperature_motor}; {temperature_battery}; {temperature_mppt}";
-                            dataLogger.WriteLine(csvData);
-                            dataLogger.Flush();
-                        }
-                        break;
-                    }
-
-                case (byte)Mavlink.MAVLINK_MSG_ID.GPS_INFO:
-                    {
-                        var payload = (Mavlink.mavlink_gps_info_t)message.Payload;
-                      
-                        float latitude = payload.latitude;
-                        float longitude = payload.longitude;
-                        float course = payload.course;
-                        float speed = payload.speed;
-                        byte satellites = payload.satellites_visible;
-
-                        FormDados.latitude = latitude;
-                        FormDados.longitude = longitude;
-                        FormDados.course = course;
-                        FormDados.speed = speed;
-                        FormDados.satellites = satellites;
-
-                        if ((latitude != -1.0f) && (longitude != -1.0f))
-                        {
-                            formMapa.UpdateLocation(latitude, longitude);
-                        }
-
-                        string directory = String.Empty;
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            directory = formConfigurações.rjTextBoxLogDirectory.Texts;
-                            if (directory == String.Empty)
-                            {
-                                MessageBox.Show("Invalid directory!");
-                            }
-                        });
-
-                        string fileName = "gps-system.csv";
-                        string path = Path.Combine(directory, fileName);
-
-                        using (StreamWriter dataLogger = new StreamWriter(path, true))
-                        {
-                            string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                            string csvData = $"{timestamp}; {latitude}; {longitude}; {course}; {speed}; {satellites}";
-                            dataLogger.WriteLine(csvData);
-                            dataLogger.Flush();
-                        }
-
-                        Console.WriteLine($"GPS received: Lat:{latitude}/Long:{longitude}/Course:{course}/Speed:{speed}/Satellites:{satellites}");                    
-                        break;
-                    }
-                case (byte)Mavlink.MAVLINK_MSG_ID.AUX_SYSTEM:
-                    {
-                        var payload = (Mavlink.mavlink_aux_system_t)message.Payload;
-                        float aux_current = payload.current;
-                        float aux_voltage = payload.voltage;
-                        byte pumps = (byte)payload.pumps;
-                        String leftPumpState = DecodePumpMask((byte)payload.pumps, 1);
-                        String rightPumpState = DecodePumpMask((byte)(int)payload.pumps, 0);
-
-                        FormDados.auxBatteryCurrent = aux_current;
-                        FormDados.auxBatteryVoltage = aux_voltage;
-                        FormDados.pumpMask = pumps;
-
-                        formDados.labelAuxiliaryData.BeginInvoke(new Action(() => formDados.labelAuxiliaryData.Text =
-                            $"Tensão da bateria: {aux_voltage:F2}V\n" +
-                            $"Corrente da bateria: {aux_current:F2}A\n" +
-                            $"Bomba esquerda: {leftPumpState}\n" +
-                            $"Bomba direita: {rightPumpState}\n"));
-
-                        string directory = String.Empty;
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            directory = formConfigurações.rjTextBoxLogDirectory.Texts;
-                            if (directory == String.Empty)
-                            {
-                                MessageBox.Show("Invalid directory!");
-                            }
-                        });
-
-                        string fileName = "aux-system.csv";
-                        string path = Path.Combine(directory, fileName);
-
-                        using (StreamWriter dataLogger = new StreamWriter(path, true))
-                        {
-                            string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                            string csvData = $"{timestamp}; {aux_current}; {aux_voltage}; {pumps}";
-                            dataLogger.WriteLine(csvData);
-                            dataLogger.Flush();
-                        }
+                        var payload = (Mavlink.mavlink_all_info_t)message.Payload;
+                        MavlinkUtilities.PrintMessageInfo(message);
+                        FormDados.UpdateData(payload);
+                        formMapa.UpdateData(payload);
+                        UpdateDataForm();          
                         break;
                     }
                 default:
                     break;
             }
+            SaveData(message);
+        }
+
+        private void UpdateDataForm()
+        {
+            UpdateInstrumentationText();
+            UpdateTemperatureText();
+            UpdateRPMText();
+        }
+
+        private void UpdateInstrumentationText()
+        {
+            string instrumentationText = $"Tensão da bateria: {FormDados.batteryVoltage:F2}V\n" +
+                                         $"Corrente do motor L: {FormDados.motorLeftCurrent:F2}A\n" +
+                                         $"Corrente do motor R: {FormDados.motorRightCurrent:F2}A\n" +
+                                         $"Corrente do MPPT: {FormDados.mpptCurrent:F2}A\n";
+
+            formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text = instrumentationText));
+        }
+
+        private String CheckProbe(float temperature)
+        {
+            //DS18B20 Technical specifications:
+            //Usable temperature range: -55 to 125 °C(-67 °F to + 257 °F)
+            
+            const float probe_disconnected_celsius = -55.0f;
+            if (temperature < probe_disconnected_celsius)
+            {
+                return "NC";
+            }
+            return $"{temperature:F2}°C";
+        }
+
+        private void UpdateTemperatureText()
+        {
+
+            string temperatureText = $"Bateria(L): " + CheckProbe(FormDados.temperatureBatteryLeft) + "\n" +
+                                     $"Bateria(R): " + CheckProbe(FormDados.temperatureBatteryRight) + "\n" +
+                                     $"MPPT: " + CheckProbe(FormDados.temperatureMPPT) + "\n";
+
+            formDados.labelTemperatureData.BeginInvoke(new Action(() => formDados.labelTemperatureData.Text = temperatureText));
+
+        }
+
+        private void UpdateRPMText()
+        {
+            string rpmText = $"Motor L: {FormDados.rpmLeft}\n" +
+                             $"Motor R: {FormDados.rpmRight}\n";
+
+            formDados.labelRPM.BeginInvoke(new Action(() => formDados.labelRPM.Text = rpmText));
         }
              
-
-        private String DecodePumpMask(byte mask, byte index)
-        {
-            if (Convert.ToBoolean((1 << index) & mask))
-            {
-                return "Ativa";
-            }
-            else
-            {
-                return "Desligada";
-            }
-        }
 
         private void WriteBufferConsole(byte[] buffer, string logMessage, bool UseHexMode = false)
         {
@@ -718,8 +573,6 @@ namespace SimpleExample
             panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Controls.Add(formGraficos);
             formGraficos.Show();
-            labelTitleSelection.Text = "Gráficos";
-
         }
 
         private void buttonDados_Click(object sender, EventArgs e)
@@ -728,9 +581,7 @@ namespace SimpleExample
             panelFormLoader.Controls.Clear();
             SetFormLoaderSmall();
             panelFormLoader.Controls.Add(formDados);
-            formDados.Show();
-            labelTitleSelection.Text = "Dados";
-                    
+            formDados.Show();         
         }
 
         private void buttonMapa_Click(object sender, EventArgs e)
@@ -740,8 +591,6 @@ namespace SimpleExample
             panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Controls.Add(formMapa);
             formMapa.Show();
-            labelTitleSelection.Text = "Mapa";
-
         }
 
         private void buttonConfigurações_Click(object sender, EventArgs e)
@@ -750,9 +599,7 @@ namespace SimpleExample
             panelFormLoader.Controls.Clear();
             panelFormLoader.Dock = DockStyle.Fill;
             panelFormLoader.Controls.Add(formConfigurações);
-            labelTitleSelection.Text = "Configurações";
             formConfigurações.Show();
-
         }
 
         private void buttonRastreio_Click(object sender, EventArgs e)
@@ -807,19 +654,6 @@ namespace SimpleExample
 
         private void buttonLogPacket_Click(object sender, EventArgs e)
         {
-            // Send and log a mavlink heartbeat message to the console
-            byte[] buffer = mavlinkParser.GenerateMAVLinkPacket10(Mavlink.MAVLINK_MSG_ID.HEARTBEAT,
-                new Mavlink.mavlink_heartbeat_t()
-                {
-                    custom_mode = (uint)Mavlink.MAV_MODE.MANUAL_DISARMED,
-                    type = (byte)Mavlink.MAV_TYPE.GCS,
-                    autopilot = (byte)Mavlink.MAV_AUTOPILOT.INVALID,
-                    base_mode = (byte)Mavlink.MAV_MODE_FLAG.SAFETY_ARMED,
-                    system_status = (byte)Mavlink.MAV_STATE.STANDBY,
-                    mavlink_version = 1
-                }, this.SysIDLocal, this.CompIDLocal);
-            serialPort1.Write(buffer, 0, buffer.Length);
-            WriteBufferConsole(buffer, "", true);
 
         }
 

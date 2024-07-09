@@ -44,7 +44,6 @@
             this.pictureBoxArariboia = new System.Windows.Forms.PictureBox();
             this.panelFormLoader = new System.Windows.Forms.Panel();
             this.buttonConnect = new CustomControls.RJControls.RJButton();
-            this.labelTitleSelection = new System.Windows.Forms.Label();
             this.buttonExit = new System.Windows.Forms.Button();
             this.buttonHTTPConnect = new CustomControls.RJControls.RJButton();
             this.mavlinkheartbeattBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -228,9 +227,9 @@
             // panelFormLoader
             // 
             this.panelFormLoader.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelFormLoader.Location = new System.Drawing.Point(228, 117);
+            this.panelFormLoader.Location = new System.Drawing.Point(228, 77);
             this.panelFormLoader.Name = "panelFormLoader";
-            this.panelFormLoader.Size = new System.Drawing.Size(937, 480);
+            this.panelFormLoader.Size = new System.Drawing.Size(937, 520);
             this.panelFormLoader.TabIndex = 11;
             // 
             // buttonConnect
@@ -253,18 +252,6 @@
             this.buttonConnect.TextColor = System.Drawing.Color.Coral;
             this.buttonConnect.UseVisualStyleBackColor = false;
             this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
-            // 
-            // labelTitleSelection
-            // 
-            this.labelTitleSelection.AutoSize = true;
-            this.labelTitleSelection.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTitleSelection.ForeColor = System.Drawing.Color.Coral;
-            this.labelTitleSelection.Location = new System.Drawing.Point(271, 73);
-            this.labelTitleSelection.Name = "labelTitleSelection";
-            this.labelTitleSelection.Size = new System.Drawing.Size(101, 32);
-            this.labelTitleSelection.TabIndex = 15;
-            this.labelTitleSelection.Text = "Dados";
-            this.labelTitleSelection.Click += new System.EventHandler(this.labelTitleSelection_Click);
             // 
             // buttonExit
             // 
@@ -314,7 +301,6 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(1165, 597);
             this.Controls.Add(this.panelFormLoader);
-            this.Controls.Add(this.labelTitleSelection);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.panelLateral);
             this.Controls.Add(this.buttonConnect);
@@ -329,7 +315,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxArariboia)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mavlinkheartbeattBindingSource)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -343,7 +328,6 @@
         private System.Windows.Forms.Button buttonDados;
         private System.Windows.Forms.Panel panelFormLoader;
         private System.Windows.Forms.Button buttonMapa;
-        private System.Windows.Forms.Label labelTitleSelection;
         private System.Windows.Forms.Button buttonGraficos;
         private System.Windows.Forms.Button buttonRastreio;
         private CustomControls.RJControls.RJButton buttonHTTPConnect;

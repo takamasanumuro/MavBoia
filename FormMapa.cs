@@ -26,6 +26,17 @@ namespace SimpleExample
 
         }
 
+        public void UpdateData(Mavlink.mavlink_all_info_t packet)
+        {
+            float lat = packet.latitude;
+            float lon = packet.longitude;
+
+            if (lat != -1.0 && lon != -1.0)
+            {
+                UpdateLocation(lat, lon);
+            }
+        }
+
         private void Form_MouseDown_Drag(object sender, MouseEventArgs e)
         {
             // Store the current mouse position
