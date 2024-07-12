@@ -528,8 +528,8 @@ namespace SimpleExample
 
         private void UpdateRPMText()
         {
-            string rpmText = $"Motor L: {FormDados.rpmLeft}\n" +
-                             $"Motor R: {FormDados.rpmRight}\n";
+            string rpmText = $"Motor L: {FormDados.rpmLeft:F0}\n" +
+                             $"Motor R: {FormDados.rpmRight:F0}\n";
 
             formDados.labelRPM.BeginInvoke(new Action(() => formDados.labelRPM.Text = rpmText));
         }
