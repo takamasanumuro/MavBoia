@@ -8,7 +8,26 @@ namespace MavBoia
 {
     internal static class MavBoiaConfigurations
     {
-        public static string SerialPort { get; set; }
-        public static string BaudRate { get; set; }
+        private static string _serialPort;
+        private static int _baudRate;
+
+        public static string SerialPort { 
+            get => _serialPort; 
+            set
+            {
+                _serialPort = value;
+                OnSerialConfigurationUpdate?.Invoke();
+            }
+        }
+        public static int BaudRate { 
+            get => _baudRate;
+            set
+            {
+                _baudRate = value;
+                OnSerialConfigurationUpdate?.Invoke();
+            }
+        }
+
+        public static Action OnSerialConfigurationUpdate;
     }
 }

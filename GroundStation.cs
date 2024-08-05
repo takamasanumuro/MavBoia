@@ -24,7 +24,9 @@ namespace SimpleExample
         public static GroundStation instance;
         //Mavlink parser responsible for parsing and deparsing mavlink packets
         private Mavlink.MavlinkParser mavlinkParser = new Mavlink.MavlinkParser();
-        
+
+        private SerialMavlinkCommunication.SerialMavlinkCommunication serialMavlink;
+
         private object serialLock = new object(); // lock to prevent thread collisions on serial port
         private byte SysIDLocal { get;  set; } = 0xFF; // Default System ID for ground stations.
         private byte CompIDLocal { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_MISSIONPLANNER;
@@ -32,7 +34,7 @@ namespace SimpleExample
         private byte VehicleCompID { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER;
  
         FormChart formGraficos = new FormChart() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        FormDados formDados = new FormDados() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+        FormDados formDados;
         FormMapa formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         FormConfigurações formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         BrowserForm formBrowser = new BrowserForm() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
@@ -43,9 +45,15 @@ namespace SimpleExample
         {
             InitializeComponent();
             instance = this;
+            formDados = new FormDados(this) { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
+
+            serialMavlink = new SerialMavlinkCommunication.SerialMavlinkCommunication("COM3", 9600);
+            serialMavlink.ReadTimeOut = 2000;
+            serialMavlink.OnMavlinkMessageReady += ProcessMavlinkMessage;
+            MavBoiaConfigurations.OnSerialConfigurationUpdate += UpdateSerialConfiguration;
                            
         }
         #region Form Rounding and Dragging
@@ -128,29 +136,46 @@ namespace SimpleExample
 
         #endregion
 
+        private void UpdateSerialConfiguration()
+        {
+            try
+            {
+                if (serialMavlink.IsOpen)
+                {
+                    serialMavlink.Close();
+                    serialMavlink.PortName = MavBoiaConfigurations.SerialPort;
+                    serialMavlink.BaudRate = MavBoiaConfigurations.BaudRate;
+                    serialMavlink.Open();
+                }
+                else
+                {
+                    serialMavlink.PortName = MavBoiaConfigurations.SerialPort;
+                    serialMavlink.BaudRate = MavBoiaConfigurations.BaudRate;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
+        }
         private void buttonConnect_Click(object sender, EventArgs e)
         {
             try
             {
+                const string buttonOffText = "Ligar rádio";
+                const string buttonOnText = "Desligar rádio";
+
                 // if the port is open close it
-                if (serialPort1.IsOpen)
+                if (serialMavlink.IsOpen)
                 {
-                    serialPort1.Close();
-                    buttonConnect.Text = "Ligar rádio";
+                    serialMavlink.Close();
+                    buttonConnect.Text = buttonOffText;
                     return;
                 }
 
-                // Configure the port based on selected options and opens it.
-                serialPort1.PortName = FormConfigurações.instance.comboBoxSerialPort.SelectedItem.ToString();
-                serialPort1.BaudRate = int.Parse(FormConfigurações.instance.comboBoxBaudRate.SelectedItem.ToString());
-                serialPort1.ReadTimeout = 2000;
-                serialPort1.Open();
-                buttonConnect.Text = "Desligar rádio";
-
-                // Read data from serial port on a background thread in order to not block the UI thread.        
-                BackgroundWorker workerSerialPort = new BackgroundWorker();
-                workerSerialPort.DoWork += workerSerialPort_ReadData;
-                workerSerialPort.RunWorkerAsync();
+                serialMavlink.Open();
+                buttonConnect.Text = buttonOnText;
             }
             catch (Exception exception)
             {
@@ -164,33 +189,27 @@ namespace SimpleExample
         }
 
         /// <summary>
-        /// Reads data from the serial port and processes it.
+        /// Process received Mavlink message based on its message ID.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void workerSerialPort_ReadData(object sender, DoWorkEventArgs e)
+        /// <param name="message"></param>
+        void ProcessMavlinkMessage(Mavlink.MavlinkMessage message)
         {
-            while (serialPort1.IsOpen)
+            Console.WriteLine(message.MsgTypename);
+            switch (message.MsgID)
             {
-                try
-                {
-                    Mavlink.MavlinkMessage message;
-                    lock (serialLock);
+                // Delegates and lambda expressions must be used to update the UI from a different thread.
+                case (uint)Mavlink.MAVLINK_MSG_ID.ALL_INFO:
                     {
-                        message = mavlinkParser.ReadPacket(serialPort1.BaseStream);
-                        if (message == null || message.Payload == null)
-                            continue;
+                        Mavlink.mavlink_all_info_t payload = (Mavlink.mavlink_all_info_t)message.Payload;
+                        MavlinkUtilities.PrintMessageInfo(message);
+                        this.formDados.BeginInvoke((Action)(() => { this.formDados.UpdateData(payload); }));
+                        formMapa.UpdateData(payload);
+                        break;
                     }
-         
-                    ProcessMessage(message);
-                }
-                catch (Exception serialException)
-                {
-                    Console.WriteLine($"{serialException.Message} at {System.DateTime.Now}");
-                }
-
-                System.Threading.Thread.Sleep(1);
+                default:
+                    break;
             }
+            SaveData(message);
         }
 
         String GetLoggingDirectory()
@@ -238,82 +257,7 @@ namespace SimpleExample
             string fileName = message.MsgTypename + ".csv";
             string data = MavlinkUtilities.GetMessageDataCSV(message);
             WriteDataCSV(directory, fileName, data);
-        }
-
-        /// <summary>
-        /// Process received Mavlink message based on its message ID.
-        /// </summary>
-        /// <param name="message"></param>
-        void ProcessMessage(Mavlink.MavlinkMessage message)
-        {
-            Console.WriteLine(message.MsgTypename);
-            switch (message.MsgID)
-            {
-                // Delegates and lambda expressions must be used to update the UI from a different thread.
-                case (byte)Mavlink.MAVLINK_MSG_ID.ALL_INFO:
-                    {
-                        var payload = (Mavlink.mavlink_all_info_t)message.Payload;
-                        MavlinkUtilities.PrintMessageInfo(message);
-                        FormDados.UpdateData(payload);
-                        formMapa.UpdateData(payload);
-                        UpdateDataForm();          
-                        break;
-                    }
-                default:
-                    break;
-            }
-            SaveData(message);
-        }
-
-        private void UpdateDataForm()
-        {
-            UpdateInstrumentationText();
-            UpdateTemperatureText();
-            UpdateRPMText();
-        }
-
-        private void UpdateInstrumentationText()
-        {
-            string instrumentationText = $"Tensão da bateria: {FormDados.batteryVoltage:F2}V\n" +
-                                         $"Corrente do motor L: {FormDados.motorLeftCurrent:F2}A\n" +
-                                         $"Corrente do motor R: {FormDados.motorRightCurrent:F2}A\n" +
-                                         $"Corrente do MPPT: {FormDados.mpptCurrent:F2}A\n";
-
-            formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text = instrumentationText));
-        }
-
-        private String CheckProbe(float temperature)
-        {
-            //DS18B20 Technical specifications:
-            //Usable temperature range: -55 to 125 °C(-67 °F to + 257 °F)
-            
-            const float probe_disconnected_celsius = -55.0f;
-            if (temperature < probe_disconnected_celsius)
-            {
-                return "NC";
-            }
-            return $"{temperature:F2}°C";
-        }
-
-        private void UpdateTemperatureText()
-        {
-
-            string temperatureText = $"Bateria(L): " + CheckProbe(FormDados.temperatureBatteryLeft) + "\n" +
-                                     $"Bateria(R): " + CheckProbe(FormDados.temperatureBatteryRight) + "\n" +
-                                     $"MPPT: " + CheckProbe(FormDados.temperatureMPPT) + "\n";
-
-            formDados.labelTemperatureData.BeginInvoke(new Action(() => formDados.labelTemperatureData.Text = temperatureText));
-
-        }
-
-        private void UpdateRPMText()
-        {
-            string rpmText = $"Motor L: {FormDados.rpmLeft:F0}\n" +
-                             $"Motor R: {FormDados.rpmRight:F0}\n";
-
-            formDados.labelRPM.BeginInvoke(new Action(() => formDados.labelRPM.Text = rpmText));
-        }
-             
+        }      
 
         private void WriteBufferConsole(byte[] buffer, string logMessage, bool UseHexMode = false)
         {

@@ -8,10 +8,8 @@ namespace SimpleExample
 {
     public partial class FormConfigurações : Form
     {
-        public static FormConfigurações instance;
         public FormConfigurações()
         {
-            instance = this;
             InitializeComponent();
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
@@ -77,7 +75,7 @@ namespace SimpleExample
 
         private void comboBoxBaudRate_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            MavBoiaConfigurations.BaudRate = this.comboBoxBaudRate.SelectedItem.ToString();
+            MavBoiaConfigurations.BaudRate = int.Parse(this.comboBoxBaudRate.SelectedItem.ToString());
         }
     }
 }

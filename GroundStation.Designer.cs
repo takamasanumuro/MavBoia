@@ -66,8 +66,9 @@
             this.panelLateral.Controls.Add(this.panelTopLeft);
             this.panelLateral.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelLateral.Location = new System.Drawing.Point(0, 0);
+            this.panelLateral.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panelLateral.Name = "panelLateral";
-            this.panelLateral.Size = new System.Drawing.Size(228, 597);
+            this.panelLateral.Size = new System.Drawing.Size(342, 918);
             this.panelLateral.TabIndex = 9;
             this.panelLateral.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown_Drag);
             this.panelLateral.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form_MouseMove_Drag);
@@ -75,9 +76,10 @@
             // panelSecondaryFormLoader
             // 
             this.panelSecondaryFormLoader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelSecondaryFormLoader.Location = new System.Drawing.Point(0, 119);
+            this.panelSecondaryFormLoader.Location = new System.Drawing.Point(0, 183);
+            this.panelSecondaryFormLoader.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panelSecondaryFormLoader.Name = "panelSecondaryFormLoader";
-            this.panelSecondaryFormLoader.Size = new System.Drawing.Size(228, 203);
+            this.panelSecondaryFormLoader.Size = new System.Drawing.Size(342, 310);
             this.panelSecondaryFormLoader.TabIndex = 14;
             this.panelSecondaryFormLoader.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.panelSecondaryFormLoader_MouseDoubleClick);
             this.panelSecondaryFormLoader.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form_MouseDown_Drag);
@@ -93,9 +95,10 @@
             this.buttonRastreio.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonRastreio.ForeColor = System.Drawing.Color.Coral;
             this.buttonRastreio.Image = ((System.Drawing.Image)(resources.GetObject("buttonRastreio.Image")));
-            this.buttonRastreio.Location = new System.Drawing.Point(0, 322);
+            this.buttonRastreio.Location = new System.Drawing.Point(0, 493);
+            this.buttonRastreio.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonRastreio.Name = "buttonRastreio";
-            this.buttonRastreio.Size = new System.Drawing.Size(228, 55);
+            this.buttonRastreio.Size = new System.Drawing.Size(342, 85);
             this.buttonRastreio.TabIndex = 13;
             this.buttonRastreio.Text = "          Rastreio  ";
             this.buttonRastreio.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -113,9 +116,10 @@
             this.buttonGraficos.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonGraficos.ForeColor = System.Drawing.Color.Coral;
             this.buttonGraficos.Image = ((System.Drawing.Image)(resources.GetObject("buttonGraficos.Image")));
-            this.buttonGraficos.Location = new System.Drawing.Point(0, 377);
+            this.buttonGraficos.Location = new System.Drawing.Point(0, 578);
+            this.buttonGraficos.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonGraficos.Name = "buttonGraficos";
-            this.buttonGraficos.Size = new System.Drawing.Size(228, 55);
+            this.buttonGraficos.Size = new System.Drawing.Size(342, 85);
             this.buttonGraficos.TabIndex = 12;
             this.buttonGraficos.Text = "          Graficos  ";
             this.buttonGraficos.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -133,9 +137,10 @@
             this.buttonDados.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDados.ForeColor = System.Drawing.Color.Coral;
             this.buttonDados.Image = ((System.Drawing.Image)(resources.GetObject("buttonDados.Image")));
-            this.buttonDados.Location = new System.Drawing.Point(0, 432);
+            this.buttonDados.Location = new System.Drawing.Point(0, 663);
+            this.buttonDados.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonDados.Name = "buttonDados";
-            this.buttonDados.Size = new System.Drawing.Size(228, 55);
+            this.buttonDados.Size = new System.Drawing.Size(342, 85);
             this.buttonDados.TabIndex = 10;
             this.buttonDados.Text = "            Dados  ";
             this.buttonDados.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -153,9 +158,10 @@
             this.buttonMapa.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonMapa.ForeColor = System.Drawing.Color.Coral;
             this.buttonMapa.Image = ((System.Drawing.Image)(resources.GetObject("buttonMapa.Image")));
-            this.buttonMapa.Location = new System.Drawing.Point(0, 487);
+            this.buttonMapa.Location = new System.Drawing.Point(0, 748);
+            this.buttonMapa.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonMapa.Name = "buttonMapa";
-            this.buttonMapa.Size = new System.Drawing.Size(228, 55);
+            this.buttonMapa.Size = new System.Drawing.Size(342, 85);
             this.buttonMapa.TabIndex = 11;
             this.buttonMapa.Text = "            Mapa  ";
             this.buttonMapa.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -166,9 +172,10 @@
             // panelNav
             // 
             this.panelNav.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
-            this.panelNav.Location = new System.Drawing.Point(3, 479);
+            this.panelNav.Location = new System.Drawing.Point(4, 737);
+            this.panelNav.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panelNav.Name = "panelNav";
-            this.panelNav.Size = new System.Drawing.Size(3, 50);
+            this.panelNav.Size = new System.Drawing.Size(4, 77);
             this.panelNav.TabIndex = 9;
             // 
             // buttonConfigurações
@@ -181,9 +188,10 @@
             this.buttonConfigurações.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonConfigurações.ForeColor = System.Drawing.Color.Coral;
             this.buttonConfigurações.Image = ((System.Drawing.Image)(resources.GetObject("buttonConfigurações.Image")));
-            this.buttonConfigurações.Location = new System.Drawing.Point(0, 542);
+            this.buttonConfigurações.Location = new System.Drawing.Point(0, 833);
+            this.buttonConfigurações.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonConfigurações.Name = "buttonConfigurações";
-            this.buttonConfigurações.Size = new System.Drawing.Size(228, 55);
+            this.buttonConfigurações.Size = new System.Drawing.Size(342, 85);
             this.buttonConfigurações.TabIndex = 8;
             this.buttonConfigurações.Text = "Configurações";
             this.buttonConfigurações.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -198,15 +206,17 @@
             this.panelTopLeft.Controls.Add(this.pictureBoxArariboia);
             this.panelTopLeft.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTopLeft.Location = new System.Drawing.Point(0, 0);
+            this.panelTopLeft.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panelTopLeft.Name = "panelTopLeft";
-            this.panelTopLeft.Size = new System.Drawing.Size(228, 119);
+            this.panelTopLeft.Size = new System.Drawing.Size(342, 183);
             this.panelTopLeft.TabIndex = 7;
             // 
             // panelTopRight
             // 
-            this.panelTopRight.Location = new System.Drawing.Point(255, 3);
+            this.panelTopRight.Location = new System.Drawing.Point(382, 5);
+            this.panelTopRight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panelTopRight.Name = "panelTopRight";
-            this.panelTopRight.Size = new System.Drawing.Size(910, 113);
+            this.panelTopRight.Size = new System.Drawing.Size(1365, 174);
             this.panelTopRight.TabIndex = 17;
             // 
             // pictureBoxArariboia
@@ -214,8 +224,9 @@
             this.pictureBoxArariboia.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxArariboia.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxArariboia.Image")));
             this.pictureBoxArariboia.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxArariboia.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pictureBoxArariboia.Name = "pictureBoxArariboia";
-            this.pictureBoxArariboia.Size = new System.Drawing.Size(228, 119);
+            this.pictureBoxArariboia.Size = new System.Drawing.Size(342, 183);
             this.pictureBoxArariboia.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxArariboia.TabIndex = 0;
             this.pictureBoxArariboia.TabStop = false;
@@ -227,9 +238,10 @@
             // panelFormLoader
             // 
             this.panelFormLoader.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelFormLoader.Location = new System.Drawing.Point(228, 77);
+            this.panelFormLoader.Location = new System.Drawing.Point(342, 118);
+            this.panelFormLoader.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panelFormLoader.Name = "panelFormLoader";
-            this.panelFormLoader.Size = new System.Drawing.Size(937, 520);
+            this.panelFormLoader.Size = new System.Drawing.Size(1406, 800);
             this.panelFormLoader.TabIndex = 11;
             // 
             // buttonConnect
@@ -244,9 +256,10 @@
             this.buttonConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonConnect.ForeColor = System.Drawing.Color.Coral;
-            this.buttonConnect.Location = new System.Drawing.Point(446, 6);
+            this.buttonConnect.Location = new System.Drawing.Point(669, 9);
+            this.buttonConnect.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(137, 31);
+            this.buttonConnect.Size = new System.Drawing.Size(206, 48);
             this.buttonConnect.TabIndex = 17;
             this.buttonConnect.Text = "Ligar rádio";
             this.buttonConnect.TextColor = System.Drawing.Color.Coral;
@@ -262,9 +275,10 @@
             this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonExit.ForeColor = System.Drawing.Color.MistyRose;
-            this.buttonExit.Location = new System.Drawing.Point(1106, 24);
+            this.buttonExit.Location = new System.Drawing.Point(1659, 37);
+            this.buttonExit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(47, 35);
+            this.buttonExit.Size = new System.Drawing.Size(70, 54);
             this.buttonExit.TabIndex = 10;
             this.buttonExit.UseVisualStyleBackColor = true;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
@@ -281,9 +295,10 @@
             this.buttonHTTPConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonHTTPConnect.Font = new System.Drawing.Font("Nirmala UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonHTTPConnect.ForeColor = System.Drawing.Color.Coral;
-            this.buttonHTTPConnect.Location = new System.Drawing.Point(607, 6);
+            this.buttonHTTPConnect.Location = new System.Drawing.Point(910, 9);
+            this.buttonHTTPConnect.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonHTTPConnect.Name = "buttonHTTPConnect";
-            this.buttonHTTPConnect.Size = new System.Drawing.Size(155, 31);
+            this.buttonHTTPConnect.Size = new System.Drawing.Size(232, 48);
             this.buttonHTTPConnect.TabIndex = 18;
             this.buttonHTTPConnect.Text = "Ligar rede";
             this.buttonHTTPConnect.TextColor = System.Drawing.Color.Coral;
@@ -296,16 +311,17 @@
             // 
             // GroundStation
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
-            this.ClientSize = new System.Drawing.Size(1165, 597);
+            this.ClientSize = new System.Drawing.Size(1748, 918);
             this.Controls.Add(this.panelFormLoader);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.panelLateral);
             this.Controls.Add(this.buttonConnect);
             this.Controls.Add(this.buttonHTTPConnect);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "GroundStation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "6";
