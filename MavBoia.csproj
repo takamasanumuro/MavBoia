@@ -223,18 +223,19 @@
     <Compile Include="GLGChart\PlotDataPoint.cs" />
     <Compile Include="GLGChart\PlotInfo.cs" />
     <Compile Include="GPRMCParser.cs" />
-    <Compile Include="Mavlink.cs" />
-    <Compile Include="MavlinkCRC.cs" />
-    <Compile Include="MavlinkMessage.cs" />
-    <Compile Include="MavlinkParser.cs" />
-    <Compile Include="MavlinkUtil.cs" />
+    <Compile Include="MavBoiaConfigurations.cs" />
+    <Compile Include="Mavlink\Mavlink.cs" />
+    <Compile Include="Mavlink\MavlinkCRC.cs" />
+    <Compile Include="Mavlink\MavlinkMessage.cs" />
+    <Compile Include="Mavlink\MavlinkParser.cs" />
+    <Compile Include="Mavlink\MavlinkUtil.cs" />
     <Compile Include="GroundStation.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GroundStation.Designer.cs">
       <DependentUpon>GroundStation.cs</DependentUpon>
     </Compile>
-    <Compile Include="MavlinkUtilities.cs" />
+    <Compile Include="Mavlink\MavlinkUtilities.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="BrowserForm.resx">
@@ -313,9 +314,7 @@
     <Content Include="Resources\Colors.txt" />
     <None Include="Resources\diagram.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CameraStreamer\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
       <Visible>False</Visible>
