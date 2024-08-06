@@ -16,6 +16,7 @@ using System.IO;
 using CefSharp;
 using CefSharp.DevTools.Network;
 using MavBoia;
+using System.Threading;
 
 namespace SimpleExample
 {
@@ -25,36 +26,46 @@ namespace SimpleExample
         //Mavlink parser responsible for parsing and deparsing mavlink packets
         private Mavlink.MavlinkParser mavlinkParser = new Mavlink.MavlinkParser();
 
-        private SerialMavlinkCommunication.SerialMavlinkCommunication serialMavlink;
-
-        private object serialLock = new object(); // lock to prevent thread collisions on serial port
         private byte SysIDLocal { get;  set; } = 0xFF; // Default System ID for ground stations.
         private byte CompIDLocal { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_MISSIONPLANNER;
         private byte VehicleSysID { get; set; } = 0x01; // Default System ID for vehicles.
         private byte VehicleCompID { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER;
  
+        // Forms instanciation
         FormChart formGraficos = new FormChart() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        FormDados formDados;
         FormMapa formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         FormConfigurações formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
         BrowserForm formBrowser = new BrowserForm() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
 
+        private FormDados formDados;
+
         public Point previousMousePosition; // Store the previous mouse position for dragging the form around
+        
+        // Serial communication
+        private SerialDataController serialDataController;
+        private SerialPort serialPort;
+        private BackgroundWorker serialWorker;
+        private object serialLock = new object(); // lock to prevent thread collisions on serial port
+
 
         public GroundStation()
         {
             InitializeComponent();
             instance = this;
-            formDados = new FormDados(this) { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
             Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
 
-            serialMavlink = new SerialMavlinkCommunication.SerialMavlinkCommunication("COM3", 9600);
-            serialMavlink.ReadTimeOut = 2000;
-            serialMavlink.OnMavlinkMessageReady += ProcessMavlinkMessage;
+            serialPort = new SerialPort("COM8", 9600);
+            serialPort.ReadTimeout = 2000;
+            serialDataController = new SerialDataController();
+            formDados = new FormDados(serialDataController) { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
             MavBoiaConfigurations.OnSerialConfigurationUpdate += UpdateSerialConfiguration;
-                           
+                  
+            serialWorker = new BackgroundWorker();
+            serialWorker.WorkerSupportsCancellation = true;
+            serialWorker.DoWork += serialWorker_DoWork;
+            serialWorker.RunWorkerCompleted += serialWorker_RunWorkerCompleted;
         }
         #region Form Rounding and Dragging
         // This is the function that will allow the form to be rounded
@@ -136,29 +147,26 @@ namespace SimpleExample
 
         #endregion
 
+        #region SerialCommunication
         private void UpdateSerialConfiguration()
         {
-            try
+            if (serialPort.IsOpen)
             {
-                if (serialMavlink.IsOpen)
+                lock (serialLock)
                 {
-                    serialMavlink.Close();
-                    serialMavlink.PortName = MavBoiaConfigurations.SerialPort;
-                    serialMavlink.BaudRate = MavBoiaConfigurations.BaudRate;
-                    serialMavlink.Open();
-                }
-                else
-                {
-                    serialMavlink.PortName = MavBoiaConfigurations.SerialPort;
-                    serialMavlink.BaudRate = MavBoiaConfigurations.BaudRate;
+                    serialPort.Close();
+                    serialPort.PortName = MavBoiaConfigurations.SerialPort;
+                    serialPort.BaudRate = MavBoiaConfigurations.BaudRate;
+                    serialPort.Open();
                 }
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine(ex.Message);
+                serialPort.PortName = MavBoiaConfigurations.SerialPort;
+                serialPort.BaudRate = MavBoiaConfigurations.BaudRate;
             }
-            
         }
+
         private void buttonConnect_Click(object sender, EventArgs e)
         {
             try
@@ -167,14 +175,17 @@ namespace SimpleExample
                 const string buttonOnText = "Desligar rádio";
 
                 // if the port is open close it
-                if (serialMavlink.IsOpen)
+                if (serialPort.IsOpen)
                 {
-                    serialMavlink.Close();
+                    serialWorker.CancelAsync();
                     buttonConnect.Text = buttonOffText;
                     return;
                 }
 
-                serialMavlink.Open();
+                serialPort.PortName = MavBoiaConfigurations.SerialPort;
+                serialPort.BaudRate = MavBoiaConfigurations.BaudRate;
+                serialPort.Open();
+                serialWorker.RunWorkerAsync();
                 buttonConnect.Text = buttonOnText;
             }
             catch (Exception exception)
@@ -182,6 +193,45 @@ namespace SimpleExample
                 MessageBox.Show($"{exception.Message}\n" + $"Verifique se a porta existe ou já está sendo usada por outro programa.");
             }    
         }
+
+        private void serialWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (!serialWorker.CancellationPending)
+            {
+                try
+                {
+                    if (!serialPort.IsOpen) continue;
+                    Mavlink.MavlinkMessage message;
+                    lock (serialLock)
+                        message = mavlinkParser.ReadPacket(serialPort.BaseStream);
+
+                    if (message != null)
+                    {
+                        serialDataController.ProcessMavlinkMessage(message);
+                    }
+                }
+                catch(UnauthorizedAccessException unauthorizedException)
+                {
+                    buttonConnect.BeginInvoke((Action)(() => { buttonConnect.Text = "Ligar rádio"; }));
+                    serialWorker.CancelAsync();
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                }
+
+                Thread.Sleep(1);
+            }
+            e.Cancel = true;
+        }
+
+        private void serialWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            lock (serialLock)
+                serialPort.Close();
+        }
+
+        #endregion
 
         private void buttonHTTPConnect_Click(object sender, EventArgs e)
         {
@@ -209,55 +259,8 @@ namespace SimpleExample
                 default:
                     break;
             }
-            SaveData(message);
+            //SaveData(message);
         }
-
-        String GetLoggingDirectory()
-        {
-            string directory = String.Empty;
-            this.Invoke((MethodInvoker)delegate
-            {
-                directory = formConfigurações.rjTextBoxLogDirectory.Texts;
-                if (directory == String.Empty)
-                {
-                    MessageBox.Show("Invalid directory!");
-                }
-            });
-            return directory;
-        }
-        
-        void WriteDataCSV(string directory, string fileName, string data)
-        {
-
-            if (directory == String.Empty)
-            {
-                MessageBox.Show("Invalid directory!");
-                return;
-            }
-
-            if (fileName == String.Empty)
-            {
-                MessageBox.Show("Invalid file name!");
-                return;
-            }
-
-            string path = Path.Combine(directory, fileName);
-            using (StreamWriter dataLogger = new StreamWriter(path, true))
-            {
-                string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                string csvData = $"{timestamp}; {data}";
-                dataLogger.WriteLine(csvData);
-                dataLogger.Flush();
-            }
-        }
-
-        void SaveData(Mavlink.MavlinkMessage message)
-        {
-            string directory = GetLoggingDirectory();
-            string fileName = message.MsgTypename + ".csv";
-            string data = MavlinkUtilities.GetMessageDataCSV(message);
-            WriteDataCSV(directory, fileName, data);
-        }      
 
         private void WriteBufferConsole(byte[] buffer, string logMessage, bool UseHexMode = false)
         {

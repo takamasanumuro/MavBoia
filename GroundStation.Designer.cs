@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GroundStation));
-            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.panelLateral = new System.Windows.Forms.Panel();
             this.panelSecondaryFormLoader = new System.Windows.Forms.Panel();
             this.buttonRastreio = new System.Windows.Forms.Button();
@@ -335,7 +334,6 @@
         }
 
         #endregion
-        private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.BindingSource mavlinkheartbeattBindingSource;
         private System.Windows.Forms.Panel panelLateral;
         private System.Windows.Forms.Button buttonConfigurações;

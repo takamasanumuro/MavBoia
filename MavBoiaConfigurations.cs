@@ -10,6 +10,7 @@ namespace MavBoia
     {
         private static string _serialPort;
         private static int _baudRate;
+        private static string rjTextBoxLogDirectory;
 
         public static string SerialPort { 
             get => _serialPort; 
@@ -25,6 +26,15 @@ namespace MavBoia
             {
                 _baudRate = value;
                 OnSerialConfigurationUpdate?.Invoke();
+            }
+        }
+
+        public static string RjTextBoxLogDirectory
+        {
+            get => rjTextBoxLogDirectory;
+            set
+            {
+                rjTextBoxLogDirectory = value;
             }
         }
 

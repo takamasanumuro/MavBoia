@@ -77,5 +77,10 @@ namespace SimpleExample
         {
             MavBoiaConfigurations.BaudRate = int.Parse(this.comboBoxBaudRate.SelectedItem.ToString());
         }
+
+        private void rjTextBoxLogDirectory__TextChanged(object sender, EventArgs e)
+        {
+            MavBoiaConfigurations.RjTextBoxLogDirectory = this.rjTextBoxLogDirectory.Texts;
+        }
     }
 }

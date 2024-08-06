@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MavBoia;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -33,15 +34,17 @@ namespace SimpleExample
         public static float rpmLeft = 0.0f;
         public static float rpmRight = 0.0f;
 
+        private SerialDataController serialDataController;
 
-        public FormDados(Form parent)
+        public FormDados(SerialDataController serialDataController)
         {
             InitializeComponent();
             instance = this;
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
 
-            this.parent = parent;
+            this.serialDataController = serialDataController;
+            this.serialDataController.OnMavlink_ALL_INFO_MessageReceived += UpdateData;
         }
 
         private String CheckTemperatureProbe(float temperature)
@@ -64,7 +67,28 @@ namespace SimpleExample
                                          $"Corrente do motor R: {message.motor_current_right:F2}A\n" +
                                          $"Corrente do MPPT: {message.mppt_current:F2}A\n";
 
-            labelInstrumentationData.Text = instrumentationText;
+            
+
+            string temperatureText = $"Bateria(L): " + CheckTemperatureProbe(message.temperature_battery_left) + "\n" +
+                                     $"Bateria(R): " + CheckTemperatureProbe(message.temperature_battery_right) + "\n" +
+                                     $"MPPT: " + CheckTemperatureProbe(message.temperature_mppt) + "\n";
+
+            
+
+            string rpmText = $"Motor L: {message.rpm_left:F0}\n" +
+                             $"Motor R: {message.rpm_right:F0}\n";
+
+            this.BeginInvoke((Action)(() =>
+            {
+                labelInstrumentationData.Text = instrumentationText;
+                labelTemperatureData.Text = temperatureText;
+                labelRPM.Text = rpmText;
+            }));
+
+            batteryVoltage = message.battery_voltage;
+            motorLeftCurrent = message.motor_current_left;
+            motorRightCurrent = message.motor_current_right;
+            mpptCurrent = message.mppt_current;
 
             batteryCurrent = motorLeftCurrent + motorRightCurrent - mpptCurrent;
             generationPower = mpptCurrent * batteryVoltage;
@@ -73,19 +97,15 @@ namespace SimpleExample
             motorRightPower = motorRightCurrent * batteryVoltage;
             resultantPower = batteryPower * batteryVoltage;
 
-            string temperatureText = $"Bateria(L): " + CheckTemperatureProbe(message.temperature_battery_left) + "\n" +
-                                     $"Bateria(R): " + CheckTemperatureProbe(message.temperature_battery_right) + "\n" +
-                                     $"MPPT: " + CheckTemperatureProbe(message.temperature_mppt) + "\n";
-
-            labelTemperatureData.Text = temperatureText;
+            temperatureBatteryLeft = message.temperature_battery_left;
+            temperatureBatteryRight = message.temperature_battery_right;
+            temperatureMPPT = message.temperature_mppt;
 
             latitude = message.latitude;
             longitude = message.longitude;
 
-            string rpmText = $"Motor L: {message.rpm_left:F0}\n" +
-                             $"Motor R: {message.rpm_right:F0}\n";
-            
-            labelRPM.Text = rpmText;
+            rpmLeft = message.rpm_left;
+            rpmRight = message.rpm_right;
         }
 
         private void Form_MouseDown_Drag(object sender, MouseEventArgs e)

@@ -150,6 +150,7 @@
             this.rjTextBoxLogDirectory.TabIndex = 30;
             this.rjTextBoxLogDirectory.Texts = "C://logs";
             this.rjTextBoxLogDirectory.UnderlinedStyle = false;
+            this.rjTextBoxLogDirectory._TextChanged += new System.EventHandler(this.rjTextBoxLogDirectory__TextChanged);
             // 
             // buttonSeneca
             // 
