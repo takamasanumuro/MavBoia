@@ -17,6 +17,7 @@ using CefSharp;
 using CefSharp.DevTools.Network;
 using MavBoia;
 using System.Threading;
+using DataController.SerialData;
 
 namespace SimpleExample
 {
@@ -30,19 +31,18 @@ namespace SimpleExample
         private byte CompIDLocal { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_MISSIONPLANNER;
         private byte VehicleSysID { get; set; } = 0x01; // Default System ID for vehicles.
         private byte VehicleCompID { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER;
- 
-        // Forms instanciation
-        FormChart formGraficos = new FormChart() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        FormMapa formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        FormConfigurações formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        BrowserForm formBrowser = new BrowserForm() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
 
-        private FormDados formDados;
+        // Forms declaration
+        FormChart formGraficos;
+        FormMapa formMapa;
+        FormConfigurações formConfigurações;
+        BrowserForm formBrowser;
+        FormDados formDados;
 
         public Point previousMousePosition; // Store the previous mouse position for dragging the form around
         
         // Serial communication
-        private SerialDataController serialDataController;
+        public static SerialDataController serialDataController;
         private SerialPort serialPort;
         private BackgroundWorker serialWorker;
         private object serialLock = new object(); // lock to prevent thread collisions on serial port
@@ -56,17 +56,26 @@ namespace SimpleExample
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
 
+            // Serial port initialization
             serialPort = new SerialPort("COM8", 9600);
             serialPort.ReadTimeout = 2000;
             serialDataController = new SerialDataController();
-            formDados = new FormDados(serialDataController) { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-            MavBoiaConfigurations.OnSerialConfigurationUpdate += UpdateSerialConfiguration;
-                  
+
             serialWorker = new BackgroundWorker();
             serialWorker.WorkerSupportsCancellation = true;
             serialWorker.DoWork += serialWorker_DoWork;
             serialWorker.RunWorkerCompleted += serialWorker_RunWorkerCompleted;
+
+            // Forms instantiation
+            formGraficos = new FormChart() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+            formDados = new FormDados(serialDataController) { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+            formMapa = new FormMapa(serialDataController) { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+            formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+            formBrowser = new BrowserForm() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
+
+            MavBoiaConfigurations.OnSerialConfigurationUpdate += UpdateSerialConfiguration;
         }
+
         #region Form Rounding and Dragging
         // This is the function that will allow the form to be rounded
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -236,30 +245,6 @@ namespace SimpleExample
         private void buttonHTTPConnect_Click(object sender, EventArgs e)
         {
             
-        }
-
-        /// <summary>
-        /// Process received Mavlink message based on its message ID.
-        /// </summary>
-        /// <param name="message"></param>
-        void ProcessMavlinkMessage(Mavlink.MavlinkMessage message)
-        {
-            Console.WriteLine(message.MsgTypename);
-            switch (message.MsgID)
-            {
-                // Delegates and lambda expressions must be used to update the UI from a different thread.
-                case (uint)Mavlink.MAVLINK_MSG_ID.ALL_INFO:
-                    {
-                        Mavlink.mavlink_all_info_t payload = (Mavlink.mavlink_all_info_t)message.Payload;
-                        MavlinkUtilities.PrintMessageInfo(message);
-                        this.formDados.BeginInvoke((Action)(() => { this.formDados.UpdateData(payload); }));
-                        formMapa.UpdateData(payload);
-                        break;
-                    }
-                default:
-                    break;
-            }
-            //SaveData(message);
         }
 
         private void WriteBufferConsole(byte[] buffer, string logMessage, bool UseHexMode = false)

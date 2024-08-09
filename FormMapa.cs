@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using static GMap.NET.MapProviders.StrucRoads.SnappedPoint;
 using System.Runtime.InteropServices;
+using DataController.SerialData;
+using System.Diagnostics;
 
 namespace SimpleExample
 {
@@ -16,7 +18,7 @@ namespace SimpleExample
         public PointLatLng boatLocation = new PointLatLng(-22.8570241, -43.0955684);
         Bitmap boatIcon = new Bitmap("Resources/boaticon1.bmp");
         
-        public FormMapa()
+        public FormMapa(SerialDataController serialDataController)
         {
             InitializeComponent();
             MouseDown += Form_MouseDown_Drag;
@@ -24,6 +26,7 @@ namespace SimpleExample
             mapControl.MouseDown += Form_MouseDown_Drag;
             mapControl.MouseMove += Form_MouseMove_Drag;
 
+            serialDataController.OnMavlink_ALL_INFO_MessageReceived += UpdateData;
         }
 
         public void UpdateData(Mavlink.mavlink_all_info_t packet)

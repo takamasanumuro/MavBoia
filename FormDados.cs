@@ -9,42 +9,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DataController.SerialData;
 
 namespace SimpleExample
 {
     public partial class FormDados : Form
     {
-        private Form parent;
-        public static Form instance;
-        public static float motorLeftCurrent = 0.0f;
-        public static float motorRightCurrent = 0.0f;
-        public static float mpptCurrent = 0.0f;
-        public static float batteryCurrent = 0.0f;
-        public static float batteryVoltage = 0.0f;
-        public static float generationPower = 0.0f;
-        public static float batteryPower = 0.0f;
-        public static float motorLeftPower = 0.0f;
-        public static float motorRightPower = 0.0f;
-        public static float resultantPower = 0.0f;
-        public static float latitude = 0.000000f;
-        public static float longitude = 0.000000f;
-        public static float temperatureBatteryLeft = 0.0f;
-        public static float temperatureBatteryRight = 0.0f;
-        public static float temperatureMPPT = 0.0f;
-        public static float rpmLeft = 0.0f;
-        public static float rpmRight = 0.0f;
-
-        private SerialDataController serialDataController;
-
         public FormDados(SerialDataController serialDataController)
         {
             InitializeComponent();
-            instance = this;
             MouseDown += Form_MouseDown_Drag;
             MouseMove += Form_MouseMove_Drag;
 
-            this.serialDataController = serialDataController;
-            this.serialDataController.OnMavlink_ALL_INFO_MessageReceived += UpdateData;
+            serialDataController.OnMavlink_ALL_INFO_MessageReceived += UpdateData;
         }
 
         private String CheckTemperatureProbe(float temperature)
@@ -84,28 +61,6 @@ namespace SimpleExample
                 labelTemperatureData.Text = temperatureText;
                 labelRPM.Text = rpmText;
             }));
-
-            batteryVoltage = message.battery_voltage;
-            motorLeftCurrent = message.motor_current_left;
-            motorRightCurrent = message.motor_current_right;
-            mpptCurrent = message.mppt_current;
-
-            batteryCurrent = motorLeftCurrent + motorRightCurrent - mpptCurrent;
-            generationPower = mpptCurrent * batteryVoltage;
-            batteryPower = batteryCurrent * batteryVoltage;
-            motorLeftPower = motorLeftCurrent * batteryVoltage;
-            motorRightPower = motorRightCurrent * batteryVoltage;
-            resultantPower = batteryPower * batteryVoltage;
-
-            temperatureBatteryLeft = message.temperature_battery_left;
-            temperatureBatteryRight = message.temperature_battery_right;
-            temperatureMPPT = message.temperature_mppt;
-
-            latitude = message.latitude;
-            longitude = message.longitude;
-
-            rpmLeft = message.rpm_left;
-            rpmRight = message.rpm_right;
         }
 
         private void Form_MouseDown_Drag(object sender, MouseEventArgs e)
