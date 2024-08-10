@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -19,58 +20,7 @@ namespace SimpleExample
         {
             instance = this;
             InitializeComponent();
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
-            MouseDown += Form_MouseDown_Drag;
-            MouseMove += Form_MouseMove_Drag;
         }
-
-        #region Form Rounding and Dragging
-        // This is the function that will allow the form to be rounded
-        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-        private static extern IntPtr CreateRoundRectRgn
-        (
-            int nLeftRect,
-            int nTopRect,
-            int nRightRect,
-            int nBottomRect,
-            int nWidthEllipse,
-            int nHeightEllipse
-
-        );
-
-        // Allows form to be dragged.
-        protected override void WndProc(ref Message m)
-        {
-            // Constants for form rounding and dragging
-            const int WM_NCHITTEST = 0x84;
-            const int HT_CAPTION = 0x2;
-            // Override WndProc to enable dragging
-            if (m.Msg == WM_NCHITTEST)
-            {
-                base.WndProc(ref m);
-                if (m.Result.ToInt32() == HT_CAPTION)
-                    m.Result = (IntPtr)1;
-                return;
-            }
-            base.WndProc(ref m);
-        }
-
-        public void Form_MouseDown_Drag(object sender, MouseEventArgs e)
-        {
-            // Store the current mouse position
-            previousMousePosition = new Point(e.X, e.Y);
-        }
-
-        public void Form_MouseMove_Drag(object sender, MouseEventArgs e)
-        {
-            // Move the form when dragging
-            if (e.Button == MouseButtons.Left)
-            {
-                this.Left += e.X - previousMousePosition.X;
-                this.Top += e.Y - previousMousePosition.Y;
-            }
-        }
-        #endregion
 
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {

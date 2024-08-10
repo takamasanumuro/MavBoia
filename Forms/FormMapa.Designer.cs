@@ -43,6 +43,7 @@
             this.mapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
             this.mapControl.LevelsKeepInMemory = 5;
             this.mapControl.Location = new System.Drawing.Point(0, 0);
+            this.mapControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.mapControl.MarkersEnabled = true;
             this.mapControl.MaxZoom = 17;
             this.mapControl.MinZoom = 2;
@@ -56,7 +57,7 @@
             this.mapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.mapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.mapControl.ShowTileGridLines = false;
-            this.mapControl.Size = new System.Drawing.Size(910, 480);
+            this.mapControl.Size = new System.Drawing.Size(1365, 738);
             this.mapControl.TabIndex = 0;
             this.mapControl.Zoom = 13D;
             this.mapControl.Load += new System.EventHandler(this.mapControl_Load);
@@ -68,14 +69,15 @@
             // 
             // FormMapa
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
-            this.ClientSize = new System.Drawing.Size(910, 480);
+            this.ClientSize = new System.Drawing.Size(1365, 738);
             this.Controls.Add(this.mapControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FormMapa";
-            this.Text = "FormMapa";
+            this.Text = "Mapa";
             this.ResumeLayout(false);
 
         }

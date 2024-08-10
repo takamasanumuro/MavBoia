@@ -21,11 +21,7 @@ namespace SimpleExample
         public FormMapa(SerialDataController serialDataController)
         {
             InitializeComponent();
-            MouseDown += Form_MouseDown_Drag;
-            MouseMove += Form_MouseMove_Drag;
-            mapControl.MouseDown += Form_MouseDown_Drag;
-            mapControl.MouseMove += Form_MouseMove_Drag;
-
+            
             serialDataController.OnMavlink_ALL_INFO_MessageReceived += UpdateData;
         }
 
@@ -37,22 +33,6 @@ namespace SimpleExample
             if (lat != -1.0 && lon != -1.0)
             {
                 UpdateLocation(lat, lon);
-            }
-        }
-
-        private void Form_MouseDown_Drag(object sender, MouseEventArgs e)
-        {
-            // Store the current mouse position
-            GroundStation.instance.previousMousePosition = new Point(e.X, e.Y);
-        }
-
-        private void Form_MouseMove_Drag(object sender, MouseEventArgs e)
-        {
-            // Move the form when dragging
-            if (e.Button == MouseButtons.Left)
-            {
-                GroundStation.instance.Left += e.X - GroundStation.instance.previousMousePosition.X;
-                GroundStation.instance.Top += e.Y - GroundStation.instance.previousMousePosition.Y;
             }
         }
 
