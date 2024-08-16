@@ -9,12 +9,14 @@ using System.Windows.Forms;
 using MavBoia;
 using System.Diagnostics;
 
-namespace DataController.SerialData
+namespace MavlinkDataController
 {
-    public class SerialDataController
+    public class DataController
     {
-        public event Action<Mavlink.mavlink_all_info_t> OnMavlink_ALL_INFO_MessageReceived;
+        public event Action<AllSensorData> OnDataReceived;
 
+        #region Variables
+        // To avoid messing with generated code, this variables were created to manage GLG Chart.
         private float motorLeftCurrent = 0.0f;
         private float motorRightCurrent = 0.0f;
         private float mpptCurrent = 0.0f;
@@ -32,6 +34,7 @@ namespace DataController.SerialData
         private float temperatureMPPT = 0.0f;
         private float rpmLeft = 0.0f;
         private float rpmRight = 0.0f;
+        #endregion
 
         public class AllSensorData
         {
@@ -53,36 +56,42 @@ namespace DataController.SerialData
             private float rpmLeft = 0.0f;
             private float rpmRight = 0.0f;
 
-            public float MotorLeftCurrent { get => motorLeftCurrent; }
-            public float MotorRightCurrent { get => motorRightCurrent; }
-            public float MpptCurrent { get => mpptCurrent; }
-            public float BatteryCurrent { get => batteryCurrent; }
-            public float BatteryVoltage { get => batteryVoltage; }
-            public float GenerationPower { get => generationPower; }
-            public float BatteryPower { get => batteryPower; }
-            public float MotorLeftPower { get => motorLeftPower; }
-            public float MotorRightPower { get => motorRightPower; }
-            public float ResultantPower { get => resultantPower; }
-            public float Latitude { get => latitude; }
-            public float Longitude { get => longitude; }
-            public float TemperatureBatteryLeft { get => temperatureBatteryLeft;     }
-            public float TemperatureBatteryRight { get => temperatureBatteryRight; }
-            public float TemperatureMPPT { get => temperatureMPPT; }
-            public float RpmLeft { get => rpmLeft; }
-            public float RpmRight { get => rpmRight; }
+            public float MotorLeftCurrent { get => motorLeftCurrent; set { this.motorLeftCurrent = value; UpdateCalculatedValues(); } }
+            public float MotorRightCurrent { get => motorRightCurrent; set { motorRightCurrent = value; UpdateCalculatedValues(); } }
+            public float MpptCurrent { get => mpptCurrent; set { mpptCurrent = value; UpdateCalculatedValues(); } }
+            public float BatteryCurrent { get => batteryCurrent; private set => batteryCurrent = value; }
+            public float BatteryVoltage { get => batteryVoltage; set { batteryVoltage = value; UpdateCalculatedValues(); } }
+            public float GenerationPower { get => generationPower; private set => generationPower = value; }
+            public float BatteryPower { get => batteryPower; private set => batteryPower = value; }
+            public float MotorLeftPower { get => motorLeftPower; private set => motorLeftPower = value; }
+            public float MotorRightPower { get => motorRightPower; private set => motorRightPower = value; }
+            public float ResultantPower { get => resultantPower; private set => resultantPower = value; }
+            public float Latitude { get => latitude; set => latitude = value; }
+            public float Longitude { get => longitude; set => longitude = value; }
+            public float TemperatureBatteryLeft { get => temperatureBatteryLeft; set => temperatureBatteryLeft = value; }
+            public float TemperatureBatteryRight { get => temperatureBatteryRight; set => temperatureBatteryRight = value; }
+            public float TemperatureMPPT { get => temperatureMPPT; set => temperatureMPPT = value; }
+            public float RpmLeft { get => rpmLeft; set => rpmLeft = value; }
+            public float RpmRight { get => rpmRight; set => rpmRight = value; }
 
-            public AllSensorData(float motorLeftCurrent, float motorRightCurrent, float mpptCurrent, float batteryCurrent, float batteryVoltage, float generationPower, float batteryPower, float motorLeftPower, float motorRightPower, float resultantPower, float latitude, float longitude, float temperatureBatteryLeft, float temperatureBatteryRight, float temperatureMPPT, float rpmLeft, float rpmRight)
+
+            private void UpdateCalculatedValues()
+            {
+                this.batteryCurrent = this.motorLeftCurrent + this.motorRightCurrent - this.mpptCurrent;
+                this.generationPower = this.mpptCurrent * this.batteryVoltage;
+                this.batteryPower = this.batteryCurrent * this.batteryVoltage;
+                this.motorLeftPower = this.motorLeftCurrent * this.batteryVoltage;
+                this.motorRightPower = this.motorRightCurrent * this.batteryVoltage;
+                this.resultantPower = this.batteryPower * this.batteryVoltage;
+            }
+
+            public AllSensorData(float motorLeftCurrent, float motorRightCurrent, float mpptCurrent, float batteryVoltage, float latitude, float longitude, float temperatureBatteryLeft, float temperatureBatteryRight, float temperatureMPPT, float rpmLeft, float rpmRight)
             {
                 this.motorLeftCurrent = motorLeftCurrent;
                 this.motorRightCurrent = motorRightCurrent;
                 this.mpptCurrent = mpptCurrent;
-                this.batteryCurrent = batteryCurrent;
                 this.batteryVoltage = batteryVoltage;
-                this.generationPower = generationPower;
-                this.batteryPower = batteryPower;
-                this.motorLeftPower = motorLeftPower;
-                this.motorRightPower = motorRightPower;
-                this.resultantPower = resultantPower;
+                UpdateCalculatedValues();
                 this.latitude = latitude;
                 this.longitude = longitude;
                 this.temperatureBatteryLeft = temperatureBatteryLeft;
@@ -91,9 +100,29 @@ namespace DataController.SerialData
                 this.rpmLeft = rpmLeft;
                 this.rpmRight = rpmRight;
             }
+            public AllSensorData() 
+            {
+                this.motorLeftCurrent = 0;
+                this.motorRightCurrent = 0;
+                this.mpptCurrent = 0;
+                this.batteryCurrent = 0;
+                this.batteryVoltage = 0;
+                this.generationPower = 0;
+                this.batteryPower = 0;
+                this.motorLeftPower = 0;
+                this.motorRightPower = 0;
+                this.resultantPower = 0;
+                this.latitude = 0;
+                this.longitude = 0;
+                this.temperatureBatteryLeft = 0;
+                this.temperatureBatteryRight = 0;
+                this.temperatureMPPT = 0;
+                this.rpmLeft = 0;
+                this.rpmRight = 0;
+            }
         }
         
-        public SerialDataController()
+        public DataController()
         { 
         }
         private void UpdateData(Mavlink.mavlink_all_info_t message)
@@ -117,6 +146,27 @@ namespace DataController.SerialData
             this.rpmRight = message.rpm_right;
         }
 
+        private void UpdateData(AllSensorData data)
+        {
+            this.motorLeftCurrent = data.MotorLeftCurrent;
+            this.motorRightCurrent = data.MotorRightCurrent;
+            this.mpptCurrent = data.MpptCurrent;
+            this.batteryCurrent = this.motorLeftCurrent + this.motorRightCurrent - this.mpptCurrent;
+            this.batteryVoltage = data.BatteryVoltage;
+            this.generationPower = this.mpptCurrent * this.batteryVoltage;
+            this.batteryPower = this.batteryCurrent * this.batteryVoltage;
+            this.motorLeftPower = this.motorLeftCurrent * this.batteryVoltage;
+            this.motorRightPower = this.motorRightCurrent * this.batteryVoltage;
+            this.resultantPower = this.batteryPower * this.batteryVoltage;
+            this.latitude = data.Latitude;
+            this.longitude = data.Longitude;
+            this.temperatureBatteryLeft = data.TemperatureBatteryLeft;
+            this.temperatureBatteryRight = data.TemperatureBatteryRight;
+            this.temperatureMPPT = data.TemperatureMPPT;
+            this.rpmLeft = data.RpmLeft;
+            this.rpmRight = data.RpmRight;
+        }
+
         public void ProcessMavlinkMessage(Mavlink.MavlinkMessage message)
         {
             Console.WriteLine(message.MsgTypename);
@@ -128,7 +178,8 @@ namespace DataController.SerialData
                         Mavlink.mavlink_all_info_t payload = (Mavlink.mavlink_all_info_t)message.Payload;
                         MavlinkUtilities.PrintMessageInfo(message);
                         this.UpdateData(payload);
-                        OnMavlink_ALL_INFO_MessageReceived?.Invoke(payload);
+                        AllSensorData allSensorData = GetAllSensorData();
+                        OnDataReceived?.Invoke(allSensorData);
                         break;
                     }
                 default:
@@ -137,15 +188,20 @@ namespace DataController.SerialData
             SaveData(message);
         }
 
+        public void ProcessNetworkData(AllSensorData data)
+        {
+            UpdateData(data);
+            OnDataReceived?.Invoke(data);
+        }
+
         public AllSensorData GetAllSensorData()
         {
             return new AllSensorData(this.motorLeftCurrent, this.motorRightCurrent,
-                this.mpptCurrent, this.batteryCurrent, this.batteryVoltage, this.generationPower,
-                this.batteryPower, this.motorLeftPower, this.motorRightPower, this.resultantPower,
-                this.latitude, this.longitude, this.temperatureBatteryLeft, this.temperatureBatteryRight,
+                this.mpptCurrent, this.batteryVoltage, this.latitude, this.longitude, this.temperatureBatteryLeft, this.temperatureBatteryRight,
                 this.temperatureMPPT, this.rpmLeft, this.rpmRight);
         }
 
+        #region Logging
         String GetLoggingDirectory()
         {
             string directory = String.Empty;
@@ -177,7 +233,8 @@ namespace DataController.SerialData
             {
                 string timestamp = DateTime.Now.ToString("HH:mm:ss");
                 string csvData = $"{timestamp}; {data}";
-                dataLogger.WriteLine(csvData);
+                Console.WriteLine(csvData);
+                dataLogger.WriteLine(data);
                 dataLogger.Flush();
             }
         }
@@ -189,5 +246,6 @@ namespace DataController.SerialData
             string data = MavlinkUtilities.GetMessageDataCSV(message);
             WriteDataCSV(directory, fileName, data);
         }
+        #endregion
     }
 }

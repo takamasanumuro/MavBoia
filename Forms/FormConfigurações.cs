@@ -1,5 +1,6 @@
 ﻿using MavBoia;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
 using System.Windows.Forms;
@@ -12,7 +13,6 @@ namespace SimpleExample
         {
             InitializeComponent();
             SetSerialPortDefaults("COM8", 9600);
-            fancyComboBoxNetConnectionType.SelectedItem = "Local";
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace SimpleExample
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void comboBoxSerialPort_Click(object sender, EventArgs e)
+        private void comboBoxSerialPort_DropDown(object sender, EventArgs e)
         {
             string[] ports = SerialPort.GetPortNames();
             comboBoxSerialPort.DataSource = ports;
@@ -42,6 +42,7 @@ namespace SimpleExample
                 }
             }
             MessageBox.Show("Serial port number not found!");
+            comboBoxSerialPort.SelectedIndex = 0;
         }
 
         private void buttonSeneca_Click(object sender, EventArgs e)

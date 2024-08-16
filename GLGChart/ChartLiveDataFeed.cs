@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GenLogic;
-using DataController.SerialData;
+using MavlinkDataController;
 using SimpleExample;
 
 /////////////////////////////////////////////////////////////////////// 
@@ -102,7 +102,7 @@ public class ChartLiveDataFeed : ChartDataFeedInterface
         tag_source = tag_source.ToLower();
         data_point.value = 0;
 
-        SerialDataController.AllSensorData allSensorsData = GroundStation.serialDataController.GetAllSensorData();
+        MavlinkDataController.DataController.AllSensorData allSensorsData = GroundStation.DataController.GetAllSensorData();
 
         if (tag_source.Contains("corrente") && tag_source.Contains("motorbombordo"))
         {

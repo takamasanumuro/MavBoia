@@ -8,15 +8,14 @@ using System.Windows.Forms;
 using CefSharp.MinimalExample.WinForms;
 using MavBoia;
 using System.Threading;
-using DataController.SerialData;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using MavBoia.InfluxDB;
 
 namespace SimpleExample
 {
     public partial class GroundStation : Form
     {
-        public static GroundStation instance;
-
         //Mavlink parser responsible for parsing and deparsing mavlink packets
         private Mavlink.MavlinkParser mavlinkParser = new Mavlink.MavlinkParser();
         private byte SysIDLocal { get;  set; } = 0xFF; // Default System ID for ground stations.
@@ -37,30 +36,38 @@ namespace SimpleExample
         private Form currentForm;
         
         // Serial communication
-        public static SerialDataController serialDataController;
         private SerialPort serialPort;
         private BackgroundWorker serialWorker;
         private object serialLock = new object(); // lock to prevent thread collisions on serial port
 
+        // Network communication
+        InfluxDBCommunication influxCommunication;
+        private CancellationTokenSource networkCancellation;
+        private bool isNetworkRunning = false;
+
+        public static MavlinkDataController.DataController DataController; // Static to facilitate communication with GLG Chart. If you need to use pass the object instead of accessing the static field.
+
         public GroundStation()
         {
             InitializeComponent();
-            instance = this;
+
+            DataController = new MavlinkDataController.DataController();
 
             // Serial port initialization
             serialPort = new SerialPort("COM8", 9600);
             serialPort.ReadTimeout = 2000;
-            serialDataController = new SerialDataController();
-
             serialWorker = new BackgroundWorker();
             serialWorker.WorkerSupportsCancellation = true;
             serialWorker.DoWork += serialWorker_DoWork;
             serialWorker.RunWorkerCompleted += serialWorker_RunWorkerCompleted;
 
+            // Network initialization
+            influxCommunication = new InfluxDBCommunication();
+
             // Forms instantiation
             formGraficos = new FormChart();
-            formDados = new FormDados(serialDataController);
-            formMapa = new FormMapa(serialDataController);
+            formDados = new FormDados(DataController);
+            formMapa = new FormMapa(DataController);
             formConfigurações = new FormConfigurações();
             formBrowser = new BrowserForm();
 
@@ -87,7 +94,8 @@ namespace SimpleExample
                 form.Dock = DockStyle.Fill;
                 panelDesktop.Controls.Add(form);
                 
-                form.Hide();
+                form.Show(); // Calls load event
+                form.Hide(); // Keeps the form in background
             }
         }
 
@@ -153,7 +161,7 @@ namespace SimpleExample
 
                     if (message != null)
                     {
-                        serialDataController.ProcessMavlinkMessage(message);
+                        DataController.ProcessMavlinkMessage(message);
                     }
                 }
                 catch(UnauthorizedAccessException unauthorizedException)
@@ -180,34 +188,42 @@ namespace SimpleExample
 
         #endregion
 
-        
-        
-        private void buttonHTTPConnect_Click(object sender, EventArgs e)
+        #region Network
+        private async Task RunNetworkAsync(CancellationToken cancellationToken)
         {
+            isNetworkRunning = true;
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    MavlinkDataController.DataController.AllSensorData data = await influxCommunication.GetAllDataAsync();
+                    DataController.ProcessNetworkData(data);
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                }
+                Thread.Sleep(1000);
+            }   
             
+            isNetworkRunning = false;
         }
 
-        private void WriteBufferConsole(byte[] buffer, string logMessage, bool UseHexMode = false)
+        private void buttonConnectNetwork_Click(object sender, EventArgs e)
         {
-            if (logMessage != String.Empty)
-                Console.WriteLine(logMessage);
+            if (isNetworkRunning)
+            {
+                networkCancellation?.Cancel();
+                buttonConnectNetwork.Text = "Conectar rede";
+                return;
+            }
 
-            if (UseHexMode)
-            {
-                foreach (var item in buffer)
-                {
-                    Console.WriteLine($"0x{item.ToString("X2")}");
-                }
-            }
-            else
-            {
-                foreach (var item in buffer)
-                {
-                    Console.WriteLine($"{item}");
-                }
-            }
-            Console.WriteLine();
+            networkCancellation = new CancellationTokenSource();
+            buttonConnectNetwork.Text = "Desconectar rede";
+            isNetworkRunning = true;
+            var task = Task.Run(async () => await RunNetworkAsync(networkCancellation.Token));
         }
+        #endregion
 
         #region Button Functions
         private void ActivateButton(Button btn)
@@ -273,6 +289,15 @@ namespace SimpleExample
             ShowForm(formConfigurações);
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            this.serialPort?.Dispose();
+            this.influxCommunication?.Dispose();
+            base.OnClosed(e);
+            Application.Exit();
+        }
+
+        #region Deprecated
         /// <summary>
         /// Callback for all buttons in the sidebar. Sets the panelNav position and color, which is the thin blue bar that tracks the buttons.
         /// </summary>
@@ -295,11 +320,28 @@ namespace SimpleExample
             //pictureBoxArariboia.Enabled = false;
             //pictureBoxArariboia.Visible = false;
         }
+        #endregion
 
-        protected override void OnClosed(EventArgs e)
+        private void WriteBufferConsole(byte[] buffer, string logMessage, bool UseHexMode = false)
         {
-            this.serialPort?.Dispose();
-            base.OnClosed(e);
+            if (logMessage != String.Empty)
+                Console.WriteLine(logMessage);
+
+            if (UseHexMode)
+            {
+                foreach (var item in buffer)
+                {
+                    Console.WriteLine($"0x{item.ToString("X2")}");
+                }
+            }
+            else
+            {
+                foreach (var item in buffer)
+                {
+                    Console.WriteLine($"{item}");
+                }
+            }
+            Console.WriteLine();
         }
     }
 }

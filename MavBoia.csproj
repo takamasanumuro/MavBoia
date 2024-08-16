@@ -228,6 +228,7 @@
     <Compile Include="GLGChart\PlotDataPoint.cs" />
     <Compile Include="GLGChart\PlotInfo.cs" />
     <Compile Include="GPRMCParser.cs" />
+    <Compile Include="InfluxDB\InfluxDBCommunication.cs" />
     <Compile Include="MavBoiaConfigurations.cs" />
     <Compile Include="Mavlink\Mavlink.cs" />
     <Compile Include="Mavlink\MavlinkCRC.cs" />
@@ -243,7 +244,7 @@
     <Compile Include="Mavlink\MavlinkUtilities.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerialDataController.cs" />
+    <Compile Include="DataController.cs" />
     <EmbeddedResource Include="Forms\BrowserForm.resx">
       <DependentUpon>BrowserForm.cs</DependentUpon>
     </EmbeddedResource>

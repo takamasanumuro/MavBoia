@@ -77,6 +77,7 @@
             // 
             // buttonRastreio
             // 
+            this.buttonRastreio.FlatAppearance.BorderSize = 0;
             this.buttonRastreio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRastreio.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonRastreio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
@@ -94,6 +95,7 @@
             // 
             // buttonGraficos
             // 
+            this.buttonGraficos.FlatAppearance.BorderSize = 0;
             this.buttonGraficos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonGraficos.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonGraficos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
@@ -111,6 +113,7 @@
             // 
             // buttonDados
             // 
+            this.buttonDados.FlatAppearance.BorderSize = 0;
             this.buttonDados.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonDados.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonDados.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
@@ -128,6 +131,7 @@
             // 
             // buttonMapa
             // 
+            this.buttonMapa.FlatAppearance.BorderSize = 0;
             this.buttonMapa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonMapa.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonMapa.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
@@ -145,6 +149,7 @@
             // 
             // buttonConfigurações
             // 
+            this.buttonConfigurações.FlatAppearance.BorderSize = 0;
             this.buttonConfigurações.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonConfigurações.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonConfigurações.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
@@ -162,7 +167,7 @@
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
+            this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 801);
             this.panel1.Name = "panel1";
@@ -238,6 +243,7 @@
             this.buttonConnectNetwork.Text = "Conectar rede";
             this.buttonConnectNetwork.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
             this.buttonConnectNetwork.UseVisualStyleBackColor = false;
+            this.buttonConnectNetwork.Click += new System.EventHandler(this.buttonConnectNetwork_Click);
             // 
             // buttonConnectRadio
             // 
@@ -263,6 +269,7 @@
             // 
             // panelDesktop
             // 
+            this.panelDesktop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.panelDesktop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelDesktop.Location = new System.Drawing.Point(341, 124);
             this.panelDesktop.Name = "panelDesktop";
@@ -275,6 +282,7 @@
             this.Controls.Add(this.panelDesktop);
             this.Controls.Add(this.panelControls);
             this.Controls.Add(this.panelLateral);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(1600, 900);
             this.Name = "GroundStation";
             this.Text = "MavBoia";
