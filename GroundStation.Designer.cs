@@ -203,9 +203,9 @@
             this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTitle.Font = new System.Drawing.Font("Nirmala UI", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
-            this.lblTitle.Location = new System.Drawing.Point(410, 0);
+            this.lblTitle.Location = new System.Drawing.Point(456, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(827, 124);
+            this.lblTitle.Size = new System.Drawing.Size(781, 124);
             this.lblTitle.TabIndex = 2;
             this.lblTitle.Text = "MavBoia";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -220,7 +220,7 @@
             this.panelButtonConnect.Location = new System.Drawing.Point(0, 0);
             this.panelButtonConnect.Name = "panelButtonConnect";
             this.panelButtonConnect.Padding = new System.Windows.Forms.Padding(20);
-            this.panelButtonConnect.Size = new System.Drawing.Size(410, 124);
+            this.panelButtonConnect.Size = new System.Drawing.Size(456, 124);
             this.panelButtonConnect.TabIndex = 1;
             // 
             // buttonConnectNetwork
@@ -236,9 +236,9 @@
             this.buttonConnectNetwork.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonConnectNetwork.Font = new System.Drawing.Font("Nirmala UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonConnectNetwork.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
-            this.buttonConnectNetwork.Location = new System.Drawing.Point(222, 33);
+            this.buttonConnectNetwork.Location = new System.Drawing.Point(249, 33);
             this.buttonConnectNetwork.Name = "buttonConnectNetwork";
-            this.buttonConnectNetwork.Size = new System.Drawing.Size(168, 55);
+            this.buttonConnectNetwork.Size = new System.Drawing.Size(187, 55);
             this.buttonConnectNetwork.TabIndex = 1;
             this.buttonConnectNetwork.Text = "Conectar rede";
             this.buttonConnectNetwork.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
@@ -260,7 +260,7 @@
             this.buttonConnectRadio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
             this.buttonConnectRadio.Location = new System.Drawing.Point(20, 33);
             this.buttonConnectRadio.Name = "buttonConnectRadio";
-            this.buttonConnectRadio.Size = new System.Drawing.Size(168, 55);
+            this.buttonConnectRadio.Size = new System.Drawing.Size(194, 55);
             this.buttonConnectRadio.TabIndex = 0;
             this.buttonConnectRadio.Text = "Conectar rádio";
             this.buttonConnectRadio.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));

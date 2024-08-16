@@ -15,8 +15,9 @@ namespace SimpleExample
             SetSerialPortDefaults("COM8", 9600);
         }
 
+
         /// <summary>
-        /// Updates the serial port list when the user clicks on the combo box.
+        /// Updates the serial port list when the user clicks on the combo box. <b>Note that DropDown event was added to FancyComboBox.cs and subscribed in FormConfuguraçõs.Designer.cs by hand.</b>
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

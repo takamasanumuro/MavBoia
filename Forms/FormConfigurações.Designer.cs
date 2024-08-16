@@ -147,6 +147,7 @@
             this.comboBoxSerialPort.TabIndex = 22;
             this.comboBoxSerialPort.Texts = "";
             this.comboBoxSerialPort.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxSerialPort_OnSelectedIndexChanged);
+            this.comboBoxSerialPort.DropDown += new System.EventHandler(this.comboBoxSerialPort_DropDown);
             // 
             // comboBoxBaudRate
             // 

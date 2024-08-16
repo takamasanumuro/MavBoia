@@ -101,7 +101,6 @@ Yonah,,1723345517,72.71,79.51,78.399011,50.456619,8.9,9.21,88.39,93.38,76.76,3.0
         public async Task<MavlinkDataController.DataController.AllSensorData> GetAllDataAsync()
         {
             HttpResponseMessage message = await this._httpClient.GetAsync(this._uri);
-            Console.WriteLine(Enum.GetName(typeof(HttpStatusCode), message.StatusCode));
             string csvString = await message.Content.ReadAsStringAsync();
             return GetAllSensorData(csvString);
         }
