@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MavBoia;
 using System.Diagnostics;
+using System.Timers;
+using System.Dynamic;
 
 namespace MavlinkDataController
 {
-    public class DataController
+    public class DataController : IDisposable
     {
         public event Action<AllSensorData> OnDataReceived;
 
@@ -29,6 +31,7 @@ namespace MavlinkDataController
         private float resultantPower = 0.0f;
         private float latitude = 0.000000f;
         private float longitude = 0.000000f;
+        private float velocity = 0.0f;
         private float temperatureBatteryLeft = 0.0f;
         private float temperatureBatteryRight = 0.0f;
         private float temperatureMPPT = 0.0f;
@@ -50,6 +53,7 @@ namespace MavlinkDataController
             private float resultantPower = 0.0f;
             private float latitude = 0.000000f;
             private float longitude = 0.000000f;
+            private float velocity = 0.0f;
             private float temperatureBatteryLeft = 0.0f;
             private float temperatureBatteryRight = 0.0f;
             private float temperatureMPPT = 0.0f;
@@ -68,6 +72,7 @@ namespace MavlinkDataController
             public float ResultantPower { get => resultantPower; private set => resultantPower = value; }
             public float Latitude { get => latitude; set => latitude = value; }
             public float Longitude { get => longitude; set => longitude = value; }
+            public float Velocity { get => velocity; set => velocity = value; }
             public float TemperatureBatteryLeft { get => temperatureBatteryLeft; set => temperatureBatteryLeft = value; }
             public float TemperatureBatteryRight { get => temperatureBatteryRight; set => temperatureBatteryRight = value; }
             public float TemperatureMPPT { get => temperatureMPPT; set => temperatureMPPT = value; }
@@ -85,6 +90,22 @@ namespace MavlinkDataController
                 this.resultantPower = this.batteryPower * this.batteryVoltage;
             }
 
+            public AllSensorData(float motorLeftCurrent, float motorRightCurrent, float mpptCurrent, float batteryVoltage, float latitude, float longitude, float velocity, float temperatureBatteryLeft, float temperatureBatteryRight, float temperatureMPPT, float rpmLeft, float rpmRight)
+            {
+                this.motorLeftCurrent = motorLeftCurrent;
+                this.motorRightCurrent = motorRightCurrent;
+                this.mpptCurrent = mpptCurrent;
+                this.batteryVoltage = batteryVoltage;
+                UpdateCalculatedValues();
+                this.latitude = latitude;
+                this.longitude = longitude;
+                this.velocity = velocity;
+                this.temperatureBatteryLeft = temperatureBatteryLeft;
+                this.temperatureBatteryRight = temperatureBatteryRight;
+                this.temperatureMPPT = temperatureMPPT;
+                this.rpmLeft = rpmLeft;
+                this.rpmRight = rpmRight;
+            }
             public AllSensorData(float motorLeftCurrent, float motorRightCurrent, float mpptCurrent, float batteryVoltage, float latitude, float longitude, float temperatureBatteryLeft, float temperatureBatteryRight, float temperatureMPPT, float rpmLeft, float rpmRight)
             {
                 this.motorLeftCurrent = motorLeftCurrent;
@@ -94,6 +115,7 @@ namespace MavlinkDataController
                 UpdateCalculatedValues();
                 this.latitude = latitude;
                 this.longitude = longitude;
+                this.velocity = 0.0f;
                 this.temperatureBatteryLeft = temperatureBatteryLeft;
                 this.temperatureBatteryRight = temperatureBatteryRight;
                 this.temperatureMPPT = temperatureMPPT;
@@ -114,6 +136,7 @@ namespace MavlinkDataController
                 this.resultantPower = 0;
                 this.latitude = 0;
                 this.longitude = 0;
+                this.velocity = 0;
                 this.temperatureBatteryLeft = 0;
                 this.temperatureBatteryRight = 0;
                 this.temperatureMPPT = 0;
@@ -121,10 +144,28 @@ namespace MavlinkDataController
                 this.rpmRight = 0;
             }
         }
-        
+
+        private volatile float lastLatitude;
+        private volatile float lastLongitude;
+
+        private System.Timers.Timer velocityTimer;
+
         public DataController()
         { 
+            velocityTimer = new System.Timers.Timer(1000);
+            velocityTimer.Elapsed += VelocityTimer_Elapsed;
+            velocityTimer.Start();
         }
+
+        private void VelocityTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (this.latitude == 0 || this.longitude == 0) return;
+
+            this.velocity = (float)((Geographic.Calculations.GeoUtils.HaversineDistance(this.lastLatitude, this.lastLongitude, this.latitude, this.longitude) / 1.852) * 3600);
+            this.lastLatitude = this.latitude;
+            this.lastLongitude = this.longitude;
+        }
+
         private void UpdateData(Mavlink.mavlink_all_info_t message)
         {
             this.motorLeftCurrent = message.motor_current_left;
@@ -165,6 +206,8 @@ namespace MavlinkDataController
             this.temperatureMPPT = data.TemperatureMPPT;
             this.rpmLeft = data.RpmLeft;
             this.rpmRight = data.RpmRight;
+
+            data.Velocity = this.velocity;
         }
 
         public void ProcessMavlinkMessage(Mavlink.MavlinkMessage message)
@@ -192,12 +235,14 @@ namespace MavlinkDataController
         {
             UpdateData(data);
             OnDataReceived?.Invoke(data);
+
+            SaveData(data);
         }
 
         public AllSensorData GetAllSensorData()
         {
             return new AllSensorData(this.motorLeftCurrent, this.motorRightCurrent,
-                this.mpptCurrent, this.batteryVoltage, this.latitude, this.longitude, this.temperatureBatteryLeft, this.temperatureBatteryRight,
+                this.mpptCurrent, this.batteryVoltage, this.latitude, this.longitude, this.velocity, this.temperatureBatteryLeft, this.temperatureBatteryRight,
                 this.temperatureMPPT, this.rpmLeft, this.rpmRight);
         }
 
@@ -244,8 +289,26 @@ namespace MavlinkDataController
             string directory = GetLoggingDirectory();
             string fileName = message.MsgTypename + ".csv";
             string data = MavlinkUtilities.GetMessageDataCSV(message);
+            data += $"{this.velocity}";
             WriteDataCSV(directory, fileName, data);
         }
+        
+        void SaveData(AllSensorData data)
+        {
+            string directory = GetLoggingDirectory();
+            const string fileName = "InfluxDB.csv";
+            
+            string csvData = $"ALL_INFO;{data.BatteryVoltage};{data.MotorLeftCurrent};{data.MotorRightCurrent};{data.MpptCurrent};{data.TemperatureBatteryLeft};{data.TemperatureBatteryRight};{data.TemperatureMPPT};{data.Latitude};{data.Longitude};{data.RpmLeft};{data.RpmRight};{this.velocity}";
+
+            WriteDataCSV(directory, fileName, csvData);
+        }
+
         #endregion
+
+        public void Dispose()
+        {
+            velocityTimer.Stop();
+            velocityTimer.Dispose();
+        }
     }
 }

@@ -293,6 +293,7 @@ namespace SimpleExample
         {
             this.serialPort?.Dispose();
             this.influxCommunication?.Dispose();
+            DataController.Dispose();
             base.OnClosed(e);
             Application.Exit();
         }

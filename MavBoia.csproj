@@ -213,6 +213,7 @@
     <Compile Include="Forms\FormSeneca.Designer.cs">
       <DependentUpon>FormSeneca.cs</DependentUpon>
     </Compile>
+    <Compile Include="GeoUtils.cs" />
     <Compile Include="GLGChart\ChartConfigRecord.cs" />
     <Compile Include="GLGChart\ChartDataFeedInterface.cs" />
     <Compile Include="GLGChart\ChartDemoDataFeed.cs" />

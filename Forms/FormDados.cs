@@ -39,7 +39,8 @@ namespace SimpleExample
             string instrumentationText = $"Tensão da bateria: {message.BatteryVoltage:F2}V\n" +
                                          $"Corrente do motor L: {message.MotorLeftCurrent:F2}A\n" +
                                          $"Corrente do motor R: {message.MotorRightCurrent:F2}A\n" +
-                                         $"Corrente do MPPT: {message.MpptCurrent:F2}A\n";
+                                         $"Corrente do MPPT: {message.MpptCurrent:F2}A\n" +
+                                         $"Velocidade: {message.Velocity:F2} nós";
 
             
 
