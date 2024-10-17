@@ -73,19 +73,22 @@ Yonah,,1723345517,72.71,79.51,78.399011,50.456619,8.9,9.21,88.39,93.38,76.76,3.0
             {
                 string[] fields = csvData.Split(',');
                 if (fields.Length != 29) return new AllSensorData();
-                float battery_voltage = float.Parse(fields[17], CultureInfo.InvariantCulture);
-                float irradiance = float.Parse(fields[18], CultureInfo.InvariantCulture);
-                float latitude = float.Parse(fields[19], CultureInfo.InvariantCulture);
-                float longitude = float.Parse(fields[20], CultureInfo.InvariantCulture);
-                float motor_current_left = float.Parse(fields[21], CultureInfo.InvariantCulture);
-                float motor_current_right = float.Parse(fields[22], CultureInfo.InvariantCulture);
-                float mppt_current = float.Parse(fields[23], CultureInfo.InvariantCulture);
-                float rpm_left = float.Parse(fields[24], CultureInfo.InvariantCulture);
-                float rpm_right = float.Parse(fields[25], CultureInfo.InvariantCulture);
-                float temp_bat_left = float.Parse(fields[26], CultureInfo.InvariantCulture);
-                float temp_bat_right = float.Parse(fields[27], CultureInfo.InvariantCulture);
-                float temp_mppt = float.Parse(fields[28], CultureInfo.InvariantCulture);
-                return new AllSensorData(motor_current_left, motor_current_right, mppt_current, battery_voltage, latitude, longitude, temp_bat_left, temp_bat_right, temp_mppt, rpm_left, rpm_right);
+
+                return new AllSensorData()
+                {
+                    BatteryVoltage = float.Parse(fields[17], CultureInfo.InvariantCulture),
+                    Irradiance = float.Parse(fields[18], CultureInfo.InvariantCulture),
+                    Latitude = double.Parse(fields[19], CultureInfo.InvariantCulture),
+                    Longitude = double.Parse(fields[20], CultureInfo.InvariantCulture),
+                    MotorLeftCurrent = float.Parse(fields[21], CultureInfo.InvariantCulture),
+                    MotorRightCurrent = float.Parse(fields[22], CultureInfo.InvariantCulture),
+                    MpptCurrent = float.Parse(fields[23], CultureInfo.InvariantCulture),
+                    RpmLeft = float.Parse(fields[24], CultureInfo.InvariantCulture),
+                    RpmRight = float.Parse(fields[25], CultureInfo.InvariantCulture),
+                    TemperatureBatteryLeft = float.Parse(fields[26], CultureInfo.InvariantCulture),
+                    TemperatureBatteryRight = float.Parse(fields[27], CultureInfo.InvariantCulture),
+                    TemperatureMPPT = float.Parse(fields[28], CultureInfo.InvariantCulture)
+                };
             }
             catch(Exception ex)
             {

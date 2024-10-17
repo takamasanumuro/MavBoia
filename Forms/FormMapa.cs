@@ -18,17 +18,18 @@ namespace SimpleExample
         public PointLatLng boatLocation = new PointLatLng(-22.8570241, -43.0955684);
         Bitmap boatIcon = new Bitmap("Resources/boaticon1.bmp");
         
-        public FormMapa(MavlinkDataController.DataController serialDataController)
+        public FormMapa(MavlinkDataController.DataController serialDataController, bool useControllerEvent)
         {
             InitializeComponent();
             
-            serialDataController.OnDataReceived += UpdateData;
+            if(useControllerEvent)
+                serialDataController.OnDataReceived += UpdateData;
         }
 
         public void UpdateData(AllSensorData packet)
         {
-            float lat = packet.Latitude;
-            float lon = packet.Longitude;
+            double lat = packet.Latitude;
+            double lon = packet.Longitude;
 
             if (lat != -1.0 && lon != -1.0)
             {

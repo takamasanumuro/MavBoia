@@ -40,8 +40,8 @@ namespace MavlinkDataController
 
         private AllSensorData lastDataProcessed = new AllSensorData();
 
-        private volatile float lastLatitude;
-        private volatile float lastLongitude;
+        private double lastLatitude;
+        private double lastLongitude;
 
         private float CalculateVelocity()
         {
@@ -110,20 +110,20 @@ namespace MavlinkDataController
                         MavlinkUtilities.PrintMessageInfo(message);
                         AllSensorData allSensorData = new AllSensorData(payload);
                         allSensorData.Velocity = CalculateVelocity();
-                        lastDataProcessed = allSensorData;
+                        lastDataProcessed = AllSensorData.Clone(allSensorData);
+                        SaveData(allSensorData);
                         OnDataReceived?.Invoke(allSensorData);
                         break;
                     }
                 default:
                     break;
             }
-            SaveData(message);
         }
 
         public void ProcessNetworkData(AllSensorData data)
         {
-            data.Velocity = CalculateVelocity(); 
-            lastDataProcessed = data;
+            data.Velocity = CalculateVelocity();
+            lastDataProcessed = AllSensorData.Clone(data);
             SaveData(data);
             OnDataReceived?.Invoke(data);
         }
@@ -173,6 +173,7 @@ namespace MavlinkDataController
         void SaveData(Mavlink.MavlinkMessage message)
         {
             string directory = GetLoggingDirectory();
+            if (directory == null) return;
             string fileName = message.MsgTypename + ".csv";
             string data = MavlinkUtilities.GetMessageDataCSV(message);
             data += $"{GetAllSensorData().Velocity}";
@@ -182,6 +183,7 @@ namespace MavlinkDataController
         void SaveData(AllSensorData data)
         {
             string directory = GetLoggingDirectory();
+            if (directory == null) return;
             const string fileName = "InfluxDB.csv";
 
             WriteDataCSV(directory, fileName, data.ToCSV());

@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GroundStation));
             this.panelLateral = new System.Windows.Forms.Panel();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.buttonRewind = new System.Windows.Forms.Button();
             this.buttonRastreio = new System.Windows.Forms.Button();
             this.buttonGraficos = new System.Windows.Forms.Button();
             this.buttonDados = new System.Windows.Forms.Button();
@@ -65,15 +66,34 @@
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.buttonRewind);
             this.panelButtons.Controls.Add(this.buttonRastreio);
             this.panelButtons.Controls.Add(this.buttonGraficos);
             this.panelButtons.Controls.Add(this.buttonDados);
             this.panelButtons.Controls.Add(this.buttonMapa);
             this.panelButtons.Controls.Add(this.buttonConfigurações);
-            this.panelButtons.Location = new System.Drawing.Point(0, 320);
+            this.panelButtons.Location = new System.Drawing.Point(0, 222);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(341, 481);
+            this.panelButtons.Size = new System.Drawing.Size(341, 579);
             this.panelButtons.TabIndex = 1;
+            // 
+            // buttonRewind
+            // 
+            this.buttonRewind.FlatAppearance.BorderSize = 0;
+            this.buttonRewind.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRewind.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRewind.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.buttonRewind.Image = global::MavBoia.Properties.Resources.settings;
+            this.buttonRewind.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonRewind.Location = new System.Drawing.Point(0, 487);
+            this.buttonRewind.Name = "buttonRewind";
+            this.buttonRewind.Size = new System.Drawing.Size(341, 86);
+            this.buttonRewind.TabIndex = 5;
+            this.buttonRewind.Text = "Playback";
+            this.buttonRewind.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonRewind.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonRewind.UseVisualStyleBackColor = true;
+            this.buttonRewind.Click += new System.EventHandler(this.buttonRewind_Click);
             // 
             // buttonRastreio
             // 
@@ -314,6 +334,7 @@
         private System.Windows.Forms.Button buttonRastreio;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Panel panelDesktop;
+        private System.Windows.Forms.Button buttonRewind;
     }
 }
 

@@ -22,7 +22,7 @@ namespace SimpleExample
             serialDataController.OnDataReceived += UpdateData;
         }
 
-        private String CheckTemperatureProbe(float temperature)
+        public static String CheckTemperatureProbe(float temperature)
         {
             //DS18B20 Technical specifications:
             //Usable temperature range: -55 to 125 °C(-67 °F to + 257 °F)

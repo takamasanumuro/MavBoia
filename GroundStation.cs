@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using MavBoia.InfluxDB;
 using MavlinkDataController;
+using MavBoia.Forms;
 
 namespace SimpleExample
 {
@@ -31,6 +32,7 @@ namespace SimpleExample
         FormConfigurações formConfigurações;
         BrowserForm formBrowser;
         FormDados formDados;
+        FormRewind formRewind;
 
         // Form state
         private Button activatedButton;
@@ -68,9 +70,10 @@ namespace SimpleExample
             // Forms instantiation
             formGraficos = new FormChart();
             formDados = new FormDados(DataController);
-            formMapa = new FormMapa(DataController);
+            formMapa = new FormMapa(DataController, true);
             formConfigurações = new FormConfigurações();
             formBrowser = new BrowserForm();
+            formRewind = new FormRewind(DataController);
 
             MavBoiaConfigurations.OnSerialConfigurationUpdate += UpdateSerialConfiguration;
         }
@@ -87,7 +90,7 @@ namespace SimpleExample
         // Ensure all forms are loaded and ready to receive data.
         private void LoadForms()
         {
-            List<Form> forms = new List<Form>() { formConfigurações, formDados, formMapa, formBrowser, formGraficos };
+            List<Form> forms = new List<Form>() { formConfigurações, formDados, formMapa, formBrowser, formGraficos, formRewind};
             foreach (Form form in forms)
             {
                 form.TopLevel = false;
@@ -288,6 +291,12 @@ namespace SimpleExample
         {
             ActivateButton(sender as Button);
             ShowForm(formConfigurações);
+        }
+
+        private void buttonRewind_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender as Button);
+            ShowForm(formRewind);
         }
 
         protected override void OnClosed(EventArgs e)
