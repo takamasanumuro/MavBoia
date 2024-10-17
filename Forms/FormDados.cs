@@ -1,4 +1,5 @@
 ﻿using MavBoia;
+using MavlinkDataController;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -34,7 +35,7 @@ namespace SimpleExample
             return $"{temperature:F2}°C";
         }
 
-        public void UpdateData(MavlinkDataController.DataController.AllSensorData message)
+        public void UpdateData(AllSensorData message)
         {
             string instrumentationText = $"Tensão da bateria: {message.BatteryVoltage:F2}V\n" +
                                          $"Corrente do motor L: {message.MotorLeftCurrent:F2}A\n" +

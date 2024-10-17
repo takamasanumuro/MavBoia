@@ -62,7 +62,7 @@ namespace MavBoia.InfluxDB
         /// </summary>
         /// <param name="csvData"></param>
         /// <returns>A <see cref="DataController.AllSensorData"/> containing all the data from database.</returns>
-        private MavlinkDataController.DataController.AllSensorData GetAllSensorData(string csvData)
+        private AllSensorData GetAllSensorData(string csvData)
         {
             /* Reference:
              * name,tags,time,battery_voltage,irradiance,latitude,longitude,motor_current_left,motor_current_right,mppt_current,rpm_left,rpm_right,temp_bat_left,temp_bat_right,temp_mppt
@@ -72,7 +72,7 @@ Yonah,,1723345517,72.71,79.51,78.399011,50.456619,8.9,9.21,88.39,93.38,76.76,3.0
             try
             {
                 string[] fields = csvData.Split(',');
-                if (fields.Length != 29) return new MavlinkDataController.DataController.AllSensorData();
+                if (fields.Length != 29) return new AllSensorData();
                 float battery_voltage = float.Parse(fields[17], CultureInfo.InvariantCulture);
                 float irradiance = float.Parse(fields[18], CultureInfo.InvariantCulture);
                 float latitude = float.Parse(fields[19], CultureInfo.InvariantCulture);
@@ -85,20 +85,20 @@ Yonah,,1723345517,72.71,79.51,78.399011,50.456619,8.9,9.21,88.39,93.38,76.76,3.0
                 float temp_bat_left = float.Parse(fields[26], CultureInfo.InvariantCulture);
                 float temp_bat_right = float.Parse(fields[27], CultureInfo.InvariantCulture);
                 float temp_mppt = float.Parse(fields[28], CultureInfo.InvariantCulture);
-                return new MavlinkDataController.DataController.AllSensorData(motor_current_left, motor_current_right, mppt_current, battery_voltage, latitude, longitude, temp_bat_left, temp_bat_right, temp_mppt, rpm_left, rpm_right);
+                return new AllSensorData(motor_current_left, motor_current_right, mppt_current, battery_voltage, latitude, longitude, temp_bat_left, temp_bat_right, temp_mppt, rpm_left, rpm_right);
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return new MavlinkDataController.DataController.AllSensorData();
+            return new AllSensorData();
         }
 
         /// <summary>
         /// Get the sensor data from the last second.
         /// </summary>
         /// <returns>A <see cref="DataController.AllSensorData"/> containing the data from database.</returns>
-        public async Task<MavlinkDataController.DataController.AllSensorData> GetAllDataAsync()
+        public async Task<AllSensorData> GetAllDataAsync()
         {
             HttpResponseMessage message = await this._httpClient.GetAsync(this._uri);
             string csvString = await message.Content.ReadAsStringAsync();

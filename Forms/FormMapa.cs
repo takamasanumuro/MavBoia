@@ -25,7 +25,7 @@ namespace SimpleExample
             serialDataController.OnDataReceived += UpdateData;
         }
 
-        public void UpdateData(MavlinkDataController.DataController.AllSensorData packet)
+        public void UpdateData(AllSensorData packet)
         {
             float lat = packet.Latitude;
             float lon = packet.Longitude;

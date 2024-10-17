@@ -11,6 +11,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using MavBoia.InfluxDB;
+using MavlinkDataController;
 
 namespace SimpleExample
 {
@@ -196,7 +197,7 @@ namespace SimpleExample
             {
                 try
                 {
-                    MavlinkDataController.DataController.AllSensorData data = await influxCommunication.GetAllDataAsync();
+                    AllSensorData data = await influxCommunication.GetAllDataAsync();
                     DataController.ProcessNetworkData(data);
                 }
                 catch (Exception exception)
@@ -293,7 +294,6 @@ namespace SimpleExample
         {
             this.serialPort?.Dispose();
             this.influxCommunication?.Dispose();
-            DataController.Dispose();
             base.OnClosed(e);
             Application.Exit();
         }

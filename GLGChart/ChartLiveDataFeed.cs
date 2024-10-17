@@ -102,7 +102,7 @@ public class ChartLiveDataFeed : ChartDataFeedInterface
         tag_source = tag_source.ToLower();
         data_point.value = 0;
 
-        MavlinkDataController.DataController.AllSensorData allSensorsData = GroundStation.DataController.GetAllSensorData();
+        AllSensorData allSensorsData = GroundStation.DataController.GetAllSensorData();
 
         if (tag_source.Contains("corrente") && tag_source.Contains("motorbombordo"))
         {
