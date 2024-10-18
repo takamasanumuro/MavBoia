@@ -1,4 +1,5 @@
 ﻿using MavBoia;
+using MavBoia.Utilities;
 using MavlinkDataController;
 using System;
 using System.Collections.Generic;
@@ -15,51 +16,42 @@ namespace SimpleExample
 {
     public partial class FormDados : Form
     {
+
+        FormResizer resizer;
+
         public FormDados(MavlinkDataController.DataController serialDataController)
         {
             InitializeComponent();
+            
+            resizer = new FormResizer(this);
 
             serialDataController.OnDataReceived += UpdateData;
         }
 
-        public static String CheckTemperatureProbe(float temperature)
-        {
-            //DS18B20 Technical specifications:
-            //Usable temperature range: -55 to 125 °C(-67 °F to + 257 °F)
-
-            const float probe_disconnected_celsius = -55.0f;
-            if (temperature < probe_disconnected_celsius)
-            {
-                return "NC";
-            }
-            return $"{temperature:F2}°C";
-        }
 
         public void UpdateData(AllSensorData message)
         {
-            string instrumentationText = $"Tensão da bateria: {message.BatteryVoltage:F2}V\n" +
-                                         $"Corrente do motor L: {message.MotorLeftCurrent:F2}A\n" +
-                                         $"Corrente do motor R: {message.MotorRightCurrent:F2}A\n" +
-                                         $"Corrente do MPPT: {message.MpptCurrent:F2}A\n" +
-                                         $"Velocidade: {message.Velocity:F2} nós";
-
-            
-
-            string temperatureText = $"Bateria(L): " + CheckTemperatureProbe(message.TemperatureBatteryLeft) + "\n" +
-                                     $"Bateria(R): " + CheckTemperatureProbe(message.TemperatureBatteryRight) + "\n" +
-                                     $"MPPT: " + CheckTemperatureProbe(message.TemperatureMPPT) + "\n";
-
-            
-
-            string rpmText = $"Motor L: {message.RpmLeft:F0}\n" +
-                             $"Motor R: {message.RpmRight:F0}\n";
-
             this.BeginInvoke((Action)(() =>
             {
-                labelInstrumentationData.Text = instrumentationText;
-                labelTemperatureData.Text = temperatureText;
-                labelRPM.Text = rpmText;
+                labelBatteryVoltage.Text = $"Tensão da bateria: {message.BatteryVoltage:F2}V";
+                labelMotorCurrentLeft.Text = $"Corrente do motor L: {message.MotorLeftCurrent:F2}A";
+                labelMotorCurrentRight.Text = $"Corrente do motor R: {message.MotorRightCurrent:F2}A";
+                labelMpptCurrent.Text = $"Corrente do MPPT: {message.MpptCurrent:F2}A";
+                labelVelocity.Text = $"Velocidade: {message.Velocity:F2} nós";
+                labelIrradiance.Text = $"Irradiância: {message.Irradiance} W/m^2";
+
+                labelBatteryLeftTemp.Text = $"Bateria(L): " + Utils.CheckTemperatureProbe(message.TemperatureBatteryLeft);
+                labelBatteryRightTemp.Text = $"Bateria(R): " + Utils.CheckTemperatureProbe(message.TemperatureBatteryRight);
+                labelMpptTemp.Text = $"MPPT: " + Utils.CheckTemperatureProbe(message.TemperatureMPPT);
+
+                labelRpmLeft.Text = $"Motor L: {message.RpmLeft:F0}";
+                labelRpmRight.Text = $"Motor R: {message.RpmRight:F0}";
             }));
+        }
+
+        private void FormDados_Resize(object sender, EventArgs e)
+        {
+            resizer.ResizeAll();
         }
     }
 }

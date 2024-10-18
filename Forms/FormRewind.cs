@@ -1,4 +1,5 @@
-﻿using MavlinkDataController;
+﻿using MavBoia.Utilities;
+using MavlinkDataController;
 using SimpleExample;
 using System;
 using System.Collections.Generic;
@@ -23,12 +24,16 @@ namespace MavBoia.Forms
         int fileLines = 0;
         bool hasLoadedFile = false;
 
+        FormResizer resizer;
+
+
         public FormRewind(DataController controller)
         {
             InitializeComponent();
 
             this.controller = controller;
             formMapa = new FormMapa(controller, false);
+            resizer = new FormResizer(this);
         }
 
         private void FormRewind_Load(object sender, EventArgs e)
@@ -55,12 +60,9 @@ namespace MavBoia.Forms
                 hasLoadedFile = true;
 
                 trackBarRewind.Maximum = fileLines;
-
-                //using (StreamReader reader = new StreamReader(new FileStream (path,FileMode.Open),new UTF8Encoding())) // do anything you want, e.g. read it
-                //{
-
-                //}
             }
+
+            trackBarRewind_Scroll(trackBarRewind, EventArgs.Empty);
         }
 
         private void trackBarRewind_Scroll(object sender, EventArgs e)
@@ -73,22 +75,30 @@ namespace MavBoia.Forms
                     sr.ReadLine();
                 }
 
-                AllSensorData data = AllSensorData.FromLine(sr.ReadLine());
+                String s = sr.ReadLine();
+                
+                AllSensorData data = AllSensorData.FromLine(s);
                 string text = $"Tensão da bateria: {data.BatteryVoltage:F2}V\n" +
                                          $"Corrente do motor L: {data.MotorLeftCurrent:F2}A\n" +
                                          $"Corrente do motor R: {data.MotorRightCurrent:F2}A\n" +
                                          $"Corrente do MPPT: {data.MpptCurrent:F2}A\n" +
                                          $"Velocidade: {data.Velocity:F2} nós\n" +
-                                         $"Bateria(L): " + FormDados.CheckTemperatureProbe(data.TemperatureBatteryLeft) + "\n" +
-                                     $"Bateria(R): " + FormDados.CheckTemperatureProbe(data.TemperatureBatteryRight) + "\n" +
-                                     $"MPPT: " + FormDados.CheckTemperatureProbe(data.TemperatureMPPT) + "\n" +
+                                         $"Bateria(L): " + Utils.CheckTemperatureProbe(data.TemperatureBatteryLeft) + "\n" +
+                                     $"Bateria(R): " + Utils.CheckTemperatureProbe(data.TemperatureBatteryRight) + "\n" +
+                                     $"MPPT: " + Utils.CheckTemperatureProbe(data.TemperatureMPPT) + "\n" +
                                      $"Motor L: {data.RpmLeft:F0}\n" +
-                             $"Motor R: {data.RpmRight:F0}\n";
+                             $"Motor R: {data.RpmRight:F0}\n" +
+                             $"Hora: {data.Timestamp}";
 
                 labelData.Text = text;
 
                 formMapa.UpdateData(data);
             }
+        }
+
+        private void FormRewind_Resize(object sender, EventArgs e)
+        {
+            resizer.ResizeAll();
         }
     }
 }

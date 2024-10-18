@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace Geographic.Calculations
+namespace MavBoia.Geography
 {
     internal static class GeoUtils
     {

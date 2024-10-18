@@ -191,7 +191,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllSensorData.cs" />
+    <Compile Include="DataControl\AllSensorData.cs" />
+    <Compile Include="Utilities\FormResizer.cs" />
     <Compile Include="Forms\BrowserForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -233,7 +234,7 @@
     <Compile Include="Forms\FormSeneca.Designer.cs">
       <DependentUpon>FormSeneca.cs</DependentUpon>
     </Compile>
-    <Compile Include="GeoUtils.cs" />
+    <Compile Include="Utilities\GeoUtils.cs" />
     <Compile Include="GLGChart\ChartConfigRecord.cs" />
     <Compile Include="GLGChart\ChartDataFeedInterface.cs" />
     <Compile Include="GLGChart\ChartDemoDataFeed.cs" />
@@ -265,7 +266,8 @@
     <Compile Include="Mavlink\MavlinkUtilities.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataController.cs" />
+    <Compile Include="DataControl\DataController.cs" />
+    <Compile Include="Utilities\Utils.cs" />
     <EmbeddedResource Include="Forms\BrowserForm.resx">
       <DependentUpon>BrowserForm.cs</DependentUpon>
     </EmbeddedResource>

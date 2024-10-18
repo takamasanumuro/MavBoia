@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using MavBoia.InfluxDB;
 using MavlinkDataController;
 using MavBoia.Forms;
+using System.Linq;
+using MavBoia.Utilities;
 
 namespace SimpleExample
 {
@@ -82,8 +84,6 @@ namespace SimpleExample
 
         private void GroundStation_Load(object sender, EventArgs e)
         {
-
-            //SetSerialPortDefaults("COM5", 4800);
             LoadForms();
         }
 
@@ -353,5 +353,16 @@ namespace SimpleExample
             }
             Console.WriteLine();
         }
+
+
+        #region Resize Logic
+        
+
+        private void GroundStation_Resize(object sender, EventArgs e)
+        {
+            
+        }
+
+        #endregion
     }
 }

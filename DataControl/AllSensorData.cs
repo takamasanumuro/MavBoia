@@ -23,7 +23,8 @@ namespace MavlinkDataController
         private float temperatureMPPT = 0.0f;
         private float rpmLeft = 0.0f;
         private float rpmRight = 0.0f;
-        private float irradiance = 0.0f;   
+        private float irradiance = 0.0f;
+        private string timestamp;
 
 
         public float BatteryCurrent => motorLeftCurrent + motorRightCurrent - mpptCurrent;
@@ -51,6 +52,7 @@ namespace MavlinkDataController
         public float RpmLeft { get => rpmLeft; set => rpmLeft = value; }
         public float RpmRight { get => rpmRight; set => rpmRight = value; }
         public float Irradiance { get => irradiance; set => irradiance = value; }
+        public string Timestamp { get => timestamp; set => timestamp = value; }
 
 
 
@@ -110,6 +112,7 @@ namespace MavlinkDataController
                 Velocity = float.Parse(items[10], CultureInfo.InvariantCulture),
                 RpmLeft = float.Parse(items[11], CultureInfo.InvariantCulture),
                 RpmRight = float.Parse(items[12], CultureInfo.InvariantCulture),
+                Timestamp = items[13],
             };
         }
 
