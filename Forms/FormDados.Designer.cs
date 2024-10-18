@@ -28,150 +28,302 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.labelInstrumentationData = new System.Windows.Forms.Label();
-            this.labelInstrumentationTitle = new System.Windows.Forms.Label();
-            this.labelTemperatura = new System.Windows.Forms.Label();
-            this.labelTemperatureData = new System.Windows.Forms.Label();
-            this.labelRPM = new System.Windows.Forms.Label();
-            this.labelRPMTitle = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.labelRPM = new System.Windows.Forms.Label();
+            this.labelTemperature = new System.Windows.Forms.Label();
+            this.labelInstrumentation = new System.Windows.Forms.Label();
+            this.tableLayoutPanelInstrumentation = new System.Windows.Forms.TableLayoutPanel();
+            this.labelIrradiance = new System.Windows.Forms.Label();
+            this.labelVelocity = new System.Windows.Forms.Label();
+            this.labelMpptCurrent = new System.Windows.Forms.Label();
+            this.labelMotorCurrentRight = new System.Windows.Forms.Label();
+            this.labelMotorCurrentLeft = new System.Windows.Forms.Label();
+            this.labelBatteryVoltage = new System.Windows.Forms.Label();
+            this.tableLayoutPanelTemp = new System.Windows.Forms.TableLayoutPanel();
+            this.labelMpptTemp = new System.Windows.Forms.Label();
+            this.labelBatteryRightTemp = new System.Windows.Forms.Label();
+            this.labelBatteryLeftTemp = new System.Windows.Forms.Label();
+            this.tableLayoutPanelRpm = new System.Windows.Forms.TableLayoutPanel();
+            this.labelRpmRight = new System.Windows.Forms.Label();
+            this.labelRpmLeft = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanelInstrumentation.SuspendLayout();
+            this.tableLayoutPanelTemp.SuspendLayout();
+            this.tableLayoutPanelRpm.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // labelInstrumentationData
-            // 
-            this.labelInstrumentationData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelInstrumentationData.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInstrumentationData.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
-            this.labelInstrumentationData.Location = new System.Drawing.Point(0, 140);
-            this.labelInstrumentationData.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelInstrumentationData.Name = "labelInstrumentationData";
-            this.labelInstrumentationData.Size = new System.Drawing.Size(432, 235);
-            this.labelInstrumentationData.TabIndex = 13;
-            this.labelInstrumentationData.Text = "Aguardando dados...";
-            this.labelInstrumentationData.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelInstrumentationTitle
-            // 
-            this.labelInstrumentationTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.labelInstrumentationTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInstrumentationTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
-            this.labelInstrumentationTitle.Location = new System.Drawing.Point(0, 0);
-            this.labelInstrumentationTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelInstrumentationTitle.Name = "labelInstrumentationTitle";
-            this.labelInstrumentationTitle.Size = new System.Drawing.Size(432, 55);
-            this.labelInstrumentationTitle.TabIndex = 14;
-            this.labelInstrumentationTitle.Text = "Instrumentação";
-            this.labelInstrumentationTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelTemperatura
-            // 
-            this.labelTemperatura.Dock = System.Windows.Forms.DockStyle.Top;
-            this.labelTemperatura.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTemperatura.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
-            this.labelTemperatura.Location = new System.Drawing.Point(0, 0);
-            this.labelTemperatura.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelTemperatura.Name = "labelTemperatura";
-            this.labelTemperatura.Size = new System.Drawing.Size(406, 55);
-            this.labelTemperatura.TabIndex = 17;
-            this.labelTemperatura.Text = "Temperatura";
-            this.labelTemperatura.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelTemperatureData
-            // 
-            this.labelTemperatureData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelTemperatureData.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTemperatureData.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
-            this.labelTemperatureData.Location = new System.Drawing.Point(-2, 144);
-            this.labelTemperatureData.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelTemperatureData.Name = "labelTemperatureData";
-            this.labelTemperatureData.Size = new System.Drawing.Size(404, 233);
-            this.labelTemperatureData.TabIndex = 18;
-            this.labelTemperatureData.Text = "Aguardando dados...";
-            this.labelTemperatureData.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelRPM
-            // 
-            this.labelRPM.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelRPM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelRPM.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
-            this.labelRPM.Location = new System.Drawing.Point(5, 147);
-            this.labelRPM.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelRPM.Name = "labelRPM";
-            this.labelRPM.Size = new System.Drawing.Size(360, 233);
-            this.labelRPM.TabIndex = 20;
-            this.labelRPM.Text = "Aguardando dados...";
-            this.labelRPM.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelRPMTitle
-            // 
-            this.labelRPMTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.labelRPMTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelRPMTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
-            this.labelRPMTitle.Location = new System.Drawing.Point(0, 0);
-            this.labelRPMTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelRPMTitle.Name = "labelRPMTitle";
-            this.labelRPMTitle.Size = new System.Drawing.Size(365, 55);
-            this.labelRPMTitle.TabIndex = 19;
-            this.labelRPMTitle.Text = "RPM";
-            this.labelRPMTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.AutoSize = true;
-            this.panel1.Controls.Add(this.panel4);
-            this.panel1.Controls.Add(this.panel2);
-            this.panel1.Controls.Add(this.panel3);
-            this.panel1.Location = new System.Drawing.Point(12, 180);
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
+            this.panel1.Controls.Add(this.tableLayoutPanel1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(130, 100);
             this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.panel1.Size = new System.Drawing.Size(1226, 380);
-            this.panel1.TabIndex = 21;
+            this.panel1.Size = new System.Drawing.Size(977, 520);
+            this.panel1.TabIndex = 0;
             // 
-            // panel4
+            // tableLayoutPanel1
             // 
-            this.panel4.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.panel4.Controls.Add(this.labelRPMTitle);
-            this.panel4.Controls.Add(this.labelRPM);
-            this.panel4.Location = new System.Drawing.Point(848, 0);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(365, 375);
-            this.panel4.TabIndex = 2;
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.29717F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.90793F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.70374F));
+            this.tableLayoutPanel1.Controls.Add(this.labelRPM, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.labelTemperature, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.labelInstrumentation, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanelInstrumentation, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanelTemp, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanelRpm, 2, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.38461F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 89.61539F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(977, 520);
+            this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // panel3
+            // labelRPM
             // 
-            this.panel3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.panel3.Controls.Add(this.labelTemperatureData);
-            this.panel3.Controls.Add(this.labelTemperatura);
-            this.panel3.Location = new System.Drawing.Point(445, 3);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(406, 372);
-            this.panel3.TabIndex = 1;
+            this.labelRPM.AutoSize = true;
+            this.labelRPM.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelRPM.Font = new System.Drawing.Font("Nirmala UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelRPM.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelRPM.Location = new System.Drawing.Point(737, 0);
+            this.labelRPM.Name = "labelRPM";
+            this.labelRPM.Size = new System.Drawing.Size(237, 53);
+            this.labelRPM.TabIndex = 2;
+            this.labelRPM.Text = "RPM";
+            this.labelRPM.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // panel2
+            // labelTemperature
             // 
-            this.panel2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.panel2.Controls.Add(this.labelInstrumentationTitle);
-            this.panel2.Controls.Add(this.labelInstrumentationData);
-            this.panel2.Location = new System.Drawing.Point(7, 2);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(432, 375);
-            this.panel2.TabIndex = 0;
+            this.labelTemperature.AutoSize = true;
+            this.labelTemperature.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelTemperature.Font = new System.Drawing.Font("Nirmala UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTemperature.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelTemperature.Location = new System.Drawing.Point(416, 0);
+            this.labelTemperature.Name = "labelTemperature";
+            this.labelTemperature.Size = new System.Drawing.Size(315, 53);
+            this.labelTemperature.TabIndex = 1;
+            this.labelTemperature.Text = "Temperatura";
+            this.labelTemperature.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelInstrumentation
+            // 
+            this.labelInstrumentation.AutoSize = true;
+            this.labelInstrumentation.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelInstrumentation.Font = new System.Drawing.Font("Nirmala UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelInstrumentation.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelInstrumentation.Location = new System.Drawing.Point(3, 0);
+            this.labelInstrumentation.Name = "labelInstrumentation";
+            this.labelInstrumentation.Size = new System.Drawing.Size(407, 53);
+            this.labelInstrumentation.TabIndex = 0;
+            this.labelInstrumentation.Text = "Instrumentação";
+            this.labelInstrumentation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tableLayoutPanelInstrumentation
+            // 
+            this.tableLayoutPanelInstrumentation.ColumnCount = 1;
+            this.tableLayoutPanelInstrumentation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelInstrumentation.Controls.Add(this.labelIrradiance, 0, 5);
+            this.tableLayoutPanelInstrumentation.Controls.Add(this.labelVelocity, 0, 4);
+            this.tableLayoutPanelInstrumentation.Controls.Add(this.labelMpptCurrent, 0, 3);
+            this.tableLayoutPanelInstrumentation.Controls.Add(this.labelMotorCurrentRight, 0, 2);
+            this.tableLayoutPanelInstrumentation.Controls.Add(this.labelMotorCurrentLeft, 0, 1);
+            this.tableLayoutPanelInstrumentation.Controls.Add(this.labelBatteryVoltage, 0, 0);
+            this.tableLayoutPanelInstrumentation.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelInstrumentation.Location = new System.Drawing.Point(3, 56);
+            this.tableLayoutPanelInstrumentation.Name = "tableLayoutPanelInstrumentation";
+            this.tableLayoutPanelInstrumentation.RowCount = 6;
+            this.tableLayoutPanelInstrumentation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanelInstrumentation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanelInstrumentation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanelInstrumentation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanelInstrumentation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanelInstrumentation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+            this.tableLayoutPanelInstrumentation.Size = new System.Drawing.Size(407, 461);
+            this.tableLayoutPanelInstrumentation.TabIndex = 6;
+            // 
+            // labelIrradiance
+            // 
+            this.labelIrradiance.AutoSize = true;
+            this.labelIrradiance.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelIrradiance.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelIrradiance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelIrradiance.Location = new System.Drawing.Point(3, 380);
+            this.labelIrradiance.Name = "labelIrradiance";
+            this.labelIrradiance.Size = new System.Drawing.Size(401, 81);
+            this.labelIrradiance.TabIndex = 5;
+            this.labelIrradiance.Text = "Aguardando...";
+            this.labelIrradiance.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelVelocity
+            // 
+            this.labelVelocity.AutoSize = true;
+            this.labelVelocity.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelVelocity.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelVelocity.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelVelocity.Location = new System.Drawing.Point(3, 304);
+            this.labelVelocity.Name = "labelVelocity";
+            this.labelVelocity.Size = new System.Drawing.Size(401, 76);
+            this.labelVelocity.TabIndex = 4;
+            this.labelVelocity.Text = "Aguardando...";
+            this.labelVelocity.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelMpptCurrent
+            // 
+            this.labelMpptCurrent.AutoSize = true;
+            this.labelMpptCurrent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelMpptCurrent.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelMpptCurrent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelMpptCurrent.Location = new System.Drawing.Point(3, 228);
+            this.labelMpptCurrent.Name = "labelMpptCurrent";
+            this.labelMpptCurrent.Size = new System.Drawing.Size(401, 76);
+            this.labelMpptCurrent.TabIndex = 3;
+            this.labelMpptCurrent.Text = "Aguardando...";
+            this.labelMpptCurrent.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelMotorCurrentRight
+            // 
+            this.labelMotorCurrentRight.AutoSize = true;
+            this.labelMotorCurrentRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelMotorCurrentRight.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelMotorCurrentRight.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelMotorCurrentRight.Location = new System.Drawing.Point(3, 152);
+            this.labelMotorCurrentRight.Name = "labelMotorCurrentRight";
+            this.labelMotorCurrentRight.Size = new System.Drawing.Size(401, 76);
+            this.labelMotorCurrentRight.TabIndex = 2;
+            this.labelMotorCurrentRight.Text = "Aguardando...";
+            this.labelMotorCurrentRight.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelMotorCurrentLeft
+            // 
+            this.labelMotorCurrentLeft.AutoSize = true;
+            this.labelMotorCurrentLeft.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelMotorCurrentLeft.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelMotorCurrentLeft.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelMotorCurrentLeft.Location = new System.Drawing.Point(3, 76);
+            this.labelMotorCurrentLeft.Name = "labelMotorCurrentLeft";
+            this.labelMotorCurrentLeft.Size = new System.Drawing.Size(401, 76);
+            this.labelMotorCurrentLeft.TabIndex = 1;
+            this.labelMotorCurrentLeft.Text = "Aguardando...";
+            this.labelMotorCurrentLeft.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelBatteryVoltage
+            // 
+            this.labelBatteryVoltage.AutoSize = true;
+            this.labelBatteryVoltage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelBatteryVoltage.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelBatteryVoltage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelBatteryVoltage.Location = new System.Drawing.Point(3, 0);
+            this.labelBatteryVoltage.Name = "labelBatteryVoltage";
+            this.labelBatteryVoltage.Size = new System.Drawing.Size(401, 76);
+            this.labelBatteryVoltage.TabIndex = 0;
+            this.labelBatteryVoltage.Text = "Aguardando...";
+            this.labelBatteryVoltage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tableLayoutPanelTemp
+            // 
+            this.tableLayoutPanelTemp.ColumnCount = 1;
+            this.tableLayoutPanelTemp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelTemp.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelTemp.Controls.Add(this.labelMpptTemp, 0, 2);
+            this.tableLayoutPanelTemp.Controls.Add(this.labelBatteryRightTemp, 0, 1);
+            this.tableLayoutPanelTemp.Controls.Add(this.labelBatteryLeftTemp, 0, 0);
+            this.tableLayoutPanelTemp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelTemp.Location = new System.Drawing.Point(416, 56);
+            this.tableLayoutPanelTemp.Name = "tableLayoutPanelTemp";
+            this.tableLayoutPanelTemp.RowCount = 3;
+            this.tableLayoutPanelTemp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanelTemp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanelTemp.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanelTemp.Size = new System.Drawing.Size(315, 461);
+            this.tableLayoutPanelTemp.TabIndex = 7;
+            // 
+            // labelMpptTemp
+            // 
+            this.labelMpptTemp.AutoSize = true;
+            this.labelMpptTemp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelMpptTemp.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelMpptTemp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelMpptTemp.Location = new System.Drawing.Point(3, 306);
+            this.labelMpptTemp.Name = "labelMpptTemp";
+            this.labelMpptTemp.Size = new System.Drawing.Size(309, 155);
+            this.labelMpptTemp.TabIndex = 3;
+            this.labelMpptTemp.Text = "Aguardando...";
+            this.labelMpptTemp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelBatteryRightTemp
+            // 
+            this.labelBatteryRightTemp.AutoSize = true;
+            this.labelBatteryRightTemp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelBatteryRightTemp.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelBatteryRightTemp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelBatteryRightTemp.Location = new System.Drawing.Point(3, 153);
+            this.labelBatteryRightTemp.Name = "labelBatteryRightTemp";
+            this.labelBatteryRightTemp.Size = new System.Drawing.Size(309, 153);
+            this.labelBatteryRightTemp.TabIndex = 2;
+            this.labelBatteryRightTemp.Text = "Aguardando...";
+            this.labelBatteryRightTemp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelBatteryLeftTemp
+            // 
+            this.labelBatteryLeftTemp.AutoSize = true;
+            this.labelBatteryLeftTemp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelBatteryLeftTemp.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelBatteryLeftTemp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelBatteryLeftTemp.Location = new System.Drawing.Point(3, 0);
+            this.labelBatteryLeftTemp.Name = "labelBatteryLeftTemp";
+            this.labelBatteryLeftTemp.Size = new System.Drawing.Size(309, 153);
+            this.labelBatteryLeftTemp.TabIndex = 1;
+            this.labelBatteryLeftTemp.Text = "Aguardando...";
+            this.labelBatteryLeftTemp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tableLayoutPanelRpm
+            // 
+            this.tableLayoutPanelRpm.ColumnCount = 1;
+            this.tableLayoutPanelRpm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelRpm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelRpm.Controls.Add(this.labelRpmRight, 0, 1);
+            this.tableLayoutPanelRpm.Controls.Add(this.labelRpmLeft, 0, 0);
+            this.tableLayoutPanelRpm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelRpm.Location = new System.Drawing.Point(737, 56);
+            this.tableLayoutPanelRpm.Name = "tableLayoutPanelRpm";
+            this.tableLayoutPanelRpm.RowCount = 2;
+            this.tableLayoutPanelRpm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelRpm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelRpm.Size = new System.Drawing.Size(237, 461);
+            this.tableLayoutPanelRpm.TabIndex = 8;
+            // 
+            // labelRpmRight
+            // 
+            this.labelRpmRight.AutoSize = true;
+            this.labelRpmRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelRpmRight.Font = new System.Drawing.Font("Nirmala UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelRpmRight.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelRpmRight.Location = new System.Drawing.Point(3, 230);
+            this.labelRpmRight.Name = "labelRpmRight";
+            this.labelRpmRight.Size = new System.Drawing.Size(231, 231);
+            this.labelRpmRight.TabIndex = 3;
+            this.labelRpmRight.Text = "Aguardando...";
+            this.labelRpmRight.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelRpmLeft
+            // 
+            this.labelRpmLeft.AutoSize = true;
+            this.labelRpmLeft.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelRpmLeft.Font = new System.Drawing.Font("Nirmala UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelRpmLeft.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.labelRpmLeft.Location = new System.Drawing.Point(3, 0);
+            this.labelRpmLeft.Name = "labelRpmLeft";
+            this.labelRpmLeft.Size = new System.Drawing.Size(231, 230);
+            this.labelRpmLeft.TabIndex = 2;
+            this.labelRpmLeft.Text = "Aguardando...";
+            this.labelRpmLeft.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FormDados
             // 
@@ -179,30 +331,48 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(1237, 720);
+            this.ControlBox = false;
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.MinimumSize = new System.Drawing.Size(1237, 720);
             this.Name = "FormDados";
+            this.Padding = new System.Windows.Forms.Padding(130, 100, 130, 100);
             this.Text = "Dados";
+            this.Resize += new System.EventHandler(this.FormDados_Resize);
             this.panel1.ResumeLayout(false);
-            this.panel4.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            this.tableLayoutPanelInstrumentation.ResumeLayout(false);
+            this.tableLayoutPanelInstrumentation.PerformLayout();
+            this.tableLayoutPanelTemp.ResumeLayout(false);
+            this.tableLayoutPanelTemp.PerformLayout();
+            this.tableLayoutPanelRpm.ResumeLayout(false);
+            this.tableLayoutPanelRpm.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-        public System.Windows.Forms.Label labelInstrumentationData;
-        public System.Windows.Forms.Label labelInstrumentationTitle;
-        public System.Windows.Forms.Label labelTemperatura;
-        public System.Windows.Forms.Label labelTemperatureData;
-        public System.Windows.Forms.Label labelRPM;
-        public System.Windows.Forms.Label labelRPMTitle;
+
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label labelInstrumentation;
+        private System.Windows.Forms.Label labelTemperature;
+        private System.Windows.Forms.Label labelRPM;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelInstrumentation;
+        private System.Windows.Forms.Label labelBatteryVoltage;
+        private System.Windows.Forms.Label labelIrradiance;
+        private System.Windows.Forms.Label labelVelocity;
+        private System.Windows.Forms.Label labelMpptCurrent;
+        private System.Windows.Forms.Label labelMotorCurrentRight;
+        private System.Windows.Forms.Label labelMotorCurrentLeft;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTemp;
+        private System.Windows.Forms.Label labelMpptTemp;
+        private System.Windows.Forms.Label labelBatteryRightTemp;
+        private System.Windows.Forms.Label labelBatteryLeftTemp;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelRpm;
+        private System.Windows.Forms.Label labelRpmRight;
+        private System.Windows.Forms.Label labelRpmLeft;
     }
 }

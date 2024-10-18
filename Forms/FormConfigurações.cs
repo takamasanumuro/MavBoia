@@ -1,5 +1,7 @@
 ﻿using MavBoia;
+using MavBoia.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
@@ -9,10 +11,14 @@ namespace SimpleExample
 {
     public partial class FormConfigurações : Form
     {
+        FormResizer resizer;
+
         public FormConfigurações()
         {
             InitializeComponent();
-            SetSerialPortDefaults("COM8", 9600);
+            SetSerialPortDefaults("COM0", 9600);
+
+            resizer = new FormResizer(this);
         }
 
 
@@ -42,7 +48,6 @@ namespace SimpleExample
                     return;
                 }
             }
-            MessageBox.Show("Serial port number not found!");
             comboBoxSerialPort.SelectedIndex = 0;
         }
 
@@ -65,6 +70,11 @@ namespace SimpleExample
         private void rjTextBoxLogDirectory__TextChanged(object sender, EventArgs e)
         {
             MavBoiaConfigurations.RjTextBoxLogDirectory = this.rjTextBoxLogDirectory.Texts;
+        }
+
+        private void FormConfigurações_Resize(object sender, EventArgs e)
+        {
+            resizer.ResizeAll();
         }
     }
 }
