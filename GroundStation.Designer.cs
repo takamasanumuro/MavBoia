@@ -231,7 +231,7 @@
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(1242, 120);
+            this.panelControls.Size = new System.Drawing.Size(1244, 120);
             this.panelControls.TabIndex = 1;
             // 
             // lblTitle
@@ -241,7 +241,7 @@
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
             this.lblTitle.Location = new System.Drawing.Point(456, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(786, 120);
+            this.lblTitle.Size = new System.Drawing.Size(788, 120);
             this.lblTitle.TabIndex = 2;
             this.lblTitle.Text = "MavBoia";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -309,7 +309,7 @@
             this.panelDesktop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelDesktop.Location = new System.Drawing.Point(0, 0);
             this.panelDesktop.Name = "panelDesktop";
-            this.panelDesktop.Size = new System.Drawing.Size(1242, 722);
+            this.panelDesktop.Size = new System.Drawing.Size(1244, 722);
             this.panelDesktop.TabIndex = 2;
             // 
             // splitContainerLateral
@@ -328,6 +328,7 @@
             this.splitContainerLateral.Panel2.Controls.Add(this.splitContainerGeneral);
             this.splitContainerLateral.Size = new System.Drawing.Size(1578, 844);
             this.splitContainerLateral.SplitterDistance = 332;
+            this.splitContainerLateral.SplitterWidth = 2;
             this.splitContainerLateral.TabIndex = 6;
             // 
             // splitContainerGeneral
@@ -346,7 +347,7 @@
             // splitContainerGeneral.Panel2
             // 
             this.splitContainerGeneral.Panel2.Controls.Add(this.panelDesktop);
-            this.splitContainerGeneral.Size = new System.Drawing.Size(1242, 844);
+            this.splitContainerGeneral.Size = new System.Drawing.Size(1244, 844);
             this.splitContainerGeneral.SplitterDistance = 120;
             this.splitContainerGeneral.SplitterWidth = 2;
             this.splitContainerGeneral.TabIndex = 6;
