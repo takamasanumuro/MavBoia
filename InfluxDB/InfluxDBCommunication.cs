@@ -1,4 +1,5 @@
-﻿using MavlinkDataController;
+﻿using CefSharp.DevTools.CSS;
+using MavlinkDataController;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,15 +18,28 @@ namespace MavBoia.InfluxDB
     {
         private Uri _uri;
         private string _accessToken;
+        private string address;
         private HttpClient _httpClient;
+        // Query data. Using InfluxQL with command:
+        // SELECT * FROM Yonah WHERE time > now() - 10s ORDER BY time DESC LIMIT 1
+        // This command selects all fields from Yonha measurement from the last 10 seconds, ordering by the newest and getting only the first.
+        private const string endpoint = "/query?db=Arariboia&q=SELECT%20*%20FROM%20Yonah%20WHERE%20time%20>%20now()%20-%2010s%20ORDER%20BY%20time%20DESC%20LIMIT%201&epoch=s";
 
-        public Uri Uri { 
-            get { return _uri; } 
-            set 
+        public string Address
+        {
+            get { return address; }
+            set
             {
-                this._uri = value;
-                this._httpClient.BaseAddress = value;
-             } 
+                this.address = value;
+                try
+                {
+                    this._uri = new Uri(value + endpoint);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
         }
 
         public string AccessToken
@@ -33,24 +47,19 @@ namespace MavBoia.InfluxDB
             get { return _accessToken; }
             set
             {
-                this._accessToken = value;
                 this._httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Token", value);
+                this._accessToken = value;
             }
         }
 
         public InfluxDBCommunication() 
         {
-            // The InfluxDB adress
-            const string address = "http://localhost:8086";
+            MavBoiaConfigurations.OnInfluxConfigurationUpdate += () => { AccessToken = MavBoiaConfigurations.RjTextBoxInfluxToken; Address = MavBoiaConfigurations.RjTextBoxInfluxAdress; };
 
-            // Query data. Using InfluxQL with command:
-            // SELECT * FROM Yonah WHERE time > now() - 10s ORDER BY time DESC LIMIT 1
-            // This command selects all fields from Yonha measurement from the last 10 seconds, ordering by the newest and getting only the first.
-            const string endpoint = "/query?db=Arariboia&q=SELECT%20*%20FROM%20Yonah%20WHERE%20time%20>%20now()%20-%2010s%20ORDER%20BY%20time%20DESC%20LIMIT%201&epoch=s";
+            // The InfluxDB adress
+            address = "http://localhost:8086";
 
             this._uri = new Uri(address + endpoint);
-
-            this._accessToken = "heZy9PrUThd3dxrsKkCh7nSOhVBzxjioa8YlFuSX721xaztA8ZQxgwqyx5D49mHq2Thrj5MJRt2lxsemYSMMCA==";
 
             this._httpClient = new HttpClient();
             this._httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Token", this._accessToken);

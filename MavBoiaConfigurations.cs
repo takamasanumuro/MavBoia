@@ -11,6 +11,8 @@ namespace MavBoia
         private static string _serialPort;
         private static int _baudRate;
         private static string rjTextBoxLogDirectory;
+        private static string rjTextBoxInfluxAdress;
+        private static string rjTextBoxInfluxToken;
 
         public static string SerialPort { 
             get => _serialPort; 
@@ -38,6 +40,27 @@ namespace MavBoia
             }
         }
 
+        public static string RjTextBoxInfluxAdress
+        {
+            get => rjTextBoxInfluxAdress;
+            set
+            {
+                rjTextBoxInfluxAdress = value;
+                OnInfluxConfigurationUpdate?.Invoke();
+            }
+        }
+
+        public static string RjTextBoxInfluxToken
+        {
+            get => rjTextBoxInfluxToken;
+            set
+            {
+                rjTextBoxInfluxToken = value;
+                OnInfluxConfigurationUpdate?.Invoke();
+            }
+        }
+
         public static Action OnSerialConfigurationUpdate;
+        public static Action OnInfluxConfigurationUpdate;
     }
 }

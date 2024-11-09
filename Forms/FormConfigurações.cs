@@ -17,6 +17,8 @@ namespace SimpleExample
         {
             InitializeComponent();
             SetSerialPortDefaults("COM0", 9600);
+            MavBoiaConfigurations.RjTextBoxInfluxAdress = rjTextBoxInfluxAdress.Texts;
+            MavBoiaConfigurations.RjTextBoxInfluxToken = rjTextBoxInfluxToken.Texts;
 
             resizer = new FormResizer(this);
         }
@@ -75,6 +77,16 @@ namespace SimpleExample
         private void FormConfigurações_Resize(object sender, EventArgs e)
         {
             resizer.ResizeAll();
+        }
+
+        private void rjTextBoxInfluxAdress_Leave(object sender, EventArgs e)
+        {
+            MavBoiaConfigurations.RjTextBoxInfluxAdress = this.rjTextBoxInfluxAdress.Texts;
+        }
+
+        private void rjTextBoxInfluxToken_Leave(object sender, EventArgs e)
+        {
+            MavBoiaConfigurations.RjTextBoxInfluxToken = this.rjTextBoxInfluxToken.Texts;
         }
     }
 }
