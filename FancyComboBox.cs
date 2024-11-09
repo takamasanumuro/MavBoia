@@ -30,6 +30,7 @@ namespace CustomControls
 
         //Events
         public event EventHandler OnSelectedIndexChanged;//Default event
+        public event EventHandler DropDown;
 
         //Constructor
         public FancyComboBox()
@@ -45,6 +46,7 @@ namespace CustomControls
             cmbList.ForeColor = listTextColor;
             cmbList.SelectedIndexChanged += new EventHandler(ComboBox_SelectedIndexChanged);//Default event
             cmbList.TextChanged += new EventHandler(ComboBox_TextChanged);//Refresh text
+            cmbList.DropDown += new EventHandler(ComboBox_DropDown);
 
             //Button: Icon
             btnIcon.Dock = DockStyle.Right;
@@ -303,6 +305,11 @@ namespace CustomControls
                 OnSelectedIndexChanged.Invoke(sender, e);
             //Refresh text
             lblText.Text = cmbList.Text;
+        }
+
+        private void ComboBox_DropDown(object sender, EventArgs e)
+        {
+            DropDown?.Invoke(sender, e);
         }
 
         //-> Draw icon

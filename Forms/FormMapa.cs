@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using static GMap.NET.MapProviders.StrucRoads.SnappedPoint;
 using System.Runtime.InteropServices;
+using MavlinkDataController;
+using System.Diagnostics;
 
 namespace SimpleExample
 {
@@ -16,40 +18,22 @@ namespace SimpleExample
         public PointLatLng boatLocation = new PointLatLng(-22.8570241, -43.0955684);
         Bitmap boatIcon = new Bitmap("Resources/boaticon1.bmp");
         
-        public FormMapa()
+        public FormMapa(MavlinkDataController.DataController serialDataController, bool useControllerEvent)
         {
             InitializeComponent();
-            MouseDown += Form_MouseDown_Drag;
-            MouseMove += Form_MouseMove_Drag;
-            mapControl.MouseDown += Form_MouseDown_Drag;
-            mapControl.MouseMove += Form_MouseMove_Drag;
-
+            
+            if(useControllerEvent)
+                serialDataController.OnDataReceived += UpdateData;
         }
 
-        public void UpdateData(Mavlink.mavlink_all_info_t packet)
+        public void UpdateData(AllSensorData packet)
         {
-            float lat = packet.latitude;
-            float lon = packet.longitude;
+            double lat = packet.Latitude;
+            double lon = packet.Longitude;
 
             if (lat != -1.0 && lon != -1.0)
             {
                 UpdateLocation(lat, lon);
-            }
-        }
-
-        private void Form_MouseDown_Drag(object sender, MouseEventArgs e)
-        {
-            // Store the current mouse position
-            GroundStation.instance.previousMousePosition = new Point(e.X, e.Y);
-        }
-
-        private void Form_MouseMove_Drag(object sender, MouseEventArgs e)
-        {
-            // Move the form when dragging
-            if (e.Button == MouseButtons.Left)
-            {
-                GroundStation.instance.Left += e.X - GroundStation.instance.previousMousePosition.X;
-                GroundStation.instance.Top += e.Y - GroundStation.instance.previousMousePosition.Y;
             }
         }
 
