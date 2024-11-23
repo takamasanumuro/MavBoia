@@ -21,10 +21,8 @@ namespace SimpleExample
 
         public FormDados(MavlinkDataController.DataController serialDataController)
         {
-            InitializeComponent();
-            
             resizer = new FormResizer(this);
-
+            InitializeComponent();
             serialDataController.OnDataReceived += UpdateData;
         }
 

@@ -15,12 +15,12 @@ namespace SimpleExample
 
         public FormConfigurações()
         {
+            resizer = new FormResizer(this);
             InitializeComponent();
             SetSerialPortDefaults("COM0", 9600);
             MavBoiaConfigurations.RjTextBoxInfluxAdress = rjTextBoxInfluxAdress.Texts;
             MavBoiaConfigurations.RjTextBoxInfluxToken = rjTextBoxInfluxToken.Texts;
 
-            resizer = new FormResizer(this);
         }
 
 

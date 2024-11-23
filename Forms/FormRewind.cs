@@ -29,11 +29,11 @@ namespace MavBoia.Forms
 
         public FormRewind(DataController controller)
         {
+            resizer = new FormResizer(this);
             InitializeComponent();
 
             this.controller = controller;
             formMapa = new FormMapa(controller, false);
-            resizer = new FormResizer(this);
         }
 
         private void FormRewind_Load(object sender, EventArgs e)
