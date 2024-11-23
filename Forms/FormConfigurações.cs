@@ -17,6 +17,8 @@ namespace SimpleExample
         {
             resizer = new FormResizer(this);
             InitializeComponent();
+            resizer.InitializeResizer();
+
             SetSerialPortDefaults("COM0", 9600);
             MavBoiaConfigurations.RjTextBoxInfluxAdress = rjTextBoxInfluxAdress.Texts;
             MavBoiaConfigurations.RjTextBoxInfluxToken = rjTextBoxInfluxToken.Texts;

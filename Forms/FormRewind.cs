@@ -31,6 +31,7 @@ namespace MavBoia.Forms
         {
             resizer = new FormResizer(this);
             InitializeComponent();
+            resizer.InitializeResizer();
 
             this.controller = controller;
             formMapa = new FormMapa(controller, false);

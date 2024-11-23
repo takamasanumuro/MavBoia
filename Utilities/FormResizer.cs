@@ -18,6 +18,13 @@ namespace MavBoia.Utilities
         public FormResizer(Form form)
         {
             this.form = form;
+        }
+
+        /// <summary>
+        /// You have to call this method after <c>InitializeComponent()</c> is called.
+        /// </summary>
+        public void InitializeResizer()
+        {
             originalFormSize = form.Size;
             StoreControlsRectangle(form);
         }
