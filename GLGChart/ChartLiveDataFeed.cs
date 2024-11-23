@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GenLogic;
+using MavlinkDataController;
 using SimpleExample;
 
 /////////////////////////////////////////////////////////////////////// 
@@ -101,37 +102,39 @@ public class ChartLiveDataFeed : ChartDataFeedInterface
         tag_source = tag_source.ToLower();
         data_point.value = 0;
 
+        AllSensorData allSensorsData = GroundStation.DataController.GetAllSensorData();
+
         if (tag_source.Contains("corrente") && tag_source.Contains("motorbombordo"))
         {
-            data_point.value = FormDados.motorLeftCurrent;
+            data_point.value = allSensorsData.MotorLeftCurrent;
         }
         if (tag_source.Contains("corrente") && tag_source.Contains("motorboreste"))
         {
-            data_point.value = FormDados.motorRightCurrent;
+            data_point.value = allSensorsData.MotorRightCurrent;
         }
         else if (tag_source.Contains("corrente") && tag_source.Contains("bateria"))
         {
-            data_point.value = FormDados.batteryCurrent;
+            data_point.value = allSensorsData.BatteryCurrent;
         }
         else if (tag_source.Contains("corrente") && tag_source.Contains("mppt"))
         {
-            data_point.value = FormDados.mpptCurrent;
+            data_point.value = allSensorsData.MpptCurrent;
         }
         else if (tag_source.Contains("tensao") && tag_source.Contains("bateria"))
         {
-            data_point.value = FormDados.batteryVoltage;
+            data_point.value = allSensorsData.BatteryVoltage;
         }
         else if (tag_source.Contains("potencia") && tag_source.Contains("geracao"))
         {
-            data_point.value = FormDados.generationPower;
+            data_point.value = allSensorsData.GenerationPower;
         }
         else if (tag_source.Contains("potencia") && tag_source.Contains("consumo"))
         {
-            data_point.value = FormDados.batteryPower;
+            data_point.value = allSensorsData.BatteryPower;
         }
         else if (tag_source.Contains("potencia") && tag_source.Contains("resultante"))
         {
-            data_point.value = FormDados.resultantPower;
+            data_point.value = allSensorsData.ResultantPower;
         }
 
         data_point.value_valid = true;

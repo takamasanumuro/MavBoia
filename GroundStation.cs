@@ -1,539 +1,336 @@
-﻿using Opc.Cpx;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 using CefSharp.MinimalExample.WinForms;
-using System.Net.Http;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.IO;
-using CefSharp;
-using CefSharp.DevTools.Network;
 using MavBoia;
+using System.Threading;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using MavBoia.InfluxDB;
+using MavlinkDataController;
+using MavBoia.Forms;
+using System.Linq;
+using MavBoia.Utilities;
 
 namespace SimpleExample
 {
     public partial class GroundStation : Form
     {
-        public static GroundStation instance;
         //Mavlink parser responsible for parsing and deparsing mavlink packets
         private Mavlink.MavlinkParser mavlinkParser = new Mavlink.MavlinkParser();
-        
-        private object serialLock = new object(); // lock to prevent thread collisions on serial port
         private byte SysIDLocal { get;  set; } = 0xFF; // Default System ID for ground stations.
         private byte CompIDLocal { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_MISSIONPLANNER;
         private byte VehicleSysID { get; set; } = 0x01; // Default System ID for vehicles.
         private byte VehicleCompID { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER;
- 
-        FormChart formGraficos = new FormChart() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        FormDados formDados = new FormDados() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        FormMapa formMapa = new FormMapa() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        FormConfigurações formConfigurações = new FormConfigurações() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
-        BrowserForm formBrowser = new BrowserForm() { Dock = DockStyle.Fill, TopLevel = false, TopMost = true, FormBorderStyle = FormBorderStyle.None };
 
-        public Point previousMousePosition; // Store the previous mouse position for dragging the form around
+        
+        // Forms declaration
+        FormChart formGraficos;
+        FormMapa formMapa;
+        FormConfigurações formConfigurações;
+        BrowserForm formBrowser;
+        FormDados formDados;
+        FormRewind formRewind;
+
+        // Form state
+        private Button activatedButton;
+        private Form currentForm;
+        
+        // Serial communication
+        private SerialPort serialPort;
+        private BackgroundWorker serialWorker;
+        private object serialLock = new object(); // lock to prevent thread collisions on serial port
+
+        // Network communication
+        InfluxDBCommunication influxCommunication;
+        private CancellationTokenSource networkCancellation;
+        private bool isNetworkRunning = false;
+
+        public static MavlinkDataController.DataController DataController; // Static to facilitate communication with GLG Chart. If you need to use pass the object instead of accessing the static field.
 
         public GroundStation()
         {
             InitializeComponent();
-            instance = this;
-            Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 25, 25));
-            MouseDown += Form_MouseDown_Drag;
-            MouseMove += Form_MouseMove_Drag;
-                           
-        }
-        #region Form Rounding and Dragging
-        // This is the function that will allow the form to be rounded
-        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-        private static extern IntPtr CreateRoundRectRgn
-        (
-            int nLeftRect,
-            int nTopRect,
-            int nRightRect,
-            int nBottomRect,
-            int nWidthEllipse,
-            int nHeightEllipse
 
-        );
+            DataController = new MavlinkDataController.DataController();
 
-        // Allows form to be dragged.
-        protected override void WndProc(ref Message m)
-        {
-            // Constants for form rounding and dragging
-            const int WM_NCHITTEST = 0x84;
-            const int HT_CAPTION = 0x2;
-            // Override WndProc to enable dragging
-            if (m.Msg == WM_NCHITTEST)
-            {
-                base.WndProc(ref m);
-                if (m.Result.ToInt32() == HT_CAPTION)
-                    m.Result = (IntPtr)1;
-                return;
-            }
-            base.WndProc(ref m);
-        }
+            // Serial port initialization
+            serialPort = new SerialPort("COM8", 9600);
+            serialPort.ReadTimeout = 2000;
+            serialWorker = new BackgroundWorker();
+            serialWorker.WorkerSupportsCancellation = true;
+            serialWorker.DoWork += serialWorker_DoWork;
+            serialWorker.RunWorkerCompleted += serialWorker_RunWorkerCompleted;
 
-        public void Form_MouseDown_Drag(object sender, MouseEventArgs e)
-        {
-            // Store the current mouse position
-            GroundStation.instance.previousMousePosition = new Point(e.X, e.Y);
-        }
+            // Network initialization
+            influxCommunication = new InfluxDBCommunication();
 
-        public void Form_MouseMove_Drag(object sender, MouseEventArgs e)
-        {
- 
+            // Forms instantiation
+            formGraficos = new FormChart();
+            formDados = new FormDados(DataController);
+            formMapa = new FormMapa(DataController, true);
+            formConfigurações = new FormConfigurações();
+            formBrowser = new BrowserForm();
+            formRewind = new FormRewind(DataController);
+
+            MavBoiaConfigurations.OnSerialConfigurationUpdate += UpdateSerialConfiguration;
         }
-        #endregion
 
         #region Form Initialization Defaults
 
         private void GroundStation_Load(object sender, EventArgs e)
         {
-           
-            //SetSerialPortDefaults("COM5", 4800);
             LoadForms();
-            panelTopLeft.Enabled = false;
-            panelTopLeft.Visible = false;
-            pictureBoxArariboia.Enabled = false;
-            pictureBoxArariboia.Visible = false;
-
         }
 
         // Ensure all forms are loaded and ready to receive data.
         private void LoadForms()
         {
-            List<Form> forms = new List<Form>() { formConfigurações, formDados, formMapa, formBrowser };
-            foreach (var form in forms)
+            List<Form> forms = new List<Form>() { formConfigurações, formDados, formMapa, formBrowser, formGraficos, formRewind};
+            foreach (Form form in forms)
             {
-                panelFormLoader.Controls.Add(form);
-                form.Show();
+                form.TopLevel = false;
+                form.FormBorderStyle = FormBorderStyle.None;
+                form.Dock = DockStyle.Fill;
+                panelDesktop.Controls.Add(form);
+                
+                form.Show(); // Calls load event
+                form.Hide(); // Keeps the form in background
             }
-            panelFormLoader.Controls.Clear();
-            panelFormLoader.Controls.Add(formDados);
-            panelFormLoader.Show();
-
-            formBrowser.Scale(new SizeF(0.5f, 0.5f));
-            panelSecondaryFormLoader.Controls.Clear();
-            panelSecondaryFormLoader.Controls.Add(formBrowser);
-            panelSecondaryFormLoader.Dock = DockStyle.Fill;
-            panelSecondaryFormLoader.Show();
-            
         }
 
         #endregion
 
-        private void buttonConnect_Click(object sender, EventArgs e)
+        #region SerialCommunication
+        private void UpdateSerialConfiguration()
+        {
+            if (serialPort.IsOpen)
+            {
+                lock (serialLock)
+                {
+                    serialPort.Close();
+                    serialPort.PortName = MavBoiaConfigurations.SerialPort;
+                    serialPort.BaudRate = MavBoiaConfigurations.BaudRate;
+                    serialPort.Open();
+                }
+            }
+            else
+            {
+                serialPort.PortName = MavBoiaConfigurations.SerialPort;
+                serialPort.BaudRate = MavBoiaConfigurations.BaudRate;
+            }
+        }
+
+        private void buttonConnectRadio_Click(object sender, EventArgs e)
         {
             try
             {
+                const string buttonOffText = "Conectar rádio";
+                const string buttonOnText = "Desconectar rádio";
+
                 // if the port is open close it
-                if (serialPort1.IsOpen)
+                if (serialPort.IsOpen)
                 {
-                    serialPort1.Close();
-                    buttonConnect.Text = "Ligar rádio";
+                    serialWorker.CancelAsync();
+                    buttonConnectRadio.Text = buttonOffText;
                     return;
                 }
 
-                // Configure the port based on selected options and opens it.
-                serialPort1.PortName = FormConfigurações.instance.comboBoxSerialPort.SelectedItem.ToString();
-                serialPort1.BaudRate = int.Parse(FormConfigurações.instance.comboBoxBaudRate.SelectedItem.ToString());
-                serialPort1.ReadTimeout = 2000;
-                serialPort1.Open();
-                buttonConnect.Text = "Desligar rádio";
-
-                // Read data from serial port on a background thread in order to not block the UI thread.        
-                BackgroundWorker workerSerialPort = new BackgroundWorker();
-                workerSerialPort.DoWork += workerSerialPort_ReadData;
-                workerSerialPort.RunWorkerAsync();
+                serialPort.PortName = MavBoiaConfigurations.SerialPort;
+                serialPort.BaudRate = MavBoiaConfigurations.BaudRate;
+                serialPort.Open();
+                serialWorker.RunWorkerAsync();
+                buttonConnectRadio.Text = buttonOnText;
             }
             catch (Exception exception)
             {
                 MessageBox.Show($"{exception.Message}\n" + $"Verifique se a porta existe ou já está sendo usada por outro programa.");
-            }    
+            }
         }
 
-        private void buttonHTTPConnect_Click(object sender, EventArgs e)
+        private void serialWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            // Take the hostname from the configurations and start making HTTP requests periodically to the server.
-            // The routes are the same as the Mavlink message names.
-            // The server will respond with the latest data present in the vehicle.
+            while (!serialWorker.CancellationPending)
+            {
+                try
+                {
+                    if (!serialPort.IsOpen) continue;
+                    Mavlink.MavlinkMessage message;
+                    lock (serialLock)
+                        message = mavlinkParser.ReadPacket(serialPort.BaseStream);
 
-            if (buttonHTTPConnect.Text == "Ligar rede")
+                    if (message != null)
+                    {
+                        DataController.ProcessMavlinkMessage(message);
+                    }
+                }
+                catch(UnauthorizedAccessException unauthorizedException)
+                {
+                    buttonConnectRadio.BeginInvoke((Action)(() => { buttonConnectRadio.Text = "Conectar rádio"; }));
+                    serialWorker.CancelAsync();
+                    Console.WriteLine(unauthorizedException.Message);
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                }
+
+                Thread.Sleep(1);
+            }
+            e.Cancel = true;
+        }
+
+        private void serialWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            lock (serialLock)
+                serialPort.Close();
+        }
+
+        #endregion
+
+        #region Network
+        private async Task RunNetworkAsync(CancellationToken cancellationToken)
+        {
+            isNetworkRunning = true;
+            while (!cancellationToken.IsCancellationRequested)
             {
-                // Check if hostname exists on the network
-                // If it does, start making HTTP requests to the server
-                
-                buttonHTTPConnect.Text = "Desligar rede";
-            } 
-            else if (buttonHTTPConnect.Text == "Desligar rede")
+                try
+                {
+                    AllSensorData data = await influxCommunication.GetAllDataAsync();
+                    DataController.ProcessNetworkData(data);
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                }
+                Thread.Sleep(1000);
+            }   
+            
+            isNetworkRunning = false;
+        }
+
+        private void buttonConnectNetwork_Click(object sender, EventArgs e)
+        {
+            if (isNetworkRunning)
             {
-                buttonHTTPConnect.Text = "Ligar rede";
+                networkCancellation?.Cancel();
+                buttonConnectNetwork.Text = "Conectar rede";
                 return;
             }
 
-            BackgroundWorker workerHTTPConnection = new BackgroundWorker();
-            workerHTTPConnection.DoWork += workerHTTPConnection_FetchData;
-            workerHTTPConnection.RunWorkerAsync();
+            networkCancellation = new CancellationTokenSource();
+            buttonConnectNetwork.Text = "Desconectar rede";
+            isNetworkRunning = true;
+            var task = Task.Run(async () => await RunNetworkAsync(networkCancellation.Token));
+        }
+        #endregion
+
+        #region Button Functions
+        private void ActivateButton(Button btn)
+        {
+            if (btn == null) return;
+
+            if(btn != activatedButton)
+            {
+                DeactivateButton(activatedButton);
+                activatedButton = btn;
+                btn.BackColor = Color.FromArgb(46, 51, 73);
+            }
         }
 
+        private void DeactivateButton(Button btn)
+        {
+            if (btn == null) return;
+
+            btn.BackColor = Color.FromArgb(24, 30, 54);
+        }
+        #endregion
+
+        private void ShowForm(Form form)
+        {
+            if(currentForm != null)
+            {
+                currentForm.Hide();
+            }
+            currentForm = form;
+            panelDesktop.Tag = form;
+            form.BringToFront();
+            form.Show();
+            lblTitle.Text = form.Text;
+        }
+
+        private void buttonRastreio_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender as Button);
+            ShowForm(formBrowser);
+        }
+
+        private void buttonGraficos_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender as Button);
+            ShowForm(formGraficos);
+        }
+
+        private void buttonDados_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender as Button);
+            ShowForm(formDados);
+        }
+
+        private void buttonMapa_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender as Button);
+            ShowForm(formMapa);
+        }
+
+        private void buttonConfigurações_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender as Button);
+            ShowForm(formConfigurações);
+        }
+
+        private void buttonRewind_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender as Button);
+            ShowForm(formRewind);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            this.serialPort?.Dispose();
+            this.influxCommunication?.Dispose();
+            base.OnClosed(e);
+            Application.Exit();
+        }
+
+        #region Deprecated
         /// <summary>
-        /// Reads data from the serial port and processes it.
+        /// Callback for all buttons in the sidebar. Sets the panelNav position and color, which is the thin blue bar that tracks the buttons.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void workerSerialPort_ReadData(object sender, DoWorkEventArgs e)
+        private void ButtonGenericClickCallback(object sender, EventArgs e)
         {
-            while (serialPort1.IsOpen)
-            {
-                try
-                {
-                    Mavlink.MavlinkMessage message;
-                    lock (serialLock);
-                    {
-                        message = mavlinkParser.ReadPacket(serialPort1.BaseStream);
-                        if (message == null || message.Payload == null)
-                            continue;
-                    }
-         
-                    ProcessMessage(message);
-                }
-                catch (Exception serialException)
-                {
-                    Console.WriteLine($"{serialException.Message} at {System.DateTime.Now}");
-                }
+            //Button button = (Button)sender;
+            //panelNav.Height = button.Height;
+            //panelNav.Top = button.Top;
+            //panelNav.Left = button.Left;
+            //panelNav.BringToFront();
+            //button.BackColor = Color.FromArgb(46, 51, 73);
+            //panelSecondaryFormLoader.Controls.Clear();
+            //panelSecondaryFormLoader.Controls.Add(formBrowser);
+            //panelSecondaryFormLoader.Show();
 
-                System.Threading.Thread.Sleep(1);
-            }
+            //panelTopLeft.Enabled = false;
+            //panelTopLeft.Visible = false;
+            //pictureBoxArariboia.Enabled = false;
+            //pictureBoxArariboia.Visible = false;
         }
-
-        private void workerHTTPConnection_FetchData(object sender, DoWorkEventArgs e)
-        {
-            while (buttonHTTPConnect.Text == "Desligar rede")
-            {
-                string hostname = String.Empty;
-                string connectionType = String.Empty;
-                this.Invoke((MethodInvoker)delegate
-                {
-                    connectionType = formConfigurações.fancyComboBoxNetConnectionType.SelectedItem.ToString();
-                    
-                    if (connectionType == "Local")
-                    {
-                        hostname = formConfigurações.rjTextBoxLocalHostname.Texts;
-                    }
-                    else if (connectionType == "VPN")
-                    {
-                        hostname = formConfigurações.rjTextBoxVPNHostname.Texts;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Erro ao selecionar nome de host. Verifique as configurações.");
-                        return;
-                    }
-
-                });
-
-                HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri($"http://{hostname}:80/");
-                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                
-                try
-                {
-
-                    // Fetch instrumentation data
-                    HttpResponseMessage response = client.GetAsync("instrumentation-system").Result;
-                    string jsonContent = response.Content.ReadAsStringAsync().Result;
-
-                    // Parse "current_motor", "current_battery", "current_mppt" and "voltage_battery" from json
-                    JObject jsonObject = JObject.Parse(jsonContent);
-                    float battery_voltage = (float)jsonObject["battery_voltage"];
-                    float motor_current = (float)jsonObject["motor_current"];
-                    float battery_current = (float)jsonObject["battery_current"];
-                    float mppt_current = (float)jsonObject["mppt_current"];
-
-                    FormDados.motorLeftCurrent = motor_current;
-                    FormDados.motorRightCurrent = battery_current;
-                    FormDados.mpptCurrent = mppt_current;
-                    FormDados.batteryVoltage = battery_voltage;
-                    FormDados.generationPower = mppt_current * battery_voltage;
-                    FormDados.batteryPower = battery_current * battery_voltage;
-                    FormDados.motorLeftPower = battery_current * motor_current;
-                    FormDados.resultantPower = FormDados.generationPower + FormDados.batteryPower;
-
-                    Console.WriteLine("VPN-instrumentation-system");
-
-                    formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text =
-                            $"Tensão da bateria: {battery_voltage:F2}V\n" +
-                            $"Corrente do motor: {motor_current:F2}A\n" +
-                            $"Corrente da bateria: {battery_current:F2}A\n" +
-                            $"Corrente do MPPT: {mppt_current:F2}A\n" +
-                            $"Potência de geração: {FormDados.generationPower:F0}W\n" +
-                            $"Potência do motor: {FormDados.motorLeftPower:F0}W\n" +
-                            $"Potência da bateria: {FormDados.batteryPower:F0}W\n"));
-
-                    string directory = String.Empty;
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        directory = formConfigurações.rjTextBoxLogDirectory.Texts;
-                        if (directory == String.Empty)
-                        {
-                            MessageBox.Show("Invalid directory!");
-                        }
-                    });
-
-                    string fileName = "instrumentation-system.csv";
-                    string path = Path.Combine(directory, fileName);
-                    using (StreamWriter dataLogger = new StreamWriter(path, true))
-                    {
-                        string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                        string csvData = $"{timestamp}; {battery_voltage}; {motor_current}; {battery_current}; {mppt_current}";
-                        dataLogger.WriteLine(csvData);
-                        dataLogger.Flush();
-                    }
-
-                    // Fetch temperatures
-                    response = client.GetAsync("temperature-system").Result;
-                    jsonContent = response.Content.ReadAsStringAsync().Result;
-
-                    // Parse "temperature_motor" and "temperature_mppt" from json
-                    jsonObject = JObject.Parse(jsonContent);
-                    float temperature_motor = (float)jsonObject["temperature_motor"];
-                    float temperature_battery = (float)jsonObject["temperature_battery"];
-                    float temperature_mppt = (float)jsonObject["temperature_mppt"];
-
-                    FormDados.temperatureBatteryLeft = temperature_motor;
-                    FormDados.temperatureBatteryRight = temperature_battery;
-                    FormDados.temperatureMPPT = temperature_mppt;
-
-                    String temperature_motor_string = $"{temperature_motor:F2}°C";
-                    String temperature_battery_string = $"{temperature_battery:F2}°C";
-                    String temperature_mppt_string = $"{temperature_mppt:F2}°C";
-                    const float probe_disconnected = -127.0f;
-                    if (temperature_motor == probe_disconnected)
-                    {
-                        temperature_motor_string = "Sonda não conectada";
-                    }
-                    if (temperature_battery == probe_disconnected)
-                    {
-                        temperature_battery_string = "Sonda não conectada";
-                    }
-                    if (temperature_mppt == probe_disconnected)
-                    {
-                        temperature_mppt_string = "Sonda não conectada";
-                    }
-                    formDados.labelTemperatureData.BeginInvoke(new Action(() => formDados.labelTemperatureData.Text =
-                        $"Temperatura do motor: {temperature_motor_string}\n" +
-                        $"Temperatura da bateria: {temperature_battery_string}\n" +
-                        $"Temperatura do MPPT: {temperature_mppt_string}\n"));
-
-                    Console.WriteLine("VPN-temperature-system");
-
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        directory = formConfigurações.rjTextBoxLogDirectory.Texts;
-                        if (directory == String.Empty)
-                        {
-                            MessageBox.Show("Invalid directory!");
-                        }
-                    });
-
-                    fileName = "temperature-system.csv";
-                    path = Path.Combine(directory, fileName);
-
-                    using (StreamWriter dataLogger = new StreamWriter(path, true))
-                    {
-                        string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                        string csvData = $"{timestamp}; {temperature_motor}; {temperature_battery}; {temperature_mppt}";
-                        dataLogger.WriteLine(csvData);
-                        dataLogger.Flush();
-                    }
-
-                    // Fetch GPS data
-                    response = client.GetAsync("gps-system").Result;
-                    jsonContent = response.Content.ReadAsStringAsync().Result;
-
-                    // Parse "latitude", "longitude", "course", "speed" and "satellites" from JSON
-                    jsonObject = JObject.Parse(jsonContent);
-                    float latitude = (float)jsonObject["latitude"];
-                    float longitude = (float)jsonObject["longitude"];
-                    float course = (float)jsonObject["course"];
-                    float speed = (float)jsonObject["speed"];
-                    int satellites = (int)jsonObject["satellites"];
-
-                    FormDados.latitude = latitude;
-                    FormDados.longitude = longitude;
-
-                    if ((latitude != -1.0f) && (longitude != -1.0f))
-                    {
-                        formMapa.UpdateLocation(latitude, longitude);
-                    }
-
-                    Console.WriteLine($"vpn-gps-system\n" +
-                                      $"Latitude:{latitude}/Longitude:{longitude}/Course:{course}/Speed:{speed}/Satellites:{satellites}");
-
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        directory = formConfigurações.rjTextBoxLogDirectory.Texts;
-                        if (directory == String.Empty)
-                        {
-                            MessageBox.Show("Invalid directory!");
-                        }
-                    });
-
-                    fileName = "gps-system.csv";
-                    path = Path.Combine(directory, fileName);
-
-                    using (StreamWriter dataLogger = new StreamWriter(path, true))
-                    {
-                        string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                        string csvData = $"{timestamp}; {latitude}; {longitude}; {course}; {speed}; {satellites}";
-                        dataLogger.WriteLine(csvData);
-                        dataLogger.Flush();
-                    }
-
-                    //formDados.labelGPSData.BeginInvoke(new Action(() => formDados.labelGPSData.Text =
-                    //             $"Latitude: {latitude}\n" +
-                    //             $"Longitude: {longitude}\n" +
-                    //             $"Curso: {course}\n" +
-                    //             $"Velocidade: {speed}\n" +
-                    //             $"Satélites: {satellites}\n"));
-                    //             
-
-                }
-                catch (Exception exc)
-                {
-                    Console.WriteLine(exc.Message);
-                }
-                System.Threading.Thread.Sleep(2000);
-            }
-        }
-
-        String GetLoggingDirectory()
-        {
-            string directory = String.Empty;
-            this.Invoke((MethodInvoker)delegate
-            {
-                directory = formConfigurações.rjTextBoxLogDirectory.Texts;
-                if (directory == String.Empty)
-                {
-                    MessageBox.Show("Invalid directory!");
-                }
-            });
-            return directory;
-        }
-        
-        void WriteDataCSV(string directory, string fileName, string data)
-        {
-
-            if (directory == String.Empty)
-            {
-                MessageBox.Show("Invalid directory!");
-                return;
-            }
-
-            if (fileName == String.Empty)
-            {
-                MessageBox.Show("Invalid file name!");
-                return;
-            }
-
-            string path = Path.Combine(directory, fileName);
-            using (StreamWriter dataLogger = new StreamWriter(path, true))
-            {
-                string timestamp = DateTime.Now.ToString("HH:mm:ss");
-                string csvData = $"{timestamp}; {data}";
-                dataLogger.WriteLine(csvData);
-                dataLogger.Flush();
-            }
-        }
-
-        void SaveData(Mavlink.MavlinkMessage message)
-        {
-            string directory = GetLoggingDirectory();
-            string fileName = message.MsgTypename + ".csv";
-            string data = MavlinkUtilities.GetMessageDataCSV(message);
-            WriteDataCSV(directory, fileName, data);
-        }
-
-        /// <summary>
-        /// Process received Mavlink message based on its message ID.
-        /// </summary>
-        /// <param name="message"></param>
-        void ProcessMessage(Mavlink.MavlinkMessage message)
-        {
-            Console.WriteLine(message.MsgTypename);
-            switch (message.MsgID)
-            {
-                // Delegates and lambda expressions must be used to update the UI from a different thread.
-                case (byte)Mavlink.MAVLINK_MSG_ID.ALL_INFO:
-                    {
-                        var payload = (Mavlink.mavlink_all_info_t)message.Payload;
-                        MavlinkUtilities.PrintMessageInfo(message);
-                        FormDados.UpdateData(payload);
-                        formMapa.UpdateData(payload);
-                        UpdateDataForm();          
-                        break;
-                    }
-                default:
-                    break;
-            }
-            SaveData(message);
-        }
-
-        private void UpdateDataForm()
-        {
-            UpdateInstrumentationText();
-            UpdateTemperatureText();
-            UpdateRPMText();
-        }
-
-        private void UpdateInstrumentationText()
-        {
-            string instrumentationText = $"Tensão da bateria: {FormDados.batteryVoltage:F2}V\n" +
-                                         $"Corrente do motor L: {FormDados.motorLeftCurrent:F2}A\n" +
-                                         $"Corrente do motor R: {FormDados.motorRightCurrent:F2}A\n" +
-                                         $"Corrente do MPPT: {FormDados.mpptCurrent:F2}A\n";
-
-            formDados.labelInstrumentationData.BeginInvoke(new Action(() => formDados.labelInstrumentationData.Text = instrumentationText));
-        }
-
-        private String CheckProbe(float temperature)
-        {
-            //DS18B20 Technical specifications:
-            //Usable temperature range: -55 to 125 °C(-67 °F to + 257 °F)
-            
-            const float probe_disconnected_celsius = -55.0f;
-            if (temperature < probe_disconnected_celsius)
-            {
-                return "NC";
-            }
-            return $"{temperature:F2}°C";
-        }
-
-        private void UpdateTemperatureText()
-        {
-
-            string temperatureText = $"Bateria(L): " + CheckProbe(FormDados.temperatureBatteryLeft) + "\n" +
-                                     $"Bateria(R): " + CheckProbe(FormDados.temperatureBatteryRight) + "\n" +
-                                     $"MPPT: " + CheckProbe(FormDados.temperatureMPPT) + "\n";
-
-            formDados.labelTemperatureData.BeginInvoke(new Action(() => formDados.labelTemperatureData.Text = temperatureText));
-
-        }
-
-        private void UpdateRPMText()
-        {
-            string rpmText = $"Motor L: {FormDados.rpmLeft:F0}\n" +
-                             $"Motor R: {FormDados.rpmRight:F0}\n";
-
-            formDados.labelRPM.BeginInvoke(new Action(() => formDados.labelRPM.Text = rpmText));
-        }
-             
+        #endregion
 
         private void WriteBufferConsole(byte[] buffer, string logMessage, bool UseHexMode = false)
         {
@@ -556,133 +353,16 @@ namespace SimpleExample
             }
             Console.WriteLine();
         }
-   
-        /// <summary>
-        /// Sets the form loader panel back to small size.
-        /// </summary>
-        private void SetFormLoaderSmall()
+
+
+        #region Resize Logic
+        
+
+        private void GroundStation_Resize(object sender, EventArgs e)
         {
-            panelFormLoader.Size = new System.Drawing.Size(910, 480);
-            panelFormLoader.Dock = DockStyle.Bottom;
+            
         }
 
-        private void buttonGraficos_Click(object sender, EventArgs e)
-        {
-            ButtonGenericClickCallback(sender, e);
-            panelFormLoader.Controls.Clear();
-            panelFormLoader.Dock = DockStyle.Fill;
-            panelFormLoader.Controls.Add(formGraficos);
-            formGraficos.Show();
-        }
-
-        private void buttonDados_Click(object sender, EventArgs e)
-        {
-            ButtonGenericClickCallback(sender, e);
-            panelFormLoader.Controls.Clear();
-            SetFormLoaderSmall();
-            panelFormLoader.Controls.Add(formDados);
-            formDados.Show();         
-        }
-
-        private void buttonMapa_Click(object sender, EventArgs e)
-        {
-            ButtonGenericClickCallback(sender, e);
-            panelFormLoader.Controls.Clear();
-            panelFormLoader.Dock = DockStyle.Fill;
-            panelFormLoader.Controls.Add(formMapa);
-            formMapa.Show();
-        }
-
-        private void buttonConfigurações_Click(object sender, EventArgs e)
-        {
-            ButtonGenericClickCallback(sender, e);
-            panelFormLoader.Controls.Clear();
-            panelFormLoader.Dock = DockStyle.Fill;
-            panelFormLoader.Controls.Add(formConfigurações);
-            formConfigurações.Show();
-        }
-
-        private void buttonRastreio_Click(object sender, EventArgs e)
-        {
-            ButtonGenericClickCallback(sender, e);
-            panelFormLoader.Controls.Clear();
-            panelFormLoader.Dock = DockStyle.Fill;
-            panelFormLoader.Controls.Add(formBrowser);
-            panelFormLoader.Show();
-
-            panelTopLeft.Enabled = true;
-            panelTopLeft.Visible = true;
-            pictureBoxArariboia.Enabled = true;
-            pictureBoxArariboia.Visible = true;
-
-        }
-
-        /// <summary>
-        /// Callback for all buttons in the sidebar. Sets the panelNav position and color, which is the thin blue bar that tracks the buttons.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ButtonGenericClickCallback(object sender, EventArgs e)
-        {
-            Button button = (Button)sender;
-            panelNav.Height = button.Height;
-            panelNav.Top = button.Top;
-            panelNav.Left = button.Left;
-            panelNav.BringToFront();
-            button.BackColor = Color.FromArgb(46, 51, 73);
-            panelSecondaryFormLoader.Controls.Clear();
-            panelSecondaryFormLoader.Controls.Add(formBrowser);
-            panelSecondaryFormLoader.Show();
-
-            panelTopLeft.Enabled = false;
-            panelTopLeft.Visible = false;
-            pictureBoxArariboia.Enabled = false;
-            pictureBoxArariboia.Visible = false;
-        }
-    
-        private void button_Leave(object sender, EventArgs e)
-        {
-            Button button = (Button)sender;
-            button.BackColor = Color.FromArgb(24, 30, 54);       
-        }
-
-        private void buttonExit_Click(object sender, EventArgs e)
-        {
-            // Close application
-            System.Windows.Forms.Application.Exit();
-        }
-
-        private void buttonLogPacket_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelTitleSelection_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panelSecondaryFormLoader_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void pictureBoxArariboia_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            panelTopLeft.Enabled = false;
-            panelTopLeft.Visible = false;
-            pictureBoxArariboia.Enabled = false;
-            pictureBoxArariboia.Visible = false;
-        }
-
-        private void pictureBoxArariboia_DoubleClick(object sender, EventArgs e)
-        {
-
-        }
-
-        private void buttonRastreio_DragDrop(object sender, DragEventArgs e)
-        {
-
-        }
+        #endregion
     }
 }
