@@ -18,6 +18,10 @@ namespace MavBoia.Utilities
         public FormResizer(Form form)
         {
             this.form = form;
+        }
+
+        public void InitializeResizer()
+        {
             originalFormSize = form.Size;
             StoreControlsRectangle(form);
         }

@@ -23,6 +23,8 @@ namespace SimpleExample
         {
             resizer = new FormResizer(this);
             InitializeComponent();
+            resizer.InitializeResizer();
+
             serialDataController.OnDataReceived += UpdateData;
         }
 
