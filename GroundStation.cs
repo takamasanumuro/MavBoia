@@ -15,18 +15,14 @@ using MavlinkDataController;
 using MavBoia.Forms;
 using System.Linq;
 using MavBoia.Utilities;
+using MavBoia.DataControl;
 
 namespace SimpleExample
 {
     public partial class GroundStation : Form
     {
         //Mavlink parser responsible for parsing and deparsing mavlink packets
-        private Mavlink.MavlinkParser mavlinkParser = new Mavlink.MavlinkParser();
-        private byte SysIDLocal { get;  set; } = 0xFF; // Default System ID for ground stations.
-        private byte CompIDLocal { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_MISSIONPLANNER;
-        private byte VehicleSysID { get; set; } = 0x01; // Default System ID for vehicles.
-        private byte VehicleCompID { get; set; } = (byte)Mavlink.MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER;
-
+        private MAVLink.MavlinkParse mavlinkParser = new MAVLink.MavlinkParse();
         
         // Forms declaration
         FormChart formGraficos;
@@ -50,13 +46,13 @@ namespace SimpleExample
         private CancellationTokenSource networkCancellation;
         private bool isNetworkRunning = false;
 
-        public static MavlinkDataController.DataController DataController; // Static to facilitate communication with GLG Chart. If you need to use pass the object instead of accessing the static field.
+        public static DataController DataController; // Static to facilitate communication with GLG Chart. If you need to use pass the object instead of accessing the static field.
 
         public GroundStation()
         {
             InitializeComponent();
 
-            DataController = new MavlinkDataController.DataController();
+            DataController = new DataController();
 
             // Serial port initialization
             serialPort = new SerialPort("COM8", 9600);
@@ -159,7 +155,7 @@ namespace SimpleExample
                 try
                 {
                     if (!serialPort.IsOpen) continue;
-                    Mavlink.MavlinkMessage message;
+                    MAVLink.MAVLinkMessage message;
                     lock (serialLock)
                         message = mavlinkParser.ReadPacket(serialPort.BaseStream);
 

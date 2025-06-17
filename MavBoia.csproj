@@ -177,6 +177,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataControl\AllSensorData.cs" />
+    <Compile Include="DataControl\BMSData.cs" />
+    <Compile Include="DataControl\BMSStatusData.cs" />
+    <Compile Include="DataControl\GPSData.cs" />
+    <Compile Include="DataControl\IBoatData.cs" />
+    <Compile Include="DataControl\InstrumentationData.cs" />
+    <Compile Include="DataControl\MotorData1.cs" />
+    <Compile Include="DataControl\MotorData2.cs" />
+    <Compile Include="DataControl\MPPTData.cs" />
+    <Compile Include="DataControl\MPPTStateData.cs" />
+    <Compile Include="DataControl\RadioStatusData.cs" />
+    <Compile Include="DataControl\TemperatureData.cs" />
+    <Compile Include="Mavlink\mavlink.cs" />
+    <Compile Include="Mavlink\MavlinkCRC.cs" />
+    <Compile Include="Mavlink\MAVLinkMessage.cs" />
+    <Compile Include="Mavlink\MavlinkParse.cs" />
+    <Compile Include="Mavlink\MavlinkUtil.cs" />
     <Compile Include="Utilities\FormResizer.cs" />
     <Compile Include="Forms\BrowserForm.cs">
       <SubType>Form</SubType>
@@ -237,11 +253,6 @@
     <Compile Include="GPRMCParser.cs" />
     <Compile Include="InfluxDB\InfluxDBCommunication.cs" />
     <Compile Include="MavBoiaConfigurations.cs" />
-    <Compile Include="Mavlink\Mavlink.cs" />
-    <Compile Include="Mavlink\MavlinkCRC.cs" />
-    <Compile Include="Mavlink\MavlinkMessage.cs" />
-    <Compile Include="Mavlink\MavlinkParser.cs" />
-    <Compile Include="Mavlink\MavlinkUtil.cs" />
     <Compile Include="GroundStation.cs">
       <SubType>Form</SubType>
     </Compile>

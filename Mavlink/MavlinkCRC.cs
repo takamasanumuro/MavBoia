@@ -1,35 +1,42 @@
-﻿public partial class Mavlink
+﻿public partial class MAVLink
 {
     public class MavlinkCRC
     {
         const int X25_INIT_CRC = 0xffff;
-        
-        public static ushort CalculateCRC(byte targetByte, ushort inputChecksum)
+        const int X25_VALIDATE_CRC = 0xf0b8;
+
+        public static ushort crc_accumulate(byte b, ushort crc)
         {
-            //If one operand is a uint and the second is of type sbyte, short, or int, both are promoted to long.
             unchecked
             {
-                byte checksum = (byte)(targetByte ^ (byte)(inputChecksum & 0x00ff));
-                checksum = (byte)(checksum ^ (checksum << 4));
-                return (ushort)((inputChecksum >> 8) ^ (checksum << 8) ^ (checksum << 3) ^ (checksum >> 4));
+                byte ch = (byte)(b ^ (byte)(crc & 0x00ff));
+                ch = (byte)(ch ^ (ch << 4));
+                return (ushort)((crc >> 8) ^ (ch << 8) ^ (ch << 3) ^ (ch >> 4));
             }
         }
-        
-        public static ushort AccumulateCRC(byte[] targetBuffer, int length)
+
+        public static ushort crc_calculate(byte[] pBuffer, int length)
         {
             if (length < 1)
             {
                 return 0xffff;
             }
-            
-            ushort accumulatedCRC = X25_INIT_CRC;
-                  
-            for (int i = 1; i < length; i++) // skips STX byte
+            // For a "message" of length bytes contained in the unsigned char array
+            // pointed to by pBuffer, calculate the CRC
+            // crcCalculate(unsigned char* pBuffer, int length, unsigned short* checkConst) < not needed
+
+            ushort crcTmp;
+            int i;
+
+            crcTmp = X25_INIT_CRC;
+
+            for (i = 1; i < length; i++) // skips header
             {
-                accumulatedCRC = CalculateCRC(targetBuffer[i], accumulatedCRC);                
+                crcTmp = crc_accumulate(pBuffer[i], crcTmp);
+                //Console.WriteLine(crcTmp + " " + pBuffer[i] + " " + length);
             }
 
-            return (accumulatedCRC);
+            return (crcTmp);
         }
 
     }

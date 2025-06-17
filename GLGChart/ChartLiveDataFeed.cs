@@ -102,39 +102,39 @@ public class ChartLiveDataFeed : ChartDataFeedInterface
         tag_source = tag_source.ToLower();
         data_point.value = 0;
 
-        AllSensorData allSensorsData = GroundStation.DataController.GetAllSensorData();
+        MavBoia.DataControl.InstrumentationData sensorsData = GroundStation.DataController.GetInstrumentationData();
 
         if (tag_source.Contains("corrente") && tag_source.Contains("motorbombordo"))
         {
-            data_point.value = allSensorsData.MotorLeftCurrent;
+            data_point.value = sensorsData.MotorCurrentLeft;
         }
         if (tag_source.Contains("corrente") && tag_source.Contains("motorboreste"))
         {
-            data_point.value = allSensorsData.MotorRightCurrent;
+            data_point.value = sensorsData.MotorCurrentRight;
         }
         else if (tag_source.Contains("corrente") && tag_source.Contains("bateria"))
         {
-            data_point.value = allSensorsData.BatteryCurrent;
+            data_point.value = sensorsData.BatteryCurrent;
         }
         else if (tag_source.Contains("corrente") && tag_source.Contains("mppt"))
         {
-            data_point.value = allSensorsData.MpptCurrent;
+            data_point.value = sensorsData.MpptCurrent;
         }
         else if (tag_source.Contains("tensao") && tag_source.Contains("bateria"))
         {
-            data_point.value = allSensorsData.BatteryVoltage;
+            data_point.value = sensorsData.BatteryVoltage;
         }
         else if (tag_source.Contains("potencia") && tag_source.Contains("geracao"))
         {
-            data_point.value = allSensorsData.GenerationPower;
+            data_point.value = sensorsData.GenerationPower;
         }
         else if (tag_source.Contains("potencia") && tag_source.Contains("consumo"))
         {
-            data_point.value = allSensorsData.BatteryPower;
+            data_point.value = sensorsData.BatteryPower;
         }
         else if (tag_source.Contains("potencia") && tag_source.Contains("resultante"))
         {
-            data_point.value = allSensorsData.ResultantPower;
+            data_point.value = sensorsData.ResultantPower;
         }
 
         data_point.value_valid = true;

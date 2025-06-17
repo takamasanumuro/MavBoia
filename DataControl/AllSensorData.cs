@@ -138,19 +138,19 @@ namespace MavlinkDataController
 
         public AllSensorData() { }
         
-        public AllSensorData(Mavlink.mavlink_all_info_t message)
-        {
-            motorLeftCurrent = message.motor_current_left;
-            motorRightCurrent = message.motor_current_right;
-            mpptCurrent = message.mppt_current;
-            batteryVoltage = message.battery_voltage;
-            latitude = message.latitude;
-            longitude = message.longitude;
-            temperatureBatteryLeft = message.temperature_battery_left;
-            temperatureBatteryRight = message.temperature_battery_right;
-            temperatureMPPT = message.temperature_mppt;
-            rpmLeft = message.rpm_left;
-            rpmRight = message.rpm_right;
-        }
+        //public AllSensorData(MAVLink.mavlink_all_info_t message)
+        //{
+        //    motorLeftCurrent = message.motor_current_left;
+        //    motorRightCurrent = message.motor_current_right;
+        //    mpptCurrent = message.mppt_current;
+        //    batteryVoltage = message.battery_voltage;
+        //    latitude = message.latitude;
+        //    longitude = message.longitude;
+        //    temperatureBatteryLeft = message.temperature_battery_left;
+        //    temperatureBatteryRight = message.temperature_battery_right;
+        //    temperatureMPPT = message.temperature_mppt;
+        //    rpmLeft = message.rpm_left;
+        //    rpmRight = message.rpm_right;
+        //}
     }
 }

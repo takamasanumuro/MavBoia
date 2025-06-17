@@ -9,6 +9,7 @@ using static GMap.NET.MapProviders.StrucRoads.SnappedPoint;
 using System.Runtime.InteropServices;
 using MavlinkDataController;
 using System.Diagnostics;
+using MavBoia.DataControl;
 
 namespace SimpleExample
 {
@@ -18,15 +19,15 @@ namespace SimpleExample
         public PointLatLng boatLocation = new PointLatLng(-22.8570241, -43.0955684);
         Bitmap boatIcon = new Bitmap("Resources/boaticon1.bmp");
         
-        public FormMapa(MavlinkDataController.DataController serialDataController, bool useControllerEvent)
+        public FormMapa(MavBoia.DataControl.DataController serialDataController, bool useControllerEvent)
         {
             InitializeComponent();
             
             if(useControllerEvent)
-                serialDataController.OnDataReceived += UpdateData;
+                serialDataController.OnGPSDataReceived += UpdateData;
         }
 
-        public void UpdateData(AllSensorData packet)
+        public void UpdateData(GPSData packet)
         {
             double lat = packet.Latitude;
             double lon = packet.Longitude;

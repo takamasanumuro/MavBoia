@@ -16,7 +16,7 @@ namespace MavBoia.Forms
 {
     public partial class FormRewind : Form
     {
-        DataController controller;
+        MavBoia.DataControl.DataController controller;
 
         FormMapa formMapa;
 
@@ -27,7 +27,7 @@ namespace MavBoia.Forms
         FormResizer resizer;
 
 
-        public FormRewind(DataController controller)
+        public FormRewind(MavBoia.DataControl.DataController controller)
         {
             resizer = new FormResizer(this);
             InitializeComponent();
@@ -78,22 +78,22 @@ namespace MavBoia.Forms
 
                 String s = sr.ReadLine();
                 
-                AllSensorData data = AllSensorData.FromLine(s);
-                string text = $"Tensão da bateria: {data.BatteryVoltage:F2}V\n" +
-                                         $"Corrente do motor L: {data.MotorLeftCurrent:F2}A\n" +
-                                         $"Corrente do motor R: {data.MotorRightCurrent:F2}A\n" +
-                                         $"Corrente do MPPT: {data.MpptCurrent:F2}A\n" +
-                                         $"Velocidade: {data.Velocity:F2} nós\n" +
-                                         $"Bateria(L): " + Utils.CheckTemperatureProbe(data.TemperatureBatteryLeft) + "\n" +
-                                     $"Bateria(R): " + Utils.CheckTemperatureProbe(data.TemperatureBatteryRight) + "\n" +
-                                     $"MPPT: " + Utils.CheckTemperatureProbe(data.TemperatureMPPT) + "\n" +
-                                     $"Motor L: {data.RpmLeft:F0}\n" +
-                             $"Motor R: {data.RpmRight:F0}\n" +
-                             $"Hora: {data.Timestamp}";
+                //AllSensorData data = AllSensorData.FromLine(s);
+                //string text = $"Tensão da bateria: {data.BatteryVoltage:F2}V\n" +
+                //                         $"Corrente do motor L: {data.MotorLeftCurrent:F2}A\n" +
+                //                         $"Corrente do motor R: {data.MotorRightCurrent:F2}A\n" +
+                //                         $"Corrente do MPPT: {data.MpptCurrent:F2}A\n" +
+                //                         $"Velocidade: {data.Velocity:F2} nós\n" +
+                //                         $"Bateria(L): " + Utils.CheckTemperatureProbe(data.TemperatureBatteryLeft) + "\n" +
+                //                     $"Bateria(R): " + Utils.CheckTemperatureProbe(data.TemperatureBatteryRight) + "\n" +
+                //                     $"MPPT: " + Utils.CheckTemperatureProbe(data.TemperatureMPPT) + "\n" +
+                //                     $"Motor L: {data.RpmLeft:F0}\n" +
+                //             $"Motor R: {data.RpmRight:F0}\n" +
+                //             $"Hora: {data.Timestamp}";
 
-                labelData.Text = text;
+                //labelData.Text = text;
 
-                formMapa.UpdateData(data);
+                //formMapa.UpdateData(data);
             }
         }
 

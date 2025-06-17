@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MavBoia.DataControl;
 
 namespace SimpleExample
 {
@@ -19,33 +20,59 @@ namespace SimpleExample
 
         FormResizer resizer;
 
-        public FormDados(MavlinkDataController.DataController serialDataController)
+        public FormDados(MavBoia.DataControl.DataController serialDataController)
         {
             resizer = new FormResizer(this);
             InitializeComponent();
             resizer.InitializeResizer();
 
-            serialDataController.OnDataReceived += UpdateData;
+            serialDataController.OnInstrumentationsDataReceived += UpdateDataInstrumentation;
         }
 
 
-        public void UpdateData(AllSensorData message)
+        public void UpdateDataInstrumentation(InstrumentationData message)
         {
             this.BeginInvoke((Action)(() =>
             {
                 labelBatteryVoltage.Text = $"Tensão da bateria: {message.BatteryVoltage:F2}V";
-                labelMotorCurrentLeft.Text = $"Corrente do motor L: {message.MotorLeftCurrent:F2}A";
-                labelMotorCurrentRight.Text = $"Corrente do motor R: {message.MotorRightCurrent:F2}A";
+                labelMotorCurrentLeft.Text = $"Corrente do motor L: {message.MotorCurrentLeft:F2}A";
+                labelMotorCurrentRight.Text = $"Corrente do motor R: {message.MotorCurrentRight:F2}A";
                 labelMpptCurrent.Text = $"Corrente do MPPT: {message.MpptCurrent:F2}A";
-                labelVelocity.Text = $"Velocidade: {message.Velocity:F2} nós";
                 labelIrradiance.Text = $"Irradiância: {message.Irradiance} W/m^2";
+            }));
+        }
+
+        public void UpdateDataGPS(GPSData message)
+        {
+            this.BeginInvoke((Action)(() =>
+            {
+                labelVelocity.Text = $"Velocidade: {message.Speed:F2} nós";
+            }));
+        }
+
+        public void UpdateDataTemperature(TemperatureData message)
+        {
+            this.BeginInvoke((Action)(() =>
+            {
 
                 labelBatteryLeftTemp.Text = $"Bateria(L): " + Utils.CheckTemperatureProbe(message.TemperatureBatteryLeft);
                 labelBatteryRightTemp.Text = $"Bateria(R): " + Utils.CheckTemperatureProbe(message.TemperatureBatteryRight);
-                labelMpptTemp.Text = $"MPPT: " + Utils.CheckTemperatureProbe(message.TemperatureMPPT);
+                labelMpptTemp.Text = $"MPPT: " + Utils.CheckTemperatureProbe(message.TemperatureMpptRight);
+            }));
+        }
 
-                labelRpmLeft.Text = $"Motor L: {message.RpmLeft:F0}";
-                labelRpmRight.Text = $"Motor R: {message.RpmRight:F0}";
+        public void UpdateDataMotor(MotorData1 message)
+        {
+            this.BeginInvoke((Action)(() =>
+            {
+                if (message.Instance == MOTOR_INSTANCE.LEFT)
+                {
+                    labelRpmLeft.Text = $"Motor L: {message.Rpm:F0}";
+                }
+                else
+                {
+                    labelRpmRight.Text = $"Motor R: {message.Rpm:F0}";
+                }
             }));
         }
 
