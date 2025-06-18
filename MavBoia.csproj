@@ -186,6 +186,7 @@
     <Compile Include="DataControl\MotorData2.cs" />
     <Compile Include="DataControl\MPPTData.cs" />
     <Compile Include="DataControl\MPPTStateData.cs" />
+    <Compile Include="DataControl\PumpData.cs" />
     <Compile Include="DataControl\RadioStatusData.cs" />
     <Compile Include="DataControl\TemperatureData.cs" />
     <Compile Include="Mavlink\mavlink.cs" />

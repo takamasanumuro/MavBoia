@@ -38,8 +38,8 @@ namespace MavBoia.DataControl
         
         public MotorData2(MAVLink.mavlink_ezkontrol_mcu_meter_data_ii_t mavMotor2)
         {
-            this.controller_temperature = mavMotor2.controller_temperature;
-            this.motor_temperature = mavMotor2.motor_temperature;
+            this.controller_temperature = mavMotor2.controller_temperature - 40;
+            this.motor_temperature = mavMotor2.motor_temperature - 40;
             if (mavMotor2.instance == 0) this.instance = MOTOR_INSTANCE.LEFT;
             else if (mavMotor2.instance == 1) this.instance = MOTOR_INSTANCE.RIGHT;
         }

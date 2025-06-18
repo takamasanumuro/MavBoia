@@ -30,10 +30,10 @@ namespace MavBoia.DataControl
 
         public MotorData1(MAVLink.mavlink_ezkontrol_mcu_meter_data_i_t mavMotor1)
         {
-            this.rpm = mavMotor1.rpm;
+            this.rpm = (mavMotor1.rpm - 32000) / 10;
             this.accelerator_opening = mavMotor1.accelerator_opening;
-            this.bus_current= mavMotor1.bus_current;
-            this.bus_voltage = mavMotor1.bus_voltage;
+            this.bus_current= (mavMotor1.bus_current - 32000) / 10.0f;
+            this.bus_voltage = mavMotor1.bus_voltage / 10.0f;
             if (mavMotor1.instance == 0) this.instance = MOTOR_INSTANCE.LEFT;
             else if (mavMotor1.instance == 1) this.instance = MOTOR_INSTANCE.RIGHT;
         }

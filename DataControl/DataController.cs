@@ -27,6 +27,7 @@ namespace MavBoia.DataControl
         public event Action<TemperatureData> OnTemperatureDataReceived;
         public event Action<MotorData1> OnMotor1DataReceived;
         public event Action<MotorData2> OnMotor2DataReceived;
+        public event Action<PumpData> OnPumpReceived;
 
         private InstrumentationData lastInstrumentationDataProcessed = new InstrumentationData();
 
@@ -97,6 +98,11 @@ namespace MavBoia.DataControl
                 case (uint)MAVLink.MAVLINK_MSG_ID.EZKONTROL_MCU_METER_DATA_II:
                     ProcessMotor2Data((MAVLink.mavlink_ezkontrol_mcu_meter_data_ii_t)message.data);
                     break;
+
+                case (uint)MAVLink.MAVLINK_MSG_ID.PUMPS:
+                    ProcessPumpData((MAVLink.mavlink_pumps_t)message.data); 
+                    break;
+
                 default:
                     break;
             }
@@ -173,6 +179,14 @@ namespace MavBoia.DataControl
             Console.WriteLine(motor2.ToString());
             OnMotor2DataReceived?.Invoke(motor2);
         }
+
+        private void ProcessPumpData(MAVLink.mavlink_pumps_t mavPump)
+        {
+            PumpData pump = new PumpData(mavPump);
+            Console.WriteLine(pump.ToString());
+            OnPumpReceived?.Invoke(pump);
+        }
+
         #endregion
 
         public void ProcessNetworkData(AllSensorData data)

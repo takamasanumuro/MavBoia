@@ -10,23 +10,27 @@ namespace MavBoia.DataControl
     public class BMSData : IBoatData
     {
         ushort[] voltages; /*< [mV] Voltage of each cell.*/
-        short[] temperatures; /*< [cdegC] Temperature of the battery*/
-        int current_battery; /*< [dA] Battery current*/
-        int state_of_charge; /*< [%] Remaining battery energy. Values: [0-100]*/
+        float[] temperatures = new float[2]; /*< [cdegC] Temperature of the battery*/
+        float current_battery; /*< [dA] Battery current*/
+        float state_of_charge; /*< [%] Remaining battery energy. Values: [0-100]*/
 
         public ushort[] Voltages { get => voltages; set => voltages = value; }
-        public short[] Temperatures { get => temperatures; set => temperatures = value; }
-        public int Current_battery { get => current_battery; set => current_battery = value; }
-        public int State_of_charge { get => state_of_charge; set => state_of_charge = value; }
+        public float[] Temperatures { get => temperatures; set => temperatures = value; }
+        public float Current_battery { get => current_battery; set => current_battery = value; }
+        public float State_of_charge { get => state_of_charge; set => state_of_charge = value; }
 
         public BMSData() { }
 
         public BMSData(MAVLink.mavlink_bms_t mavBms)
         {
             this.Voltages = mavBms.voltages.ToArray();
-            this.temperatures = mavBms.temperatures.ToArray();
-            this.current_battery = mavBms.current_battery;
-            this.state_of_charge = mavBms.state_of_charge;
+            for(int i = 0; i < mavBms.temperatures.Length; i++)
+            {
+                this.temperatures[i] = mavBms.temperatures[i] / 100.0f;
+            }
+
+            this.current_battery = mavBms.current_battery / 10.0f;
+            this.state_of_charge = mavBms.state_of_charge / 10.0f;
         }
 
         public override string ToString()

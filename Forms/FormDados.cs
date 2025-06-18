@@ -27,6 +27,9 @@ namespace SimpleExample
             resizer.InitializeResizer();
 
             serialDataController.OnInstrumentationsDataReceived += UpdateDataInstrumentation;
+            serialDataController.OnTemperatureDataReceived += UpdateDataTemperature;
+            serialDataController.OnMotor1DataReceived += UpdateDataMotor;
+
         }
 
 
