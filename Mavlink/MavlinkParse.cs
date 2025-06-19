@@ -5,12 +5,6 @@ using System.Security.Cryptography;
 
 public partial class MAVLink
 {
-    // Criado pois o xml que gerou o código não tem esse enum
-    public enum MAV_COMPONENT : byte
-    {
-        MAV_COMP_ID_MISSIONPLANNER = 190
-    }
-
     public static string GetUnit(string fieldname, Type packetype = null, string name="", uint msgid = UInt32.MaxValue)
     {
         try

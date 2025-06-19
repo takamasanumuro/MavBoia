@@ -126,8 +126,10 @@ public partial class MAVLink
         MAV_COMP_ID_RADIO_433=2, 
         ///<summary> Message sent via internet | </summary>
         [Description("Message sent via internet")]
-        MAV_COMP_ID_INTERNET=3, 
-        
+        MAV_COMP_ID_INTERNET=3,
+
+        MAV_COMP_ID_MISSIONPLANNER = 190,
+
     };
     
     ///<summary> Represents the status of the battery. Derived from input register 3200. </summary>
