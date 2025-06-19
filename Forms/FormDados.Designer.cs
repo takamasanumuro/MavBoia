@@ -30,10 +30,10 @@
         {
             this.tabControlNotifications = new System.Windows.Forms.TabControl();
             this.tabPageBMS = new System.Windows.Forms.TabPage();
+            this.flowLayoutBMS = new System.Windows.Forms.FlowLayoutPanel();
             this.tabPageMotor = new System.Windows.Forms.TabPage();
             this.btnNotifications = new System.Windows.Forms.Button();
             this.panelNotification = new System.Windows.Forms.FlowLayoutPanel();
-            this.flowLayoutBMS = new System.Windows.Forms.FlowLayoutPanel();
             this.tabControlNotifications.SuspendLayout();
             this.tabPageBMS.SuspendLayout();
             this.panelNotification.SuspendLayout();
@@ -45,7 +45,7 @@
             this.tabControlNotifications.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlNotifications.Controls.Add(this.tabPageBMS);
             this.tabControlNotifications.Controls.Add(this.tabPageMotor);
-            this.tabControlNotifications.Location = new System.Drawing.Point(31, 3);
+            this.tabControlNotifications.Location = new System.Drawing.Point(4, 3);
             this.tabControlNotifications.Multiline = true;
             this.tabControlNotifications.Name = "tabControlNotifications";
             this.tabControlNotifications.SelectedIndex = 0;
@@ -63,6 +63,17 @@
             this.tabPageBMS.Text = "BMS";
             this.tabPageBMS.UseVisualStyleBackColor = true;
             // 
+            // flowLayoutBMS
+            // 
+            this.flowLayoutBMS.AutoScroll = true;
+            this.flowLayoutBMS.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutBMS.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.flowLayoutBMS.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutBMS.Name = "flowLayoutBMS";
+            this.flowLayoutBMS.Size = new System.Drawing.Size(321, 706);
+            this.flowLayoutBMS.TabIndex = 0;
+            this.flowLayoutBMS.WrapContents = false;
+            // 
             // tabPageMotor
             // 
             this.tabPageMotor.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -76,7 +87,7 @@
             // 
             // btnNotifications
             // 
-            this.btnNotifications.Location = new System.Drawing.Point(3, 3);
+            this.btnNotifications.Location = new System.Drawing.Point(369, 3);
             this.btnNotifications.Name = "btnNotifications";
             this.btnNotifications.Size = new System.Drawing.Size(22, 713);
             this.btnNotifications.TabIndex = 2;
@@ -89,20 +100,11 @@
             this.panelNotification.Controls.Add(this.btnNotifications);
             this.panelNotification.Controls.Add(this.tabControlNotifications);
             this.panelNotification.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panelNotification.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.panelNotification.Location = new System.Drawing.Point(843, 0);
             this.panelNotification.Name = "panelNotification";
             this.panelNotification.Size = new System.Drawing.Size(394, 720);
             this.panelNotification.TabIndex = 3;
-            // 
-            // flowLayoutBMS
-            // 
-            this.flowLayoutBMS.AutoScroll = true;
-            this.flowLayoutBMS.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutBMS.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
-            this.flowLayoutBMS.Location = new System.Drawing.Point(3, 3);
-            this.flowLayoutBMS.Name = "flowLayoutBMS";
-            this.flowLayoutBMS.Size = new System.Drawing.Size(321, 706);
-            this.flowLayoutBMS.TabIndex = 0;
             // 
             // FormDados
             // 

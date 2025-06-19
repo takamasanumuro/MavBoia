@@ -17,9 +17,7 @@ namespace SimpleExample
 {
     public partial class FormDados : Form
     {
-
         FormResizer resizer;
-        int panelNotificationsStartWidth; 
 
         public FormDados(MavBoia.DataControl.DataController serialDataController)
         {
@@ -30,9 +28,26 @@ namespace SimpleExample
             //serialDataController.OnInstrumentationsDataReceived += UpdateDataInstrumentation;
             //serialDataController.OnTemperatureDataReceived += UpdateDataTemperature;
             //serialDataController.OnMotor1DataReceived += UpdateDataMotor;
+            serialDataController.OnBMSStatusDataReceived += UpdateDataBMSStatus;
 
         }
 
+        public void UpdateDataBMSStatus(BMSStatusData data)
+        {
+            this.BeginInvoke((Action)(() =>
+            {
+                foreach (var failure in data.FailureFlags)
+                {
+                    Label label = new Label();
+                    label.Text = failure.ToString() + "\n";
+                    label.AutoSize = false;
+                    label.MaximumSize = new Size(flowLayoutBMS.Width - 20, 0);
+                    label.AutoEllipsis = false;
+                    label.AutoSize = true;
+                    flowLayoutBMS.Controls.Add(label);
+                }
+            }));
+        }
 
         //public void UpdateDataInstrumentation(InstrumentationData message)
         //{
@@ -89,19 +104,19 @@ namespace SimpleExample
 
         private void FormDados_Load(object sender, EventArgs e)
         {
-            panelNotificationsStartWidth = panelNotification.Width;
-
             for (int i = 0; i < 20; i++)
             {
                 Label lbl = new Label();
                 lbl.Text = "Esta é uma mensagem de teste que deve quebrar linha automaticamente.";
-                lbl.AutoEllipsis = true;
-                //lbl.AutoSize = true;
+                lbl.AutoSize = false;
+                lbl.MaximumSize = new Size(flowLayoutBMS.Width - 20, 0);
+                lbl.AutoEllipsis = false;
+                lbl.AutoSize = true;
 
                 flowLayoutBMS.Controls.Add(lbl);
             }
 
-            flowLayoutBMS.Visible = false;
+            flowLayoutBMS.Visible = true;
         }
 
         private void ToggleNotificationBar()
@@ -110,14 +125,11 @@ namespace SimpleExample
             {
                 tabControlNotifications.Visible = false;
                 btnNotifications.Text = "<";
-                panelNotification.Size = new Size(btnNotifications.Width, 0);
             }
             else
             {
                 tabControlNotifications.Visible = true;
-                btnNotifications.Text = ">";
-                // + 1 to make the tabControl appear
-                panelNotification.Size = new Size(panelNotificationsStartWidth + 1, 0); 
+                btnNotifications.Text = ">"; 
             }
         }
 
