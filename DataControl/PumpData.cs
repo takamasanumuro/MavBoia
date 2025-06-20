@@ -29,5 +29,9 @@ namespace MavBoia.DataControl
                 this.pump_state = PUMP_STATE.ON;
             }
         }
+        public override string ToString()
+        {
+            return "PUMP";
+        }
     }
 }

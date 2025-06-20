@@ -13,11 +13,13 @@ namespace MavBoia.DataControl
         float[] temperatures = new float[2]; /*< [cdegC] Temperature of the battery*/
         float current_battery; /*< [dA] Battery current*/
         float state_of_charge; /*< [%] Remaining battery energy. Values: [0-100]*/
+        float total_voltage;
 
         public ushort[] Voltages { get => voltages; set => voltages = value; }
         public float[] Temperatures { get => temperatures; set => temperatures = value; }
         public float Current_battery { get => current_battery; set => current_battery = value; }
         public float State_of_charge { get => state_of_charge; set => state_of_charge = value; }
+        public float Total_voltage { get => total_voltage; set => total_voltage = value; }
 
         public BMSData() { }
 
@@ -26,11 +28,17 @@ namespace MavBoia.DataControl
             this.Voltages = mavBms.voltages.ToArray();
             for(int i = 0; i < mavBms.temperatures.Length; i++)
             {
-                this.temperatures[i] = mavBms.temperatures[i] / 100.0f;
+                this.temperatures[i] = mavBms.temperatures[i];
             }
 
+            foreach(var v in this.voltages)
+            {
+                this.Total_voltage += v;
+            }
+            this.total_voltage /= 1000.0f;
+
             this.current_battery = mavBms.current_battery / 10.0f;
-            this.state_of_charge = mavBms.state_of_charge / 10.0f;
+            this.state_of_charge = mavBms.state_of_charge;
         }
 
         public override string ToString()

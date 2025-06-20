@@ -154,6 +154,20 @@ namespace SimpleExample
             {
                 try
                 {
+                    //while (serialPort.BytesToRead > 0)
+                    //{
+                    //    int data = serialPort.ReadByte(); // Lê um byte (retorna int)
+
+                    //    if (data != -1) // -1 indica fim de stream (não aconteceu nada)
+                    //    {
+                    //        if(data == 0xFE)
+                    //        {
+                    //            int c = 0;
+                    //        }
+                    //        byte b = (byte)data;
+                    //        Console.WriteLine($"Byte recebido: 0x{b:X2} ({b})");
+                    //    }
+                    //}
                     if (!serialPort.IsOpen) continue;
                     MAVLink.MAVLinkMessage message;
                     lock (serialLock)

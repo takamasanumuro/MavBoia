@@ -35,19 +35,19 @@ namespace MavBoia.DataControl
 
         public InstrumentationData(MAVLink.mavlink_instrumentation_t mavInst)
         {
-            this.mppt_current = mavInst.mppt_current / 100.0f;
+            this.mppt_current = mavInst.mppt_current / 100f;
             this.motor_current_left = mavInst.motor_current_left / 100.0f;
             this.motor_current_right = mavInst.motor_current_right / 100.0f ;
             this.auxiliary_battery_current = mavInst.auxiliary_battery_current / 100.0f;
             this.irradiance = mavInst.irradiance;
             this.auxiliary_battery_voltage = mavInst.auxiliary_battery_voltage / 100.0f;
             this.battery_current = mavInst.battery_current / 100.0f;
-            this.battery_voltage = mavInst.battery_voltage / 100.0f;
+            this.battery_voltage = mavInst.battery_voltage / 10.0f;
         }
 
         public override string ToString()
         {
-            string s = "BatteryVALUES";
+            string s = "INSTRUMENTATION";
             return s;
         }
     }

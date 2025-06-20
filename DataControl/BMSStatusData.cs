@@ -98,6 +98,7 @@ namespace MavBoia.DataControl
         public float[] Temperatures { get => temperatures; set => temperatures = value; }
         public uint Status { get => status; set => status = value; }
         public List<FAILURE_FLAGS> FailureFlags { get => failureFlags; }
+        public long Timestamp { get => timestamp; }
 
         public BMSStatusData() { }
         public BMSStatusData(MAVLink.mavlink_bms_status_t mavBmsStatus)
@@ -107,6 +108,8 @@ namespace MavBoia.DataControl
                 this.temperatures[i] = mavBmsStatus.temperatures[i] / 100.0f;
             }
             this.status = mavBmsStatus.status;
+            this.timestamp = mavBmsStatus.timestamp_seconds * 1000 + mavBmsStatus.timestamp_milliseconds;
+
             this.failure_flags_byte0 = mavBmsStatus.failure_flags_byte0;
             this.failure_flags_byte1 = mavBmsStatus.failure_flags_byte1;
             this.failure_flags_byte2 = mavBmsStatus.failure_flags_byte2;

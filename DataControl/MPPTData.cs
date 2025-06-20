@@ -31,10 +31,7 @@ namespace MavBoia.DataControl
 
         public override string ToString()
         {
-            return $"Pv Voltage: {pv_voltage}\n" +
-                $"Pv_current: {pv_current}\n" +
-                $"Battery Current: {battery_current}\n" +
-                $"Battery Voltage: {battery_voltage}";
+            return "MPPT";
         }
     }
 }
