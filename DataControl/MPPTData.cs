@@ -13,11 +13,13 @@ namespace MavBoia.DataControl
         float pv_current; /*< [cA] Solar array current,ID=3101*/
         float battery_voltage; /*< [cV] Battery voltage,ID=3104*/
         float battery_current; /*< [cA] Net battery current(positive=charging),ID=331B*/
+        float mppt_current;
 
         public float Pv_voltage { get => pv_voltage; set => pv_voltage = value; }
         public float Pv_current { get => pv_current; set => pv_current = value; }
         public float Battery_voltage { get => battery_voltage; set => battery_voltage = value; }
         public float Battery_current { get => battery_current; set => battery_current = value; }
+        public float MPPT_current { get => mppt_current; set => mppt_current = value; }
 
         public MPPTData() { }
 
@@ -26,12 +28,13 @@ namespace MavBoia.DataControl
             this.pv_current = mavMppt.pv_current / 100.0f;
             this.pv_voltage = mavMppt.pv_voltage / 100.0f;
             this.battery_current= mavMppt.battery_current / 100.0f ;
-            this.battery_voltage = mavMppt.battery_voltage / 100.0f;    
+            this.battery_voltage = mavMppt.battery_voltage / 100.0f;   
+            this.mppt_current = (this.pv_voltage * this.pv_current * 0.98f) / this.Battery_voltage;
         }
 
         public override string ToString()
         {
-            return "MPPT";
+            return $"MPPT: PV_V:{this.pv_voltage}; PV_C:{this.pv_current}; MPPT_C:{this.mppt_current}";
         }
     }
 }

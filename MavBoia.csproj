@@ -60,7 +60,7 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
-  <PropertyGroup> 
+  <PropertyGroup>
     <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
     <CopySQLiteInteropFiles>false</CopySQLiteInteropFiles>
     <CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
