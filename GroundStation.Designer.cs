@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GroundStation));
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panelButtons = new System.Windows.Forms.Panel();
             this.buttonRewind = new System.Windows.Forms.Button();
             this.buttonRastreio = new System.Windows.Forms.Button();
             this.buttonGraficos = new System.Windows.Forms.Button();
@@ -39,6 +38,8 @@
             this.buttonMapa = new System.Windows.Forms.Button();
             this.buttonConfigurações = new System.Windows.Forms.Button();
             this.panelLateral = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonApolloTracker = new System.Windows.Forms.Button();
             this.panelControls = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.panelButtonConnect = new System.Windows.Forms.Panel();
@@ -48,8 +49,8 @@
             this.splitContainerLateral = new System.Windows.Forms.SplitContainer();
             this.splitContainerGeneral = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
-            this.panelButtons.SuspendLayout();
             this.panelLateral.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.panelControls.SuspendLayout();
             this.panelButtonConnect.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLateral)).BeginInit();
@@ -84,19 +85,6 @@
             this.panel1.Size = new System.Drawing.Size(332, 20);
             this.panel1.TabIndex = 1;
             // 
-            // panelButtons
-            // 
-            this.panelButtons.Controls.Add(this.buttonRewind);
-            this.panelButtons.Controls.Add(this.buttonRastreio);
-            this.panelButtons.Controls.Add(this.buttonGraficos);
-            this.panelButtons.Controls.Add(this.buttonDados);
-            this.panelButtons.Controls.Add(this.buttonMapa);
-            this.panelButtons.Controls.Add(this.buttonConfigurações);
-            this.panelButtons.Location = new System.Drawing.Point(0, 222);
-            this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(341, 579);
-            this.panelButtons.TabIndex = 1;
-            // 
             // buttonRewind
             // 
             this.buttonRewind.AutoSize = true;
@@ -106,7 +94,7 @@
             this.buttonRewind.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
             this.buttonRewind.Image = global::MavBoia.Properties.Resources.settings;
             this.buttonRewind.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonRewind.Location = new System.Drawing.Point(0, 487);
+            this.buttonRewind.Location = new System.Drawing.Point(3, 611);
             this.buttonRewind.Name = "buttonRewind";
             this.buttonRewind.Size = new System.Drawing.Size(341, 86);
             this.buttonRewind.TabIndex = 5;
@@ -125,7 +113,7 @@
             this.buttonRastreio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
             this.buttonRastreio.Image = global::MavBoia.Properties.Resources.camera;
             this.buttonRastreio.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonRastreio.Location = new System.Drawing.Point(0, 51);
+            this.buttonRastreio.Location = new System.Drawing.Point(3, 151);
             this.buttonRastreio.Name = "buttonRastreio";
             this.buttonRastreio.Size = new System.Drawing.Size(341, 86);
             this.buttonRastreio.TabIndex = 4;
@@ -144,7 +132,7 @@
             this.buttonGraficos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
             this.buttonGraficos.Image = global::MavBoia.Properties.Resources.charts;
             this.buttonGraficos.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonGraficos.Location = new System.Drawing.Point(0, 137);
+            this.buttonGraficos.Location = new System.Drawing.Point(3, 243);
             this.buttonGraficos.Name = "buttonGraficos";
             this.buttonGraficos.Size = new System.Drawing.Size(341, 86);
             this.buttonGraficos.TabIndex = 3;
@@ -163,7 +151,7 @@
             this.buttonDados.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
             this.buttonDados.Image = global::MavBoia.Properties.Resources.diagram;
             this.buttonDados.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonDados.Location = new System.Drawing.Point(0, 223);
+            this.buttonDados.Location = new System.Drawing.Point(3, 427);
             this.buttonDados.Name = "buttonDados";
             this.buttonDados.Size = new System.Drawing.Size(341, 86);
             this.buttonDados.TabIndex = 2;
@@ -182,7 +170,7 @@
             this.buttonMapa.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
             this.buttonMapa.Image = global::MavBoia.Properties.Resources.mapicon;
             this.buttonMapa.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonMapa.Location = new System.Drawing.Point(0, 309);
+            this.buttonMapa.Location = new System.Drawing.Point(3, 335);
             this.buttonMapa.Name = "buttonMapa";
             this.buttonMapa.Size = new System.Drawing.Size(341, 86);
             this.buttonMapa.TabIndex = 1;
@@ -201,7 +189,7 @@
             this.buttonConfigurações.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
             this.buttonConfigurações.Image = global::MavBoia.Properties.Resources.settings;
             this.buttonConfigurações.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonConfigurações.Location = new System.Drawing.Point(0, 395);
+            this.buttonConfigurações.Location = new System.Drawing.Point(3, 519);
             this.buttonConfigurações.Name = "buttonConfigurações";
             this.buttonConfigurações.Size = new System.Drawing.Size(341, 86);
             this.buttonConfigurações.TabIndex = 0;
@@ -214,7 +202,7 @@
             // panelLateral
             // 
             this.panelLateral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
-            this.panelLateral.Controls.Add(this.panelButtons);
+            this.panelLateral.Controls.Add(this.flowLayoutPanel1);
             this.panelLateral.Controls.Add(this.panel1);
             this.panelLateral.Controls.Add(this.pictureBoxLogo);
             this.panelLateral.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -222,6 +210,41 @@
             this.panelLateral.Name = "panelLateral";
             this.panelLateral.Size = new System.Drawing.Size(332, 844);
             this.panelLateral.TabIndex = 0;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.buttonRewind);
+            this.flowLayoutPanel1.Controls.Add(this.buttonConfigurações);
+            this.flowLayoutPanel1.Controls.Add(this.buttonDados);
+            this.flowLayoutPanel1.Controls.Add(this.buttonMapa);
+            this.flowLayoutPanel1.Controls.Add(this.buttonGraficos);
+            this.flowLayoutPanel1.Controls.Add(this.buttonRastreio);
+            this.flowLayoutPanel1.Controls.Add(this.buttonApolloTracker);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 124);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(332, 700);
+            this.flowLayoutPanel1.TabIndex = 2;
+            // 
+            // buttonApolloTracker
+            // 
+            this.buttonApolloTracker.AutoSize = true;
+            this.buttonApolloTracker.FlatAppearance.BorderSize = 0;
+            this.buttonApolloTracker.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonApolloTracker.Font = new System.Drawing.Font("Nirmala UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonApolloTracker.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.buttonApolloTracker.Image = global::MavBoia.Properties.Resources.settings;
+            this.buttonApolloTracker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonApolloTracker.Location = new System.Drawing.Point(3, 59);
+            this.buttonApolloTracker.Name = "buttonApolloTracker";
+            this.buttonApolloTracker.Size = new System.Drawing.Size(341, 86);
+            this.buttonApolloTracker.TabIndex = 6;
+            this.buttonApolloTracker.Text = "ApolloTracker";
+            this.buttonApolloTracker.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonApolloTracker.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonApolloTracker.UseVisualStyleBackColor = true;
+            this.buttonApolloTracker.Click += new System.EventHandler(this.buttonApolloTracker_Click);
             // 
             // panelControls
             // 
@@ -364,9 +387,9 @@
             this.Load += new System.EventHandler(this.GroundStation_Load);
             this.Resize += new System.EventHandler(this.GroundStation_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
-            this.panelButtons.ResumeLayout(false);
-            this.panelButtons.PerformLayout();
             this.panelLateral.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.panelControls.ResumeLayout(false);
             this.panelButtonConnect.ResumeLayout(false);
             this.panelButtonConnect.PerformLayout();
@@ -385,7 +408,6 @@
         #endregion
         private System.Windows.Forms.PictureBox pictureBoxLogo;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.Button buttonRewind;
         private System.Windows.Forms.Button buttonRastreio;
         private System.Windows.Forms.Button buttonGraficos;
@@ -401,6 +423,8 @@
         private System.Windows.Forms.Panel panelDesktop;
         private System.Windows.Forms.SplitContainer splitContainerLateral;
         private System.Windows.Forms.SplitContainer splitContainerGeneral;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button buttonApolloTracker;
     }
 }
 

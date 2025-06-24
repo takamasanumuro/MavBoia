@@ -13,6 +13,7 @@ namespace MavBoia
         private static string rjTextBoxLogDirectory;
         private static string rjTextBoxInfluxAdress;
         private static string rjTextBoxInfluxToken;
+        private static string rjTextBoxApolloTracker;
 
         public static string SerialPort { 
             get => _serialPort; 
@@ -57,6 +58,15 @@ namespace MavBoia
             {
                 rjTextBoxInfluxToken = value;
                 OnInfluxConfigurationUpdate?.Invoke();
+            }
+        }
+
+        public static string RjTextBoxApolloTracker
+        {
+            get => rjTextBoxApolloTracker;
+            set
+            {
+                rjTextBoxApolloTracker = value;
             }
         }
 

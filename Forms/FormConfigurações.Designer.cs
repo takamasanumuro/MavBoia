@@ -37,17 +37,21 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.comboBoxBaudRate = new CustomControls.FancyComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.comboBoxSerialPort = new CustomControls.FancyComboBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.rjTextBoxInfluxToken = new CustomControls.RJControls.RJTextBox();
             this.rjTextBoxInfluxAdress = new CustomControls.RJControls.RJTextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.comboBoxBaudRate = new CustomControls.FancyComboBox();
-            this.comboBoxSerialPort = new CustomControls.FancyComboBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.rjTextBoxApolloTracker = new CustomControls.RJControls.RJTextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -55,6 +59,10 @@
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -127,7 +135,7 @@
             this.buttonSeneca.FlatAppearance.BorderSize = 0;
             this.buttonSeneca.Font = new System.Drawing.Font("Nirmala UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonSeneca.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
-            this.buttonSeneca.Location = new System.Drawing.Point(154, 322);
+            this.buttonSeneca.Location = new System.Drawing.Point(141, 180);
             this.buttonSeneca.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonSeneca.Name = "buttonSeneca";
             this.buttonSeneca.Size = new System.Drawing.Size(193, 77);
@@ -142,7 +150,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
-            this.label3.Location = new System.Drawing.Point(136, 200);
+            this.label3.Location = new System.Drawing.Point(114, 103);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(235, 48);
@@ -195,6 +203,34 @@
             this.panel2.Size = new System.Drawing.Size(717, 148);
             this.panel2.TabIndex = 36;
             // 
+            // comboBoxBaudRate
+            // 
+            this.comboBoxBaudRate.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.comboBoxBaudRate.BorderColor = System.Drawing.Color.MediumSlateBlue;
+            this.comboBoxBaudRate.BorderSize = 1;
+            this.comboBoxBaudRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            this.comboBoxBaudRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxBaudRate.ForeColor = System.Drawing.Color.DimGray;
+            this.comboBoxBaudRate.IconColor = System.Drawing.Color.MediumSlateBlue;
+            this.comboBoxBaudRate.Items.AddRange(new object[] {
+            "4800",
+            "9600",
+            "19200",
+            "57600",
+            "115200",
+            "915200"});
+            this.comboBoxBaudRate.ListBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
+            this.comboBoxBaudRate.ListTextColor = System.Drawing.Color.DimGray;
+            this.comboBoxBaudRate.Location = new System.Drawing.Point(218, 52);
+            this.comboBoxBaudRate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBoxBaudRate.MinimumSize = new System.Drawing.Size(45, 15);
+            this.comboBoxBaudRate.Name = "comboBoxBaudRate";
+            this.comboBoxBaudRate.Padding = new System.Windows.Forms.Padding(2);
+            this.comboBoxBaudRate.Size = new System.Drawing.Size(174, 48);
+            this.comboBoxBaudRate.TabIndex = 23;
+            this.comboBoxBaudRate.Texts = "";
+            this.comboBoxBaudRate.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxBaudRate_OnSelectedIndexChanged);
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.comboBoxSerialPort);
@@ -205,6 +241,28 @@
             this.panel1.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
             this.panel1.Size = new System.Drawing.Size(717, 148);
             this.panel1.TabIndex = 35;
+            // 
+            // comboBoxSerialPort
+            // 
+            this.comboBoxSerialPort.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.comboBoxSerialPort.BorderColor = System.Drawing.Color.MediumSlateBlue;
+            this.comboBoxSerialPort.BorderSize = 1;
+            this.comboBoxSerialPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
+            this.comboBoxSerialPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxSerialPort.ForeColor = System.Drawing.Color.DimGray;
+            this.comboBoxSerialPort.IconColor = System.Drawing.Color.MediumSlateBlue;
+            this.comboBoxSerialPort.ListBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
+            this.comboBoxSerialPort.ListTextColor = System.Drawing.Color.DimGray;
+            this.comboBoxSerialPort.Location = new System.Drawing.Point(218, 52);
+            this.comboBoxSerialPort.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBoxSerialPort.MinimumSize = new System.Drawing.Size(45, 15);
+            this.comboBoxSerialPort.Name = "comboBoxSerialPort";
+            this.comboBoxSerialPort.Padding = new System.Windows.Forms.Padding(2);
+            this.comboBoxSerialPort.Size = new System.Drawing.Size(174, 48);
+            this.comboBoxSerialPort.TabIndex = 22;
+            this.comboBoxSerialPort.Texts = "";
+            this.comboBoxSerialPort.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxSerialPort_OnSelectedIndexChanged);
+            this.comboBoxSerialPort.DropDown += new System.EventHandler(this.comboBoxSerialPort_DropDown);
             // 
             // panel3
             // 
@@ -229,6 +287,18 @@
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(717, 225);
             this.panel5.TabIndex = 38;
+            // 
+            // label6
+            // 
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.label6.Location = new System.Drawing.Point(213, 19);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(122, 39);
+            this.label6.TabIndex = 35;
+            this.label6.Text = "Endereço";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label5
             // 
@@ -303,75 +373,82 @@
             // 
             // panel4
             // 
-            this.panel4.Controls.Add(this.label3);
-            this.panel4.Controls.Add(this.buttonSeneca);
+            this.panel4.Controls.Add(this.splitContainer1);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(732, 3);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(502, 714);
             this.panel4.TabIndex = 1;
             // 
-            // comboBoxBaudRate
+            // splitContainer1
             // 
-            this.comboBoxBaudRate.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.comboBoxBaudRate.BorderColor = System.Drawing.Color.MediumSlateBlue;
-            this.comboBoxBaudRate.BorderSize = 1;
-            this.comboBoxBaudRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
-            this.comboBoxBaudRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBoxBaudRate.ForeColor = System.Drawing.Color.DimGray;
-            this.comboBoxBaudRate.IconColor = System.Drawing.Color.MediumSlateBlue;
-            this.comboBoxBaudRate.Items.AddRange(new object[] {
-            "4800",
-            "9600",
-            "19200",
-            "57600",
-            "115200",
-            "915200"});
-            this.comboBoxBaudRate.ListBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
-            this.comboBoxBaudRate.ListTextColor = System.Drawing.Color.DimGray;
-            this.comboBoxBaudRate.Location = new System.Drawing.Point(218, 52);
-            this.comboBoxBaudRate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.comboBoxBaudRate.MinimumSize = new System.Drawing.Size(45, 15);
-            this.comboBoxBaudRate.Name = "comboBoxBaudRate";
-            this.comboBoxBaudRate.Padding = new System.Windows.Forms.Padding(2);
-            this.comboBoxBaudRate.Size = new System.Drawing.Size(174, 48);
-            this.comboBoxBaudRate.TabIndex = 23;
-            this.comboBoxBaudRate.Texts = "";
-            this.comboBoxBaudRate.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxBaudRate_OnSelectedIndexChanged);
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // comboBoxSerialPort
+            // splitContainer1.Panel1
             // 
-            this.comboBoxSerialPort.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.comboBoxSerialPort.BorderColor = System.Drawing.Color.MediumSlateBlue;
-            this.comboBoxSerialPort.BorderSize = 1;
-            this.comboBoxSerialPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
-            this.comboBoxSerialPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBoxSerialPort.ForeColor = System.Drawing.Color.DimGray;
-            this.comboBoxSerialPort.IconColor = System.Drawing.Color.MediumSlateBlue;
-            this.comboBoxSerialPort.ListBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
-            this.comboBoxSerialPort.ListTextColor = System.Drawing.Color.DimGray;
-            this.comboBoxSerialPort.Location = new System.Drawing.Point(218, 52);
-            this.comboBoxSerialPort.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.comboBoxSerialPort.MinimumSize = new System.Drawing.Size(45, 15);
-            this.comboBoxSerialPort.Name = "comboBoxSerialPort";
-            this.comboBoxSerialPort.Padding = new System.Windows.Forms.Padding(2);
-            this.comboBoxSerialPort.Size = new System.Drawing.Size(174, 48);
-            this.comboBoxSerialPort.TabIndex = 22;
-            this.comboBoxSerialPort.Texts = "";
-            this.comboBoxSerialPort.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxSerialPort_OnSelectedIndexChanged);
-            this.comboBoxSerialPort.DropDown += new System.EventHandler(this.comboBoxSerialPort_DropDown);
+            this.splitContainer1.Panel1.Controls.Add(this.buttonSeneca);
+            this.splitContainer1.Panel1.Controls.Add(this.label3);
             // 
-            // label6
+            // splitContainer1.Panel2
             // 
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
-            this.label6.Location = new System.Drawing.Point(213, 19);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(122, 39);
-            this.label6.TabIndex = 35;
-            this.label6.Text = "Endereço";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.splitContainer1.Panel2.Controls.Add(this.rjTextBoxApolloTracker);
+            this.splitContainer1.Panel2.Controls.Add(this.label8);
+            this.splitContainer1.Panel2.Controls.Add(this.label7);
+            this.splitContainer1.Size = new System.Drawing.Size(502, 714);
+            this.splitContainer1.SplitterDistance = 357;
+            this.splitContainer1.TabIndex = 34;
+            // 
+            // label7
+            // 
+            this.label7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.label7.Location = new System.Drawing.Point(0, 0);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(502, 56);
+            this.label7.TabIndex = 34;
+            this.label7.Text = "ApolloTracker";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label8
+            // 
+            this.label8.Dock = System.Windows.Forms.DockStyle.Left;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(100)))), ((int)(((byte)(23)))));
+            this.label8.Location = new System.Drawing.Point(0, 56);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(198, 297);
+            this.label8.TabIndex = 35;
+            this.label8.Text = "Nome da competição";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // rjTextBoxApolloTracker
+            // 
+            this.rjTextBoxApolloTracker.BackColor = System.Drawing.SystemColors.Window;
+            this.rjTextBoxApolloTracker.BorderColor = System.Drawing.Color.MediumSlateBlue;
+            this.rjTextBoxApolloTracker.BorderFocusColor = System.Drawing.Color.HotPink;
+            this.rjTextBoxApolloTracker.BorderRadius = 0;
+            this.rjTextBoxApolloTracker.BorderSize = 2;
+            this.rjTextBoxApolloTracker.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rjTextBoxApolloTracker.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.rjTextBoxApolloTracker.Location = new System.Drawing.Point(208, 182);
+            this.rjTextBoxApolloTracker.Margin = new System.Windows.Forms.Padding(6);
+            this.rjTextBoxApolloTracker.Multiline = false;
+            this.rjTextBoxApolloTracker.Name = "rjTextBoxApolloTracker";
+            this.rjTextBoxApolloTracker.Padding = new System.Windows.Forms.Padding(15, 11, 15, 11);
+            this.rjTextBoxApolloTracker.PasswordChar = false;
+            this.rjTextBoxApolloTracker.PlaceholderColor = System.Drawing.Color.DarkGray;
+            this.rjTextBoxApolloTracker.PlaceholderText = "";
+            this.rjTextBoxApolloTracker.Size = new System.Drawing.Size(252, 45);
+            this.rjTextBoxApolloTracker.TabIndex = 36;
+            this.rjTextBoxApolloTracker.Texts = "desafio-sol-e-mar";
+            this.rjTextBoxApolloTracker.UnderlinedStyle = false;
+            this.rjTextBoxApolloTracker._TextChanged += new System.EventHandler(this.rjTextBoxApolloTracker__TextChanged);
             // 
             // FormConfigurações
             // 
@@ -393,7 +470,11 @@
             this.panel3.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -419,5 +500,9 @@
         public System.Windows.Forms.Label label5;
         internal CustomControls.RJControls.RJTextBox rjTextBoxInfluxToken;
         public System.Windows.Forms.Label label6;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        internal CustomControls.RJControls.RJTextBox rjTextBoxApolloTracker;
+        public System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
     }
 }

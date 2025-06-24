@@ -31,6 +31,7 @@ namespace SimpleExample
         BrowserForm formBrowser;
         FormDados formDados;
         FormRewind formRewind;
+        FormApolloTracker formApolloTracker;
 
         // Form state
         private Button activatedButton;
@@ -72,6 +73,7 @@ namespace SimpleExample
             formConfigurações = new FormConfigurações();
             formBrowser = new BrowserForm();
             formRewind = new FormRewind(DataController);
+            formApolloTracker = new FormApolloTracker();
 
             MavBoiaConfigurations.OnSerialConfigurationUpdate += UpdateSerialConfiguration;
         }
@@ -86,7 +88,7 @@ namespace SimpleExample
         // Ensure all forms are loaded and ready to receive data.
         private void LoadForms()
         {
-            List<Form> forms = new List<Form>() { formConfigurações, formDados, formMapa, formBrowser, formGraficos, formRewind};
+            List<Form> forms = new List<Form>() { formConfigurações, formDados, formMapa, formBrowser, formGraficos, formRewind, formApolloTracker };
             foreach (Form form in forms)
             {
                 form.TopLevel = false;
@@ -271,6 +273,12 @@ namespace SimpleExample
             form.BringToFront();
             form.Show();
             lblTitle.Text = form.Text;
+        }
+
+        private void buttonApolloTracker_Click(object sender, EventArgs e)
+        {
+            ActivateButton(sender as Button);
+            ShowForm(formApolloTracker);
         }
 
         private void buttonRastreio_Click(object sender, EventArgs e)

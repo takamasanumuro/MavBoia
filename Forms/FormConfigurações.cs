@@ -22,6 +22,7 @@ namespace SimpleExample
             SetSerialPortDefaults("COM9", 115200);
             MavBoiaConfigurations.RjTextBoxInfluxAdress = rjTextBoxInfluxAdress.Texts;
             MavBoiaConfigurations.RjTextBoxInfluxToken = rjTextBoxInfluxToken.Texts;
+            MavBoiaConfigurations.RjTextBoxApolloTracker = rjTextBoxApolloTracker.Texts;
 
         }
 
@@ -89,6 +90,11 @@ namespace SimpleExample
         private void rjTextBoxInfluxToken_Leave(object sender, EventArgs e)
         {
             MavBoiaConfigurations.RjTextBoxInfluxToken = this.rjTextBoxInfluxToken.Texts;
+        }
+
+        private void rjTextBoxApolloTracker__TextChanged(object sender, EventArgs e)
+        {
+            MavBoiaConfigurations.RjTextBoxApolloTracker = this.rjTextBoxApolloTracker.Texts;
         }
     }
 }
