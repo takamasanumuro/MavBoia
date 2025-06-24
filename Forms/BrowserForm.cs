@@ -28,7 +28,7 @@ namespace CefSharp.MinimalExample.WinForms
             Text = title;
             WindowState = FormWindowState.Normal;
 
-            browser = new ChromiumWebBrowser("https://dsbrastreio.com.br/");
+            browser = new ChromiumWebBrowser("https://regatasolar.com.br/tracker/");
             toolStripContainer.ContentPanel.Controls.Add(browser);
 
             browser.IsBrowserInitializedChanged += OnIsBrowserInitializedChanged;
